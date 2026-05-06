@@ -4,6 +4,7 @@ import { Oxanium } from 'next/font/google';
 import { cn } from '@/lib/utils';
 
 import './globals.css';
+import { Providers } from '@/components';
 
 const oxanium = Oxanium({ subsets: ['latin'], variable: '--font-oxanium' });
 
@@ -13,7 +14,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" className={cn('h-full dark', 'antialiased', oxanium.variable)} suppressHydrationWarning>
       <body suppressHydrationWarning className="min-h-svh flex flex-col transition-colors duration-300">
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
