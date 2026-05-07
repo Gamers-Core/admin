@@ -20,7 +20,7 @@ export const Link = ({ keepSearchParams, isDisabled, className, children, ...pro
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
-  const href = keepSearchParams ? `${props.href}?${searchParams.toString()}` : props.href;
+  const href = getHref(searchParams.searchParams, !!keepSearchParams, props);
   const isCurrent = props.href === pathname;
 
   if (isDisabled)
@@ -48,4 +48,15 @@ export const Link = ({ keepSearchParams, isDisabled, className, children, ...pro
       {children}
     </NextLink>
   );
+};
+
+const getHref = (searchParams: URLSearchParams, keepSearchParams: boolean, props: LinkProps) => {
+  if (!keepSearchParams) return props.href;
+
+  const query = searchParams.toString();
+  if (!query) return props.href;
+
+  if (typeof props.href === 'string') return `${props.href}?${query}`;
+
+  return { ...props.href, search: query };
 };

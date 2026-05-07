@@ -53,5 +53,5 @@ export const useSearchParams = () => {
 
   const toString = useCallback(() => searchParams.toString(), [searchParams]);
 
-  return { get, set, toString };
+  return { get, set, toString, searchParams };
 };
