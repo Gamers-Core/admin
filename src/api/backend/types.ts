@@ -1,3 +1,5 @@
+import { authPurposes } from './const';
+
 interface ValidationError<P extends string = string> {
   property: P;
   keys: string[];
@@ -16,3 +18,25 @@ export interface AppError {
 export type BackendError<E extends ValidationErrors | AppError = ValidationErrors | AppError> = {
   status: number;
 } & E;
+
+export interface OTPFlowResponse {
+  sessionId: string;
+}
+
+export interface OtpVerifyResultMap {
+  admin_signin: {
+    user: BasicUser;
+  };
+}
+
+export type AuthPurpose = (typeof authPurposes)[number];
+
+export type VerifyOTPResponse = {
+  [P in AuthPurpose]: { purpose: P } & OtpVerifyResultMap[P];
+};
+
+export interface BasicUser {
+  id: number;
+  name: string;
+  email: string;
+}
