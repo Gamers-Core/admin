@@ -134,7 +134,7 @@ interface SubMenuProps {
 const SubMenu = ({ item, activeItem }: SubMenuProps) => {
   const sidebar = useSidebar();
 
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(() => item.items.some((sub) => sub.url === activeItem?.url));
 
   const onOpenChange = (open: boolean) => {
     if (sidebar.open) return setIsOpen(open);
