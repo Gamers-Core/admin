@@ -16,20 +16,17 @@ export const useAuthSync = () => {
   const logoutMutation = useLogoutMutation();
 
   useEffect(() => {
-    if (meQuery.error?.response?.data.status === 401)
+    if (meQuery.error?.response?.data.status === 401 && !logoutMutation.isPending)
       logoutMutation.mutate(void 0, {
         onSuccess: () => {
           toast.error('Unauthorized');
         },
       });
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [meQuery.error]);
+  }, [logoutMutation, meQuery.error]);
 
   useEffect(() => {
-    if (!meQuery.isSuccess) return setUser(null);
+    if (meQuery.isSuccess) return setUser(meQuery.data);
 
-    setUser(meQuery.data);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [meQuery.isSuccess, meQuery.data]);
+    if (meQuery.isError) return setUser(null);
+  }, [meQuery.isSuccess, meQuery.data, meQuery.isError, setUser]);
 };

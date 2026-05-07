@@ -19,9 +19,9 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
 
   return (
     <html lang="en" className={cn('h-full dark', 'antialiased', oxanium.variable)} suppressHydrationWarning>
-      <HolyLoader speed={500} showSpinner color="oklch(0.424 0.199 265.638)" />
-
       <body suppressHydrationWarning className="min-h-svh flex flex-col transition-colors duration-300">
+        <HolyLoader speed={500} showSpinner color="oklch(0.424 0.199 265.638)" />
+
         <Providers isLoggedIn={isLoggedIn}>{children}</Providers>
       </body>
     </html>
