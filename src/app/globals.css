@@ -118,7 +118,6 @@
 }
 
 @utility container {
-  max-width: fit-content;
   margin-inline: auto;
 
   @media (width >= theme(--breakpoint-sm)) {

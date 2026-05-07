@@ -4,10 +4,7 @@ import { redirect } from 'next/navigation';
 import { AuthHeader, VerifyOTPForm } from '@/components';
 import { PagePropsWithSearchParams } from '@/app/types';
 
-export const metadata: Metadata = {
-  title: 'Gamers Core | Verify OTP',
-  description: 'Verify your OTP to complete the sign-in process.',
-};
+export const metadata: Metadata = { title: 'Gamers Core | Admin | Verify OTP' };
 
 export default async function Page(props: PagePropsWithSearchParams<{ sessionId: string; from?: string }>) {
   const searchParams = await props.searchParams;
