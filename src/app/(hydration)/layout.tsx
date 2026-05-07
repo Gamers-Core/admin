@@ -17,6 +17,7 @@ export default async function Layout({ children }: Readonly<{ children: React.Re
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <QueryProviders />
+
       {children}
     </HydrationBoundary>
   );
