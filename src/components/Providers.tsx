@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 
 import { useAuthStore } from '@/stores';
 
-import { Toaster } from './ui';
+import { Toaster, TooltipProvider } from './ui';
 
 interface ProvidersProps {
   children: React.ReactNode;
@@ -25,7 +25,7 @@ export const Providers = ({ children, isLoggedIn = false }: ProvidersProps) => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {children}
+      <TooltipProvider>{children}</TooltipProvider>
 
       <Toaster duration={5000} richColors position="top-center" />
 
