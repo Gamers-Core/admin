@@ -49,7 +49,7 @@ export const VerifyOTPForm = ({ sessionId, from }: VerifyOTPFormProps) => {
             case 'admin_signin':
               setUser(res.user);
 
-              if (!res) toast.success('OTP verified successfully. Redirecting...');
+              toast.success(`OTP verified successfully. Welcome back, ${res.user.name}!`);
 
               router.push(from ?? '/');
               break;

@@ -28,8 +28,8 @@ export const Button = ({
     return (
       <ShadCNButton
         className={cn('opacity-80 cursor-not-allowed flex justify-center items-center', className)}
-        disabled
         {...props}
+        disabled
       >
         <Spinner className={cn('size-7.5', loadingIconClassName)} />
       </ShadCNButton>
@@ -38,10 +38,10 @@ export const Button = ({
   return (
     <ShadCNButton
       size={size}
-      disabled={isDisabled}
       type="button"
       className={cn('cursor-pointer', { 'cursor-not-allowed': isDisabled }, className)}
       {...props}
+      disabled={isDisabled}
     >
       {icon}
 

@@ -12,7 +12,7 @@ export default async function Layout({ children }: Readonly<{ children: React.Re
   const headersList = await headers();
   const isLoggedIn = headersList.get(isLoggedInHeaderKey) === 'true';
 
-  if (isLoggedIn) Promise.all([queryClient.prefetchQuery(useMeQuery)]);
+  if (isLoggedIn) await Promise.all([queryClient.prefetchQuery(useMeQuery)]);
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
