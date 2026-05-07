@@ -3,3 +3,4 @@ export * from './Providers';
 export * from './QueryProviders';
 export * from './auth';
 export * from './Button';
+export * from './Link';
