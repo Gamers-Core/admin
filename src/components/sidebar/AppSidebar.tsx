@@ -132,11 +132,20 @@ interface SubMenuProps {
 }
 
 const SubMenu = ({ item, activeItem }: SubMenuProps) => {
+  const sidebar = useSidebar();
+
   const [isOpen, setIsOpen] = useState(false);
+
+  const onOpenChange = (open: boolean) => {
+    if (sidebar.open) return setIsOpen(open);
+
+    sidebar.setOpen(true);
+    setIsOpen(true);
+  };
 
   return (
     <SidebarMenuItem>
-      <SidebarMenuButton tooltip={item.title} onClick={() => setIsOpen(!isOpen)}>
+      <SidebarMenuButton tooltip={item.title} onClick={() => onOpenChange(!isOpen)}>
         {item.icon && <HugeiconsIcon icon={item.icon} />}
 
         <span className="whitespace-nowrap capitalize text-sm">{item.title}</span>
@@ -148,7 +157,7 @@ const SubMenu = ({ item, activeItem }: SubMenuProps) => {
       </SidebarMenuButton>
 
       <SidebarMenuSub
-        className={cn('max-h-0 overflow-hidden pointer-events-none py-0 pe-0 me-0 transition-all duration-300', {
+        className={cn('max-h-0 overflow-hidden pointer-events-none py-0 pe-0 me-0 transition-all duration-500', {
           'max-h-250 pointer-events-auto my-0.5': isOpen,
         })}
       >
@@ -158,7 +167,9 @@ const SubMenu = ({ item, activeItem }: SubMenuProps) => {
               <Link
                 prefetch
                 href={subItem.url}
-                className={cn('text-xs', { 'bg-secondary rounded-lg': activeItem?.url === subItem.url })}
+                className={cn('text-xs whitespace-nowrap', {
+                  'bg-secondary rounded-lg': activeItem?.url === subItem.url,
+                })}
               >
                 {subItem.title}
               </Link>
