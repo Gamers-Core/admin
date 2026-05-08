@@ -1,13 +1,19 @@
 'use client';
 
+import { usePathname } from 'next/navigation';
+
 import { Separator, SidebarTrigger } from '../ui';
-import { NavigationItem, SubSidebarItem } from './types';
+import { getActiveItem } from './helpers';
 
 interface TopBarProps {
-  activeItem: NavigationItem | SubSidebarItem | null;
+  pathname: string | null;
 }
 
-export const TopBar = ({ activeItem }: TopBarProps) => {
+export const TopBar = (props: TopBarProps) => {
+  const pathname = usePathname();
+
+  const activeItem = getActiveItem(pathname || props.pathname || '/');
+
   if (!activeItem) return null;
 
   return (

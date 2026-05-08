@@ -2,6 +2,7 @@
 
 import { HugeiconsIcon } from '@hugeicons/react';
 import { ChevronRight, LogoutCircle01Icon } from '@hugeicons/core-free-icons';
+import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
 import { cn } from '@/lib/utils';
@@ -36,16 +37,21 @@ import { Logo } from '../Logo';
 import { sidebarItems } from './const';
 import { NavigationItem, NavigationItemWithSubItems, SubSidebarItem } from './types';
 import { Link } from '../Link';
+import { getActiveItem } from './helpers';
 
 interface AppSidebarProps {
-  activeItem: NavigationItem | SubSidebarItem | null;
+  pathname: string | null;
 }
 
-export const AppSidebar = ({ activeItem }: AppSidebarProps) => {
+export const AppSidebar = (props: AppSidebarProps) => {
   const { open, isMobile } = useSidebar();
+
+  const pathname = usePathname();
 
   const meQuery = useMeQuery();
   const logoutMutation = useLogoutMutation();
+
+  const activeItem = getActiveItem(pathname || props.pathname || '/');
 
   return (
     <Sidebar
