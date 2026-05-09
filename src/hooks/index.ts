@@ -5,3 +5,4 @@ export * from './useErrorHandler';
 export * from './useCounter';
 export * from './useSearchParams';
 export * from './useIsMobile';
+export * from './media';

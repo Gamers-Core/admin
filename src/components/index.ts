@@ -6,3 +6,5 @@ export * from './Button';
 export * from './Link';
 export * from './Logo';
 export * from './sidebar';
+export * from './Image';
+export * from './UploadMedia';
