@@ -1,17 +1,17 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Refresh01Icon, Upload, X } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
 
 import { MediaByFolder, MediaFolder, mediaRawFormats } from '@/api';
-import { useUploadMedia, useUploadMediaMutation } from '@/hooks';
+import { MAX_FILES, useUploadMedia, useUploadMediaMutation } from '@/hooks';
 import { FileState, useUploadMediaStore } from '@/stores';
 import { cn } from '@/lib/utils';
+import { chunk } from '@/helpers';
 
 import { Button } from './Button';
 import { Image } from './Image';
-import { chunk } from '@/helpers';
 
 interface UploadMediaProps<F extends MediaFolder> {
   folder: F;
@@ -26,7 +26,7 @@ export const UploadMedia = <F extends MediaFolder>({ folder, onSuccess, classNam
   const uploadMutation = useUploadMediaMutation(folder);
 
   const files = useUploadMediaStore((state) => state.files);
-  const { onFilesChange, onRemove, supportedTypes, isMultiple, isUploading, MAX_FILES } = useUploadMedia(folder);
+  const { onFilesChange, onRemove, clear, supportedTypes, isMultiple, isUploading } = useUploadMedia(folder);
 
   const canUpload = !isUploading && (isMultiple ? files.length < MAX_FILES : files.length < 1);
 
@@ -49,6 +49,16 @@ export const UploadMedia = <F extends MediaFolder>({ folder, onSuccess, classNam
 
     onSuccess?.(results);
   };
+
+  const clearRef = useRef(clear);
+  clearRef.current = clear;
+  useEffect(
+    () => () => {
+      clearRef.current();
+      uploadMutation.reset();
+    },
+    [uploadMutation],
+  );
 
   return (
     <div className={cn('flex w-full flex-col gap-3', className)}>

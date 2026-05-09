@@ -1,16 +1,15 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 import { toast } from 'sonner';
 
 import { useUploadMediaStore } from '@/stores';
 import { MediaFolder, mediaFoldersTypeMap, mediaTypes } from '@/api';
 
 import { useRemoveMediaMutation } from './useRemoveMediaMutation';
-import { useUploadMediaMutation } from './useUploadMediaMutation';
 
-const MAX_SIZE_MB = 100;
-const MAX_FILES = 10;
+export const MAX_SIZE_MB = 100;
+export const MAX_FILES = 10;
 
 export const useUploadMedia = <F extends MediaFolder>(folder: F) => {
   const folderMediaTypes = mediaFoldersTypeMap[folder];
@@ -26,7 +25,6 @@ export const useUploadMedia = <F extends MediaFolder>(folder: F) => {
   const addFiles = useUploadMediaStore((state) => state.addFiles);
   const resetStore = useUploadMediaStore((state) => state.reset);
 
-  const uploadMutation = useUploadMediaMutation(folder);
   const removeMutation = useRemoveMediaMutation();
 
   const validateFile = useCallback(
@@ -98,12 +96,7 @@ export const useUploadMedia = <F extends MediaFolder>(folder: F) => {
     filesRef.current.filter((f) => f.state === 'success').forEach((f) => removeMutation.mutate(f.media.id));
 
     resetStore();
-    uploadMutation.reset();
-  }, [removeMutation, resetStore, uploadMutation]);
+  }, [removeMutation, resetStore]);
 
-  const clearRef = useRef(clear);
-  clearRef.current = clear;
-  useEffect(() => () => clearRef.current(), []);
-
-  return { onRemove, onFilesChange, clear, supportedTypes, isMultiple, isUploading, MAX_SIZE_MB, MAX_FILES };
+  return { onRemove, onFilesChange, clear, supportedTypes, isMultiple, isUploading };
 };
