@@ -27,7 +27,7 @@ export const Providers = ({ children, isLoggedIn = false }: ProvidersProps) => {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>{children}</TooltipProvider>
 
-      <Toaster duration={5000} richColors position="top-center" />
+      <Toaster duration={5000} richColors position="top-center" swipeDirections={['top', 'left', 'right']} />
 
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
