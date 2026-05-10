@@ -1,9 +1,11 @@
 'use client';
 
 import { useFormContext, Controller, FieldPath } from 'react-hook-form';
+
 import { defaultLocale, Locale, locales, Localized } from '@/api';
-import { Field, FieldError, FieldLabel, Input, Textarea } from './ui';
 import { cn } from '@/lib/utils';
+
+import { Field, FieldError, FieldLabel, Input, Textarea } from './ui';
 
 type LocalizedFields<T> = {
   [K in keyof T]: T[K] extends Localized ? K : never;
