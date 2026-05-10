@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Refresh01Icon, Upload, X } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
 
@@ -12,6 +12,7 @@ import { chunk } from '@/helpers';
 
 import { Button } from './Button';
 import { Image } from './Image';
+import { Separator } from './ui';
 
 interface UploadMediaProps<F extends MediaFolder> {
   folder: F;
@@ -26,7 +27,7 @@ export const UploadMedia = <F extends MediaFolder>({ folder, onSuccess, classNam
   const uploadMutation = useUploadMediaMutation(folder);
 
   const files = useUploadMediaStore((state) => state.files);
-  const { onFilesChange, onRemove, clear, supportedTypes, isMultiple, isUploading } = useUploadMedia(folder);
+  const { onFilesChange, onRemove, supportedTypes, isMultiple, isUploading } = useUploadMedia(folder);
 
   const canUpload = !isUploading && (isMultiple ? files.length < MAX_FILES : files.length < 1);
 
@@ -49,16 +50,6 @@ export const UploadMedia = <F extends MediaFolder>({ folder, onSuccess, classNam
 
     onSuccess?.(results);
   };
-
-  const clearRef = useRef(clear);
-  clearRef.current = clear;
-  useEffect(
-    () => () => {
-      clearRef.current();
-      uploadMutation.reset();
-    },
-    [uploadMutation],
-  );
 
   return (
     <div className={cn('flex w-full flex-col gap-3', className)}>
@@ -85,7 +76,7 @@ export const UploadMedia = <F extends MediaFolder>({ folder, onSuccess, classNam
             e.preventDefault();
             setIsDraggingFile(true);
           }}
-          onDragLeave={(e) => {
+          onDragExit={(e) => {
             e.preventDefault();
             setIsDraggingFile(false);
           }}
@@ -96,15 +87,12 @@ export const UploadMedia = <F extends MediaFolder>({ folder, onSuccess, classNam
             Drag and drop your {isMultiple ? 'files' : 'file'} here to upload.
           </p>
 
-          <div className="relative inset-0 my-2 w-50 border-t border-gray-700">
-            <span
-              className={cn(
-                'absolute left-[50%] top-[-50%] translate-x-[-50%] translate-y-[-50%] bg-(--drag-over-bg) px-2 text-gray-600',
-                { 'select-none': !canUpload },
-              )}
-            >
-              or
-            </span>
+          <div className="flex justify-center items-center my-2 w-25">
+            <Separator className="w-auto" />
+
+            <span className={cn('bg-(--drag-over-bg) px-2 text-gray-600', { 'select-none': !canUpload })}>or</span>
+
+            <Separator />
           </div>
 
           <Button
@@ -160,7 +148,7 @@ export const UploadState = <F extends MediaFolder>({
   const isImage = file.type.startsWith('image');
 
   return (
-    <li className="flex items-center justify-between rounded-md border border-gray-200 px-3 py-2">
+    <li className="flex items-center justify-between rounded-md border border-border px-3 py-2">
       <div className="flex flex-1 min-w-0 gap-2">
         {isImage && (
           <div className="w-12 flex flex-col justify-center items-center aspect-square">

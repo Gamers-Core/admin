@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { toast } from 'sonner';
 
 import { useUploadMediaStore } from '@/stores';
@@ -90,13 +90,15 @@ export const useUploadMedia = <F extends MediaFolder>(folder: F) => {
   const filesRef = useRef(files);
   filesRef.current = files;
 
-  const clear = useCallback(() => {
-    if (isUploadingRef.current) filesRef.current.filter((f) => f.state === 'uploading').forEach((f) => f.abort.abort());
+  useEffect(() => {
+    return () => {
+      if (isUploadingRef.current)
+        filesRef.current.filter((f) => f.state === 'uploading').forEach((f) => f.abort.abort());
 
-    filesRef.current.filter((f) => f.state === 'success').forEach((f) => removeMutation.mutate(f.media.id));
+      resetStore();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-    resetStore();
-  }, [removeMutation, resetStore]);
-
-  return { onRemove, onFilesChange, clear, supportedTypes, isMultiple, isUploading };
+  return { onRemove, onFilesChange, supportedTypes, isMultiple, isUploading };
 };
