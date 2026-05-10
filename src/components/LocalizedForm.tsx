@@ -2,7 +2,7 @@
 
 import { useFormContext, Controller, FieldPath } from 'react-hook-form';
 
-import { defaultLocale, Locale, locales, Localized } from '@/api';
+import { defaultLocale, localeDir, locales, Localized } from '@/api';
 import { cn } from '@/lib/utils';
 
 import { Field, FieldError, FieldLabel, Input, Textarea } from './ui';
@@ -16,11 +16,6 @@ interface LocalizedFormProps<T extends Record<string, unknown>> {
   type?: 'input' | 'textarea';
 }
 
-const localeDir: Record<Locale, 'ltr' | 'rtl'> = {
-  en: 'ltr',
-  ar: 'rtl',
-};
-
 export const LocalizedForm = <T extends Record<string, unknown>>({ name, type = 'input' }: LocalizedFormProps<T>) => {
   const form = useFormContext<T>();
 
@@ -30,7 +25,7 @@ export const LocalizedForm = <T extends Record<string, unknown>>({ name, type = 
         const fieldName = `${name}.${locale}` as FieldPath<T>;
         const id = `${name}-${locale}`;
         const isRequired = locale === defaultLocale;
-        const dir = localeDir[locale] ?? 'ltr';
+        const dir = localeDir[locale];
 
         const Component = type === 'textarea' ? Textarea : Input;
 
