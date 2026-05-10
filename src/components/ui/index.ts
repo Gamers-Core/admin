@@ -12,3 +12,4 @@ export * from './tooltip';
 export * from './collapsible';
 export * from './dropdown-menu';
 export * from './alert-dialog';
+export * from './textarea';

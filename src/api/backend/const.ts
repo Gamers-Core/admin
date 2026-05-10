@@ -1,6 +1,9 @@
-import { MediaFolder, MediaFormat } from './types';
+import { Locale, MediaFolder, MediaFormat } from './types';
 
 export const authPurposes = ['admin_signin'] as const;
+
+export const locales = ['en', 'ar'] as const;
+export const defaultLocale = 'en' as const satisfies Locale;
 
 export const mediaTypes = ['image', 'video', 'audio', 'raw'] as const;
 

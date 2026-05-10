@@ -8,3 +8,4 @@ export * from './Logo';
 export * from './sidebar';
 export * from './Image';
 export * from './UploadMedia';
+export * from './LocalizedForm';

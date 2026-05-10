@@ -1,4 +1,5 @@
-import { authPurposes, mediaFolders, mediaFoldersTypeMap, mediaTypes } from './const';
+import { authPurposes, locales, mediaFolders, mediaFoldersTypeMap, mediaTypes } from './const';
+import { Localized } from './schemas';
 
 interface ValidationError<P extends string = string> {
   property: P;
@@ -40,6 +41,8 @@ export interface BasicUser {
   name: string;
   email: string;
 }
+
+export type Locale = (typeof locales)[number];
 
 export type MediaType = (typeof mediaTypes)[number];
 export type MediaFormat = 'all' | MediaType;
