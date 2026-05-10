@@ -65,3 +65,9 @@ export interface Media<T extends MediaType = MediaType> {
   format: string;
   bytes: number;
 }
+
+export interface Brand {
+  id: number;
+  name: Localized;
+  image: Media<'image'> | null;
+}

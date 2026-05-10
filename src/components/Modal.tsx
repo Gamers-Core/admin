@@ -35,7 +35,7 @@ export const Modal = (props: ModalProps) => {
 
   const Component = isMobile ? AddBrandsDrawer : AddBrandsDialog;
 
-  return <Component {...props} />;
+  return <Component {...props} onClose={() => props.onOpenChange(false)} />;
 };
 
 const AddBrandsDrawer = ({ children, title, description, className, asChild, ...disclosure }: ModalProps) => (

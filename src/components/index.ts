@@ -11,3 +11,4 @@ export * from './UploadMedia';
 export * from './LocalizedForm';
 export * from './Modal';
 export * from './Form';
+export * from './brands';

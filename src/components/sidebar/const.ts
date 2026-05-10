@@ -1,5 +1,6 @@
 import { DeliveryBox01FreeIcons, FileText, House, Store01Icon } from '@hugeicons/core-free-icons';
 import { SidebarItem } from './types';
+import { BrandsCTA } from '../brands';
 
 export const sidebarItems: SidebarItem[] = [
   {
@@ -23,6 +24,7 @@ export const sidebarItems: SidebarItem[] = [
       {
         title: 'Brands',
         url: '/brands',
+        cta: BrandsCTA,
       },
       {
         title: 'Categories',

@@ -27,7 +27,11 @@ export const TopBar = (props: TopBarProps) => {
           <h1 className="text-base font-medium">{activeItem?.title}</h1>
         </div>
 
-        {'cta' in activeItem && activeItem.cta && <div className="flex items-center gap-2">{activeItem.cta}</div>}
+        {'cta' in activeItem && activeItem.cta && (
+          <div className="flex items-center gap-2">
+            <activeItem.cta />
+          </div>
+        )}
       </div>
     </header>
   );
