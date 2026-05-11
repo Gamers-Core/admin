@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { toast } from 'sonner';
 
 import { useUploadMediaStore } from '@/stores';
-import { MediaFolder, mediaFoldersTypeMap, mediaTypes } from '@/api';
+import { MediaFolder, mediaFoldersTypeMap, mediaRawFormats, mediaTypes } from '@/api';
 
 import { useRemoveMediaMutation } from './useRemoveMediaMutation';
 
@@ -32,7 +32,13 @@ export const useUploadMedia = <F extends MediaFolder>(folder: F) => {
       if (!isMultiple && files.length >= 1) return 'Only one file allowed';
       if (isMultiple && files.length >= MAX_FILES) return `Max ${MAX_FILES} files allowed`;
 
-      const isSupportedFormat = supportedTypes.some((type) => file.type.startsWith(type === 'raw' ? '' : type));
+      const isSupportedFormat = supportedTypes.some((type) => {
+        const fileType = file.type.split('/')[0];
+
+        if (type === 'raw') return mediaRawFormats.includes(fileType as (typeof mediaRawFormats)[number]);
+
+        return fileType === type;
+      });
       if (!isSupportedFormat) return `Unsupported format. Allowed: ${supportedTypes.join(', ')}`;
 
       if (file.size / 1024 / 1024 > MAX_SIZE_MB) return `File too large. Max: ${MAX_SIZE_MB}MB`;
