@@ -1,13 +1,19 @@
 'use client';
 
+import { usePathname } from 'next/navigation';
+
 import { Separator, SidebarTrigger } from '../ui';
-import { NavigationItem, SubSidebarItem } from './types';
+import { getActiveItem } from './helpers';
 
 interface TopBarProps {
-  activeItem: NavigationItem | SubSidebarItem | null;
+  pathname: string | null;
 }
 
-export const TopBar = ({ activeItem }: TopBarProps) => {
+export const TopBar = (props: TopBarProps) => {
+  const pathname = usePathname();
+
+  const activeItem = getActiveItem(pathname || props.pathname || '/');
+
   if (!activeItem) return null;
 
   return (
@@ -21,7 +27,11 @@ export const TopBar = ({ activeItem }: TopBarProps) => {
           <h1 className="text-base font-medium">{activeItem?.title}</h1>
         </div>
 
-        {'cta' in activeItem && activeItem.cta && <div className="flex items-center gap-2">{activeItem.cta}</div>}
+        {'cta' in activeItem && activeItem.cta && (
+          <div className="flex items-center gap-2">
+            <activeItem.cta />
+          </div>
+        )}
       </div>
     </header>
   );

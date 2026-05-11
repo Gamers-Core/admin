@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
 import { SigninSchema, signinSchema } from '@/api';
-import { Button, Field, FieldError, FieldLabel, Input } from '@/components';
+import { Button, Field, FieldError, FieldLabel, Form, Input } from '@/components';
 import { useAdminSigninMutation } from '@/hooks';
 
 const defaultValues: SigninSchema = {
@@ -49,7 +49,7 @@ export const SigninForm = ({ from }: SigninFormProps) => {
   };
 
   return (
-    <form className="flex flex-col gap-5" onSubmit={form.handleSubmit(onSubmit, console.warn)}>
+    <Form className="flex flex-col gap-5" onSubmit={onSubmit} {...form}>
       <Controller
         name="email"
         control={form.control}
@@ -85,6 +85,6 @@ export const SigninForm = ({ from }: SigninFormProps) => {
       >
         Sign In
       </Button>
-    </form>
+    </Form>
   );
 };

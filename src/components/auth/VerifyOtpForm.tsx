@@ -8,7 +8,16 @@ import { useRouter } from 'next/navigation';
 
 import { useVerifyOTPMutation, useCounter, useResendOTPMutation } from '@/hooks';
 import { verifyOTPSchema, VerifyOTPSchema } from '@/api';
-import { Button, Field, FieldError, InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '@/components';
+import {
+  Button,
+  Field,
+  FieldError,
+  Form,
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from '@/components';
 import { useAuthStore } from '@/stores';
 
 const defaultValues: VerifyOTPSchema = {
@@ -80,7 +89,7 @@ export const VerifyOTPForm = ({ sessionId, from }: VerifyOTPFormProps) => {
   };
 
   return (
-    <form className="flex flex-col gap-3" onSubmit={form.handleSubmit(onSubmit, console.warn)}>
+    <Form className="flex flex-col gap-3" onSubmit={onSubmit} {...form}>
       <Controller
         name="otp"
         control={form.control}
@@ -132,6 +141,6 @@ export const VerifyOTPForm = ({ sessionId, from }: VerifyOTPFormProps) => {
       >
         Verify OTP
       </Button>
-    </form>
+    </Form>
   );
 };

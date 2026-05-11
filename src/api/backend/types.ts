@@ -1,4 +1,5 @@
-import { authPurposes } from './const';
+import { authPurposes, locales, mediaFolders, mediaFoldersTypeMap, mediaTypes } from './const';
+import { Localized } from './schemas';
 
 interface ValidationError<P extends string = string> {
   property: P;
@@ -39,4 +40,34 @@ export interface BasicUser {
   id: number;
   name: string;
   email: string;
+}
+
+export type Locale = (typeof locales)[number];
+
+export type MediaType = (typeof mediaTypes)[number];
+export type MediaFormat = 'all' | MediaType;
+export type MediaFolder = (typeof mediaFolders)[number];
+
+export type MediaTypeByFolder<
+  F extends MediaFolder,
+  T extends (typeof mediaFoldersTypeMap)[F] = (typeof mediaFoldersTypeMap)[F],
+> = T extends 'all' ? MediaType : T;
+
+export type MediaByFolder<F extends MediaFolder> = Media<MediaTypeByFolder<F>>;
+export interface Media<T extends MediaType = MediaType> {
+  id: number;
+  src: string;
+  blurDataURL: T extends 'image' ? string | null : null;
+  type: T;
+  publicId: string;
+  width: number;
+  height: number;
+  format: string;
+  bytes: number;
+}
+
+export interface Brand {
+  id: number;
+  name: Localized;
+  image: Media<'image'> | null;
 }
