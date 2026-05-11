@@ -10,8 +10,7 @@ import {
   categorySchema,
   CategorySchema,
   defaultLocale,
-  locales,
-  Localized,
+  defaultLocalizedValue,
   ValidationErrors,
 } from '@/api';
 import { Disclosure, useAddCategoryMutation, useUpdateCategoryMutation } from '@/hooks';
@@ -27,7 +26,7 @@ interface CategoryFormModalProps {
 }
 
 const defaultValues: CategorySchema = {
-  name: locales.reduce<Localized>((acc, locale) => ({ ...acc, [locale]: '' }), { [defaultLocale]: '' }),
+  name: defaultLocalizedValue,
 };
 
 export const CategoryFormModal = ({ category, disclosure }: CategoryFormModalProps) => {

@@ -8,11 +8,10 @@ import {
   BackendError,
   Brand,
   defaultLocale,
-  locales,
-  Localized,
   ValidationErrors,
   BrandSchema,
   brandSchema,
+  defaultLocalizedValue,
 } from '@/api';
 import { useUploadMediaStore } from '@/stores';
 import { Disclosure, useAddBrandMutation, useUpdateBrandMutation } from '@/hooks';
@@ -31,7 +30,7 @@ interface BrandFormModalProps {
 
 const defaultValues: BrandSchema = {
   imageId: null,
-  name: locales.reduce<Localized>((acc, locale) => ({ ...acc, [locale]: '' }), { [defaultLocale]: '' }),
+  name: defaultLocalizedValue,
 } as unknown as BrandSchema;
 
 export const BrandFormModal = ({ brand, disclosure }: BrandFormModalProps) => {
