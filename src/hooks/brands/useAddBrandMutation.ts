@@ -3,7 +3,7 @@
 import type { AxiosError, AxiosResponse } from 'axios';
 import { useMutation } from '@tanstack/react-query';
 
-import { BackendError, Brand, AddBrandSchema, ValidationErrors, gamersCoreAdmin } from '@/api';
+import { BackendError, Brand, BrandSchema, ValidationErrors, gamersCoreAdmin } from '@/api';
 
 import { useErrorHandler } from '../useErrorHandler';
 import { useInvalidateBrandsQuery } from './useBrandsQuery';
@@ -13,10 +13,10 @@ export const useAddBrandMutation = () => {
 
   const invalidateBrandsQuery = useInvalidateBrandsQuery();
 
-  return useMutation<Brand, BackendError<ValidationErrors<keyof AddBrandSchema>> | null, AddBrandSchema>({
+  return useMutation<Brand, BackendError<ValidationErrors<keyof BrandSchema>> | null, BrandSchema>({
     mutationFn: (data) =>
       gamersCoreAdmin
-        .post<Brand, AxiosResponse<Brand>, AddBrandSchema>('/brands', data)
+        .post<Brand, AxiosResponse<Brand>, BrandSchema>('/brands', data)
         .then((res) => res.data)
         .catch((err: AxiosError<BackendError>) => {
           throw errorHandler(err);

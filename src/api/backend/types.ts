@@ -1,5 +1,5 @@
 import { authPurposes, locales, mediaFolders, mediaFoldersTypeMap, mediaTypes } from './const';
-import { Localized } from './schemas';
+import type { Localized } from './schemas';
 
 interface ValidationError<P extends string = string> {
   property: P;

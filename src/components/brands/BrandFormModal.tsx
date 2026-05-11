@@ -5,16 +5,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 
 import {
-  addBrandSchema,
-  AddBrandSchema,
   BackendError,
   Brand,
   defaultLocale,
   locales,
   Localized,
-  updateBrandSchema,
-  UpdateBrandSchema,
   ValidationErrors,
+  BrandSchema,
+  brandSchema,
 } from '@/api';
 import { useUploadMediaStore } from '@/stores';
 import { Disclosure, useAddBrandMutation, useUpdateBrandMutation } from '@/hooks';
@@ -31,21 +29,16 @@ interface BrandFormModalProps {
   disclosure: Disclosure;
 }
 
-const defaultValues: AddBrandSchema = {
+const defaultValues: BrandSchema = {
   imageId: null,
   name: locales.reduce<Localized>((acc, locale) => ({ ...acc, [locale]: '' }), { [defaultLocale]: '' }),
-} as unknown as AddBrandSchema;
+} as unknown as BrandSchema;
 
 export const BrandFormModal = ({ brand, disclosure }: BrandFormModalProps) => {
-  const form = useForm<AddBrandSchema | UpdateBrandSchema>({
-    defaultValues: brand
-      ? ({
-          imageId: brand.image?.id,
-          name: brand.name,
-        } as UpdateBrandSchema)
-      : defaultValues,
+  const form = useForm<BrandSchema>({
+    defaultValues: brand ? { imageId: brand.image?.id, name: brand.name } : defaultValues,
     mode: 'onChange',
-    resolver: zodResolver(brand ? updateBrandSchema : addBrandSchema),
+    resolver: zodResolver(brandSchema),
   });
 
   const updateBrandMutation = useUpdateBrandMutation();
@@ -67,7 +60,7 @@ export const BrandFormModal = ({ brand, disclosure }: BrandFormModalProps) => {
     disclosure.onOpenChange(open);
   };
 
-  const onSubmit: SubmitHandler<AddBrandSchema | UpdateBrandSchema> = async (data) => {
+  const onSubmit: SubmitHandler<BrandSchema> = async (data) => {
     if (!form.formState.isValid || isLoading) return;
 
     const onSuccess = ({ name }: Brand) => {
@@ -76,9 +69,7 @@ export const BrandFormModal = ({ brand, disclosure }: BrandFormModalProps) => {
       onOpenChange(false);
     };
 
-    const onError = (
-      validationErrors: BackendError<ValidationErrors<keyof (AddBrandSchema | UpdateBrandSchema)>> | null,
-    ) => {
+    const onError = (validationErrors: BackendError<ValidationErrors<keyof BrandSchema>> | null) => {
       if (!validationErrors) return;
 
       validationErrors.errors.forEach((error) => {
@@ -88,7 +79,7 @@ export const BrandFormModal = ({ brand, disclosure }: BrandFormModalProps) => {
 
     if (brand) return updateBrandMutation.mutate({ ...data, id: brand.id }, { onSuccess, onError });
 
-    addBrandMutation.mutate(data as AddBrandSchema, { onSuccess, onError });
+    addBrandMutation.mutate(data as BrandSchema, { onSuccess, onError });
   };
 
   return (
@@ -118,7 +109,7 @@ export const BrandFormModal = ({ brand, disclosure }: BrandFormModalProps) => {
           )}
         />
 
-        <LocalizedForm<AddBrandSchema> name="name" />
+        <LocalizedForm<BrandSchema> name="name" />
 
         <ModalFooter>
           <Button

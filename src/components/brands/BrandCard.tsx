@@ -2,9 +2,7 @@
 
 import { HugeiconsIcon } from '@hugeicons/react';
 import { PencilEdit02Icon, Trash } from '@hugeicons/core-free-icons';
-
-import { Image } from '../Image';
-import { Button } from '../Button';
+import { toast } from 'sonner';
 
 import { Brand, defaultLocale, localeDir, locales } from '@/api';
 import { useDisclosure, useRemoveBrandMutation } from '@/hooks';
@@ -22,7 +20,8 @@ import {
   AlertDialogTrigger,
 } from '../ui';
 import { BrandFormModal } from './BrandFormModal';
-import { toast } from 'sonner';
+import { Image } from '../Image';
+import { Button } from '../Button';
 
 interface BrandCardProps extends Brand {
   preview?: boolean;
