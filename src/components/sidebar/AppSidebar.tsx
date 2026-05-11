@@ -44,7 +44,7 @@ interface AppSidebarProps {
 }
 
 export const AppSidebar = (props: AppSidebarProps) => {
-  const { open, isMobile } = useSidebar();
+  const { open, isMobile, setOpenMobile } = useSidebar();
 
   const pathname = usePathname();
 
@@ -60,10 +60,8 @@ export const AppSidebar = (props: AppSidebarProps) => {
       className="border-none outline-none py-5 md:px-2"
       innerClassName="dark:bg-sidebar gap-4"
     >
-      <SidebarHeader className="">
-        <SidebarMenu>
-          <Logo className="px-1" isCompact={!open && !isMobile} />
-        </SidebarMenu>
+      <SidebarHeader>
+        <Logo className="px-1" isCompact={!open && !isMobile} onClick={() => isMobile && setOpenMobile(false)} />
       </SidebarHeader>
 
       <SidebarContent>
@@ -79,7 +77,7 @@ export const AppSidebar = (props: AppSidebarProps) => {
                     className={cn({ 'bg-secondary rounded-lg': activeItem?.url === item.url })}
                   >
                     <SidebarMenuButton tooltip={item.title} asChild>
-                      <Link prefetch href={item.url}>
+                      <Link prefetch href={item.url} onClick={() => isMobile && setOpenMobile(false)}>
                         {item.icon && <HugeiconsIcon icon={item.icon} />}
 
                         <span className="whitespace-nowrap capitalize text-sm">{item.title}</span>
@@ -176,6 +174,7 @@ const SubMenu = ({ item, activeItem }: SubMenuProps) => {
                 className={cn('text-xs whitespace-nowrap', {
                   'bg-secondary rounded-lg': activeItem?.url === subItem.url,
                 })}
+                onClick={() => sidebar.isMobile && sidebar.setOpenMobile(false)}
               >
                 {subItem.title}
               </Link>
