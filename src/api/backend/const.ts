@@ -1,4 +1,4 @@
-import { Locale, MediaFolder, MediaFormat } from './types';
+import type { Locale, MediaFolder, MediaFormat } from './types';
 
 export const authPurposes = ['admin_signin'] as const;
 

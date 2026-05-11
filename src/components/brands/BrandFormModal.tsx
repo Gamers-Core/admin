@@ -32,7 +32,7 @@ interface BrandFormModalProps {
 }
 
 const defaultValues: AddBrandSchema = {
-  image: null,
+  imageId: null,
   name: locales.reduce<Localized>((acc, locale) => ({ ...acc, [locale]: '' }), { [defaultLocale]: '' }),
 } as unknown as AddBrandSchema;
 
@@ -53,6 +53,8 @@ export const BrandFormModal = ({ brand, disclosure }: BrandFormModalProps) => {
 
   const isUploading = useUploadMediaStore((state) => state.files.some((f) => f.state === 'uploading'));
 
+  const isLoading = updateBrandMutation.isPending || addBrandMutation.isPending;
+
   const onOpenChange = (open: boolean) => {
     if (isUploading) return;
 
@@ -66,7 +68,7 @@ export const BrandFormModal = ({ brand, disclosure }: BrandFormModalProps) => {
   };
 
   const onSubmit: SubmitHandler<AddBrandSchema | UpdateBrandSchema> = async (data) => {
-    if (!form.formState.isValid || addBrandMutation.isPending) return;
+    if (!form.formState.isValid || isLoading) return;
 
     const onSuccess = ({ name }: Brand) => {
       toast.success(`Brand "${name[defaultLocale]}" ${brand ? 'updated' : 'added'} successfully.`);
@@ -122,8 +124,10 @@ export const BrandFormModal = ({ brand, disclosure }: BrandFormModalProps) => {
           type="submit"
           variant="default"
           className="w-full h-auto py-2 text-lg"
-          isDisabled={!form.formState.isValid || addBrandMutation.isSuccess || isUploading}
-          isLoading={addBrandMutation.isPending}
+          isDisabled={
+            !form.formState.isValid || isUploading || addBrandMutation.isSuccess || updateBrandMutation.isSuccess
+          }
+          isLoading={isLoading}
         >
           {brand ? 'Update' : 'Add'} Brand
         </Button>
