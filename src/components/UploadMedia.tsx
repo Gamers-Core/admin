@@ -76,8 +76,9 @@ export const UploadMedia = <F extends MediaFolder>({ folder, onSuccess, classNam
             e.preventDefault();
             setIsDraggingFile(true);
           }}
-          onDragExit={(e) => {
+          onDragLeave={(e) => {
             e.preventDefault();
+            if (e.currentTarget.contains(e.relatedTarget as Node)) return;
             setIsDraggingFile(false);
           }}
         >
@@ -169,7 +170,7 @@ export const UploadState = <F extends MediaFolder>({
             <span className="text-xs text-destructive capitalize">{error}</span>
           ) : (
             <span
-              className={cn('text-x capitalize', {
+              className={cn('text-xs capitalize', {
                 'text-sidebar-primary': state === 'uploading',
                 'text-green-600': state === 'success',
               })}

@@ -1,12 +1,12 @@
 'use client';
 
 import NextImage from 'next/image';
-import { useState } from 'react';
+import { ComponentProps, useState } from 'react';
 
 import { Media } from '@/api';
 import { cn } from '@/lib/utils';
 
-type NextImageProps = React.ComponentProps<typeof NextImage>;
+type NextImageProps = ComponentProps<typeof NextImage>;
 
 type BaseProps = Omit<NextImageProps, 'src' | 'width' | 'height' | 'alt'> & {
   alt?: string;
