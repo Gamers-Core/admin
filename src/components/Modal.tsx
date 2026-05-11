@@ -33,12 +33,12 @@ interface ModalProps extends Disclosure {
 export const Modal = (props: ModalProps) => {
   const isMobile = useIsMobile();
 
-  const Component = isMobile ? AddBrandsDrawer : AddBrandsDialog;
+  const Component = isMobile ? MobileDrawer : DesktopDialog;
 
   return <Component {...props} onClose={() => props.onOpenChange(false)} />;
 };
 
-const AddBrandsDrawer = ({ children, title, description, className, asChild, ...disclosure }: ModalProps) => (
+const MobileDrawer = ({ children, title, description, className, asChild, ...disclosure }: ModalProps) => (
   <Drawer direction="bottom" {...disclosure}>
     <DrawerContent className="bg-transparent before:backdrop-blur-lg before:bg-popover/60 h-full px-6">
       <DrawerHeader className="flex flex-row justify-between px-0">
@@ -58,7 +58,7 @@ const AddBrandsDrawer = ({ children, title, description, className, asChild, ...
   </Drawer>
 );
 
-const AddBrandsDialog = ({ children, title, description, className, asChild, ...disclosure }: ModalProps) => (
+const DesktopDialog = ({ children, title, description, className, asChild, ...disclosure }: ModalProps) => (
   <Dialog {...disclosure}>
     <DialogContent showCloseButton={false} className="sm:max-w-md md:max-w-2xl">
       <DialogHeader className="flex flex-row justify-between items-center">
