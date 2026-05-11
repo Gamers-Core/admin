@@ -71,3 +71,8 @@ export interface Brand {
   name: Localized;
   image: Media<'image'> | null;
 }
+
+export interface Category {
+  id: number;
+  name: Localized;
+}

@@ -8,3 +8,4 @@ export * from './useIsMobile';
 export * from './media';
 export * from './useDisclosure';
 export * from './brands';
+export * from './categories';
