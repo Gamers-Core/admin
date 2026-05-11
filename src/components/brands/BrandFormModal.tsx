@@ -24,7 +24,7 @@ import { Field, FieldError } from '../ui';
 import { UploadMedia } from '../UploadMedia';
 import { LocalizedForm } from '../LocalizedForm';
 import { Button } from '../Button';
-import { Modal } from '../Modal';
+import { Modal, ModalFooter } from '../Modal';
 
 interface BrandFormModalProps {
   brand?: Brand;
@@ -120,17 +120,19 @@ export const BrandFormModal = ({ brand, disclosure }: BrandFormModalProps) => {
 
         <LocalizedForm<AddBrandSchema> name="name" />
 
-        <Button
-          type="submit"
-          variant="default"
-          className="w-full h-auto py-2 text-lg"
-          isDisabled={
-            !form.formState.isValid || isUploading || addBrandMutation.isSuccess || updateBrandMutation.isSuccess
-          }
-          isLoading={isLoading}
-        >
-          {brand ? 'Update' : 'Add'} Brand
-        </Button>
+        <ModalFooter>
+          <Button
+            type="submit"
+            variant="default"
+            className="w-full h-auto py-2 text-lg"
+            isDisabled={
+              !form.formState.isValid || isUploading || addBrandMutation.isSuccess || updateBrandMutation.isSuccess
+            }
+            isLoading={isLoading}
+          >
+            {brand ? 'Update' : 'Add'} Brand
+          </Button>
+        </ModalFooter>
       </Form>
     </Modal>
   );
