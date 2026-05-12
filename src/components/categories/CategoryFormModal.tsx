@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
@@ -40,6 +41,11 @@ export const CategoryFormModal = ({ category, disclosure }: CategoryFormModalPro
   const addCategoryMutation = useAddCategoryMutation();
 
   const isLoading = updateCategoryMutation.isPending || addCategoryMutation.isPending;
+
+  useEffect(() => {
+    if (!disclosure.open) return;
+    form.reset(category ?? defaultValues);
+  }, [category, disclosure.open, form]);
 
   const onOpenChange = (open: boolean) => {
     if (!open) {

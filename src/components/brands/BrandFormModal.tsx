@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
@@ -46,6 +47,11 @@ export const BrandFormModal = ({ brand, disclosure }: BrandFormModalProps) => {
   const isUploading = useUploadMediaStore((state) => state.files.some((f) => f.state === 'uploading'));
 
   const isLoading = updateBrandMutation.isPending || addBrandMutation.isPending;
+
+  useEffect(() => {
+    if (!disclosure.open) return;
+    form.reset(brand ? { imageId: brand.image?.id, name: brand.name } : defaultValues);
+  }, [brand, disclosure.open, form]);
 
   const onOpenChange = (open: boolean) => {
     if (isUploading) return;
