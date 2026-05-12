@@ -41,22 +41,24 @@ export const Modal = (props: ModalProps) => {
 
 const MobileDrawer = ({ title, description, children, className, asChild, ...disclosure }: ModalProps) => (
   <Drawer direction="bottom" {...disclosure}>
-    <DrawerContent className="bg-transparent before:backdrop-blur-lg before:bg-popover/60 h-full px-6">
+    <DrawerContent className="bg-transparent before:backdrop-blur-lg before:bg-popover/60 h-full p-6 pt-0">
       <DrawerHeader className="flex flex-col gap-2 px-0">
         <DrawerTitle className="text-xl font-bold">{title}</DrawerTitle>
 
         <DrawerDescription className="text-xs font-semibold text-muted-foreground">{description}</DrawerDescription>
       </DrawerHeader>
 
-      {asChild ? <div className={cn('flex flex-1 min-h-0', className)}>{children}</div> : children}
+      <div className="flex flex-col flex-1 min-h-0 overflow-y-auto">
+        {asChild ? children : <div className={cn('flex flex-col flex-1 gap-4', className)}>{children}</div>}
+      </div>
     </DrawerContent>
   </Drawer>
 );
 
 const DesktopDialog = ({ title, description, children, className, asChild, ...disclosure }: ModalProps) => (
   <Dialog {...disclosure}>
-    <DialogContent showCloseButton={false} className="sm:max-w-md md:max-w-2xl">
-      <DialogHeader className="flex flex-row justify-between items-center">
+    <DialogContent showCloseButton={false} className="flex flex-col md:max-w-2xl max-h-[90dvh] px-0">
+      <DialogHeader className="flex flex-row justify-between items-center px-4">
         <div className="flex flex-col gap-2">
           <DialogTitle className="text-xl">{title}</DialogTitle>
 
@@ -68,7 +70,9 @@ const DesktopDialog = ({ title, description, children, className, asChild, ...di
         </DialogClose>
       </DialogHeader>
 
-      {asChild ? <div className={cn('flex flex-1 min-h-0', className)}>{children}</div> : children}
+      <div className="flex flex-col flex-1 min-h-0 overflow-y-auto px-4">
+        {asChild ? children : <div className={cn('flex flex-col flex-1 gap-4', className)}>{children}</div>}
+      </div>
     </DialogContent>
   </Dialog>
 );
