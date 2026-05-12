@@ -69,6 +69,7 @@ export const UserReviewCard = ({ preview = false, isDisabled = false, ...userRev
 
       <Link
         href={userReview.facebookURL}
+        target="_blank"
         className="text-base md:text-lg lg:text-xl font-medium text-center flex-1 w-full h-full flex flex-col justify-center items-center bg-white dark:bg-border rounded-lg p-2"
       >
         <Image
@@ -85,7 +86,7 @@ interface RemoveUserReviewProps extends UserReview {
   isDisabled?: boolean;
 }
 
-const RemoveUserReview = ({ isDisabled, position, id }: RemoveUserReviewProps) => {
+const RemoveUserReview = ({ isDisabled, position }: RemoveUserReviewProps) => {
   const removeUserReviewMutation = useRemoveUserReviewMutation();
 
   return (
