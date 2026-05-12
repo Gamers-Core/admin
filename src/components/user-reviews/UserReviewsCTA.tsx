@@ -33,7 +33,7 @@ export const UserReviewsCTA = () => {
         onSuccess: (data) => {
           setUserReviews(data);
 
-          toast.success('UserReviews reordered successfully.');
+          toast.success('User reviews reordered successfully.');
         },
         onSettled: () => {
           setIsLoading(false);

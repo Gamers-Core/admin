@@ -69,7 +69,7 @@ export const UserReviewsList = () => {
         </div>
       ) : (
         <p className="m-auto text-center text-lg md:text-xl lg:text-2xl text-muted-foreground">
-          There are no UserReviews to display.
+          There are no user reviews to display.
         </p>
       )}
     </section>

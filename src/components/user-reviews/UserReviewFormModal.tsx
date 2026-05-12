@@ -80,11 +80,7 @@ export const UserReviewFormModal = ({ userReview, disclosure }: UserReviewFormMo
   return (
     <Modal
       title={userReview ? `Update UserReview ${userReview.position}` : 'Add New UserReview'}
-      description={
-        userReview
-          ? `Update the userReview ${userReview.position} information.`
-          : 'Add a new userReview to the list of frequently asked questions.'
-      }
+      description={userReview ? `Update the userReview ${userReview.position} information.` : 'Add a new user review.'}
       asChild
       {...disclosure}
       onOpenChange={onOpenChange}
