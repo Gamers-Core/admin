@@ -5,7 +5,9 @@ import { useEffect } from 'react';
 import { $createLinkNode } from '@lexical/link';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import {
+  $createParagraphNode,
   $createTextNode,
+  $getRoot,
   $getSelection,
   $isRangeSelection,
   COMMAND_PRIORITY_LOW,
@@ -88,7 +90,22 @@ export const AutoTransformPlugin = () => {
         e.preventDefault();
         editor.update(() => {
           const selection = $getSelection();
-          if ($isRangeSelection(selection)) selection.insertNodes([new YouTubeNode(videoId)]);
+          if (!$isRangeSelection(selection)) return;
+
+          const anchor = selection.anchor.getNode();
+          const topLevel = anchor.getKey() === 'root' ? $getRoot() : anchor.getTopLevelElementOrThrow();
+          const youtubeNode = new YouTubeNode(videoId);
+          const paragraph = $createParagraphNode();
+
+          if (topLevel.getKey() === 'root') {
+            topLevel.append(youtubeNode, paragraph);
+            paragraph.select();
+            return;
+          }
+
+          topLevel.insertAfter(youtubeNode);
+          youtubeNode.insertAfter(paragraph);
+          paragraph.select();
         });
 
         return true;
