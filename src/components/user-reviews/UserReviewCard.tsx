@@ -106,7 +106,7 @@ const RemoveUserReview = ({ isDisabled, position, id }: RemoveUserReviewProps) =
 
           <AlertDialogAction
             onClick={() =>
-              removeUserReviewMutation.mutate(id, {
+              removeUserReviewMutation.mutate(position, {
                 onSuccess: () => toast.success(`${position} userReview removed successfully`),
               })
             }
