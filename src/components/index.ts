@@ -16,3 +16,4 @@ export * from './categories';
 export * from './rich-text-input';
 export * from './faqs';
 export * from './HTMLRender';
+export * from './user-reviews';

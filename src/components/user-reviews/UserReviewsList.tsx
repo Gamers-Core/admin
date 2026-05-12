@@ -12,18 +12,18 @@ import {
 import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 import { useEffect, useId } from 'react';
 
-import { useFAQsQuery } from '@/hooks';
+import { useUserReviewsQuery } from '@/hooks';
 
-import { FAQCard } from './FAQCard';
-import { useFAQsReorderStore } from '@/stores';
+import { UserReviewCard } from './UserReviewCard';
+import { useUserReviewsReorderStore } from '@/stores';
 
-export const FAQsList = () => {
-  const faqsQuery = useFAQsQuery();
+export const UserReviewsList = () => {
+  const userReviewsQuery = useUserReviewsQuery();
 
-  const faqs = useFAQsReorderStore((state) => state.items) ?? faqsQuery.data ?? [];
-  const isLoading = useFAQsReorderStore((state) => state.isLoading);
-  const setFAQs = useFAQsReorderStore((state) => state.setItems);
-  const setQueryFAQs = useFAQsReorderStore((state) => state.setQueryItems);
+  const userReviews = useUserReviewsReorderStore((state) => state.items) ?? userReviewsQuery.data ?? [];
+  const isLoading = useUserReviewsReorderStore((state) => state.isLoading);
+  const setUserReviews = useUserReviewsReorderStore((state) => state.setItems);
+  const setQueryUserReviews = useUserReviewsReorderStore((state) => state.setQueryItems);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
@@ -37,39 +37,39 @@ export const FAQsList = () => {
 
     if (!over || active.id === over.id) return;
 
-    const oldIndex = faqs.findIndex((f) => f.id === active.id);
-    const newIndex = faqs.findIndex((f) => f.id === over.id);
+    const oldIndex = userReviews.findIndex((f) => f.id === active.id);
+    const newIndex = userReviews.findIndex((f) => f.id === over.id);
 
     if (oldIndex === -1 || newIndex === -1 || oldIndex === newIndex) return;
 
-    setFAQs(arrayMove(faqs, oldIndex, newIndex));
+    setUserReviews(arrayMove(userReviews, oldIndex, newIndex));
   };
 
   useEffect(() => {
-    if (!faqsQuery.data) return;
+    if (!userReviewsQuery.data) return;
 
-    setQueryFAQs(faqsQuery.data);
-  }, [faqsQuery.data, setQueryFAQs]);
+    setQueryUserReviews(userReviewsQuery.data);
+  }, [userReviewsQuery.data, setQueryUserReviews]);
 
   return (
     <section className="flex-1 flex flex-col gap-8 min-w-0">
-      {faqs.length ? (
+      {userReviews.length ? (
         <div className="flex flex-col gap-6">
           <DndContext id={dndId} sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
             <SortableContext
               disabled={isLoading}
-              items={faqs.map(({ id }) => id)}
+              items={userReviews.map(({ id }) => id)}
               strategy={verticalListSortingStrategy}
             >
-              {faqs.map((faq) => (
-                <FAQCard key={faq.id} isDisabled={isLoading} {...faq} />
+              {userReviews.map((userReview) => (
+                <UserReviewCard key={userReview.id} isDisabled={isLoading} {...userReview} />
               ))}
             </SortableContext>
           </DndContext>
         </div>
       ) : (
         <p className="m-auto text-center text-lg md:text-xl lg:text-2xl text-muted-foreground">
-          There are no FAQs to display.
+          There are no user reviews to display.
         </p>
       )}
     </section>

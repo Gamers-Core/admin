@@ -15,10 +15,10 @@ export const FAQsCTA = () => {
 
   const reorderMutation = useReorderFAQMutation();
 
-  const faqs = useFAQsReorderStore((state) => state.faqs);
+  const faqs = useFAQsReorderStore((state) => state.items);
   const isLoading = useFAQsReorderStore((state) => state.isLoading);
   const isReordered = useFAQsReorderStore((state) => state.isReordered);
-  const setFAQs = useFAQsReorderStore((state) => state.setFAQs);
+  const setFAQs = useFAQsReorderStore((state) => state.setItems);
   const resetFAQs = useFAQsReorderStore((state) => state.reset);
   const setIsLoading = useFAQsReorderStore((state) => state.setIsLoading);
 

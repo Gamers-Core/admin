@@ -85,3 +85,10 @@ export interface FAQ {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface UserReview {
+  id: number;
+  position: number;
+  facebookURL: string;
+  image: Media<'image'> | null;
+}

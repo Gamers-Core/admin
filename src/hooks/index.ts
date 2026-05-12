@@ -10,3 +10,4 @@ export * from './useDisclosure';
 export * from './brands';
 export * from './categories';
 export * from './faqs';
+export * from './user-reviews';
