@@ -20,10 +20,10 @@ import { useFAQsReorderStore } from '@/stores';
 export const FAQsList = () => {
   const faqsQuery = useFAQsQuery();
 
-  const faqs = useFAQsReorderStore((state) => state.faqs) ?? faqsQuery.data ?? [];
+  const faqs = useFAQsReorderStore((state) => state.items) ?? faqsQuery.data ?? [];
   const isLoading = useFAQsReorderStore((state) => state.isLoading);
-  const setFAQs = useFAQsReorderStore((state) => state.setFAQs);
-  const setQueryFAQs = useFAQsReorderStore((state) => state.setQueryFAQs);
+  const setFAQs = useFAQsReorderStore((state) => state.setItems);
+  const setQueryFAQs = useFAQsReorderStore((state) => state.setQueryItems);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
