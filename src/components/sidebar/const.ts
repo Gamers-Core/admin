@@ -4,6 +4,7 @@ import { SidebarItem } from './types';
 import { BrandsCTA } from '../brands';
 import { CategoriesCTA } from '../categories';
 import { FAQsCTA } from '../faqs';
+import { UserReviewsCTA } from '../user-reviews';
 
 export const sidebarItems: SidebarItem[] = [
   {
@@ -56,6 +57,7 @@ export const sidebarItems: SidebarItem[] = [
       {
         title: 'User Reviews',
         url: '/user-reviews',
+        cta: UserReviewsCTA,
       },
     ],
   },
