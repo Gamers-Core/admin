@@ -13,3 +13,4 @@ export * from './Modal';
 export * from './Form';
 export * from './brands';
 export * from './categories';
+export * from './rich-text-input';
