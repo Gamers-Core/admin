@@ -48,7 +48,7 @@ export const FAQCard = ({ preview = false, isDisabled = false, ...faq }: FAQCard
           <Button
             {...attributes}
             {...listeners}
-            className={cn('cursor-grab aria-pressed:cursor-grabbing')}
+            className={cn('cursor-grab aria-pressed:cursor-grabbing touch-none')}
             isDisabled={isDisabled}
             variant="outline"
             icon={<HugeiconsIcon icon={DragDropVerticalIcon} />}

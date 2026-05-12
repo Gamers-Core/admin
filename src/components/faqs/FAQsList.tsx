@@ -1,6 +1,14 @@
 'use client';
 
-import { DndContext, closestCenter, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 import { useEffect, useId } from 'react';
 
@@ -17,12 +25,17 @@ export const FAQsList = () => {
   const setFAQs = useFAQsReorderStore((state) => state.setFAQs);
   const setQueryFAQs = useFAQsReorderStore((state) => state.setQueryFAQs);
 
-  const sensors = useSensors(useSensor(PointerSensor));
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 150, tolerance: 8 } }),
+  );
+
   const dndId = useId();
 
   const onDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-    if (!over || active.id === over.id || !faqs) return;
+
+    if (!over || active.id === over.id) return;
 
     const oldIndex = faqs.findIndex((f) => f.id === active.id);
     const newIndex = faqs.findIndex((f) => f.id === over.id);
@@ -56,7 +69,7 @@ export const FAQsList = () => {
         </div>
       ) : (
         <p className="m-auto text-center text-lg md:text-xl lg:text-2xl text-muted-foreground">
-          There are no faqs to display.
+          There are no FAQs to display.
         </p>
       )}
     </section>
