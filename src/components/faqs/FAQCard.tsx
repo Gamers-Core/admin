@@ -1,8 +1,10 @@
 'use client';
 
 import { HugeiconsIcon } from '@hugeicons/react';
-import { PencilEdit02Icon, Trash } from '@hugeicons/core-free-icons';
+import { DragDropVerticalIcon, PencilEdit02Icon, Trash } from '@hugeicons/core-free-icons';
 import { toast } from 'sonner';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 import { FAQ, localeDir, locales } from '@/api';
 import { Disclosure, useDisclosure, useRemoveFAQMutation } from '@/hooks';
@@ -25,34 +27,51 @@ import { Modal } from '../Modal';
 import { HTMLRender } from '../HTMLRender';
 
 interface FAQCardProps extends FAQ {
+  isDisabled?: boolean;
   preview?: boolean;
 }
 
-export const FAQCard = ({ preview = false, ...faq }: FAQCardProps) => {
+export const FAQCard = ({ preview = false, isDisabled = false, ...faq }: FAQCardProps) => {
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: faq.id });
+
   const deleteModalDisclosure = useDisclosure();
   const previewModalDisclosure = useDisclosure();
 
   return (
-    <div className="flex-1 flex items-center gap-4">
+    <div
+      ref={setNodeRef}
+      style={{ transform: CSS.Transform.toString(transform), transition }}
+      className="flex-1 flex items-center gap-4"
+    >
       {!preview && (
         <div className="flex flex-col gap-2">
+          <Button
+            {...attributes}
+            {...listeners}
+            className={cn('cursor-grab aria-pressed:cursor-grabbing')}
+            isDisabled={isDisabled}
+            variant="outline"
+            icon={<HugeiconsIcon icon={DragDropVerticalIcon} />}
+          />
+
           <div>
             <Button
-              icon={<HugeiconsIcon icon={PencilEdit02Icon} className="rtl:rotate-y-180" />}
+              isDisabled={isDisabled}
+              icon={<HugeiconsIcon icon={PencilEdit02Icon} />}
               onClick={deleteModalDisclosure.onOpen}
             />
 
             <FAQFormModal disclosure={deleteModalDisclosure} faq={faq} />
           </div>
 
-          <RemoveFAQ {...faq} />
+          <RemoveFAQ isDisabled={isDisabled} {...faq} />
         </div>
       )}
 
       <Button
         onClick={previewModalDisclosure.onOpen}
         variant="ghost"
-        className="flex-1 flex flex-col gap-4 p-6 bg-border rounded-lg h-full"
+        className="flex-1 min-w-0 flex flex-col gap-4 p-6 bg-border rounded-lg h-full"
       >
         {locales.map((locale) => (
           <p
@@ -72,13 +91,17 @@ export const FAQCard = ({ preview = false, ...faq }: FAQCardProps) => {
   );
 };
 
-const RemoveFAQ = ({ question, id }: FAQ) => {
+interface RemoveFAQProps extends FAQ {
+  isDisabled?: boolean;
+}
+
+const RemoveFAQ = ({ isDisabled, question, id }: RemoveFAQProps) => {
   const removeFAQMutation = useRemoveFAQMutation();
 
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive" icon={<HugeiconsIcon icon={Trash} className="rtl:rotate-y-180" />} />
+        <Button isDisabled={isDisabled} variant="destructive" icon={<HugeiconsIcon icon={Trash} />} />
       </AlertDialogTrigger>
 
       <AlertDialogContent size="sm">
