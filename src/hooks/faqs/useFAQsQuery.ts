@@ -20,5 +20,11 @@ export const useInvalidateFAQsQuery = () => {
   return () => queryClient.invalidateQueries({ queryKey });
 };
 
+export const useSetFAQsQueryData = () => {
+  const queryClient = useQueryClient();
+
+  return (faqs: FAQ[]) => queryClient.setQueryData(queryKey, faqs);
+};
+
 useFAQsQuery.queryKey = queryKey;
 useFAQsQuery.queryFn = queryFn;

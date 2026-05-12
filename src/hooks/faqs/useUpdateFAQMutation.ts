@@ -6,7 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 import { BackendError, FAQ, FAQSchema, ValidationErrors, gamersCoreAdmin } from '@/api';
 
 import { useErrorHandler } from '../useErrorHandler';
-import { useInvalidateFAQsQuery } from './useFAQsQuery';
+import { useSetFAQsQueryData } from './useFAQsQuery';
 
 interface UpdateFAQMutationOptions extends FAQSchema {
   id: number;
@@ -15,18 +15,18 @@ interface UpdateFAQMutationOptions extends FAQSchema {
 export const useUpdateFAQMutation = () => {
   const errorHandler = useErrorHandler();
 
-  const invalidateFAQsQuery = useInvalidateFAQsQuery();
+  const setFAQsQueryData = useSetFAQsQueryData();
 
-  return useMutation<FAQ, BackendError<ValidationErrors<keyof FAQSchema>> | null, UpdateFAQMutationOptions>({
+  return useMutation<FAQ[], BackendError<ValidationErrors<keyof FAQSchema>> | null, UpdateFAQMutationOptions>({
     mutationFn: ({ id, ...data }) =>
       gamersCoreAdmin
-        .patch<FAQ, AxiosResponse<FAQ>, FAQSchema>(`/faqs/${id}`, data)
+        .patch<FAQ[], AxiosResponse<FAQ[]>, FAQSchema>(`/faqs/${id}`, data)
         .then((res) => res.data)
         .catch((err: AxiosError<BackendError>) => {
           throw errorHandler(err);
         }),
-    onSuccess: () => {
-      invalidateFAQsQuery();
+    onSuccess: (data) => {
+      setFAQsQueryData(data);
     },
   });
 };
