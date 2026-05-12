@@ -30,7 +30,7 @@ export const useFAQsReorderStore = create<FAQsReorderStore>((set) => ({
   setQueryFAQs: (faqs) => set({ queryFAQs: faqs, faqs, isReordered: false }),
   setFAQs: (newFAQs) =>
     set(({ queryFAQs }) => {
-      const isReordered = !!newFAQs && newFAQs.some(({ position }, index) => queryFAQs?.[index].position !== position);
+      const isReordered = !!newFAQs && newFAQs.some(({ position }, index) => queryFAQs?.[index]?.position !== position);
 
       return { faqs: newFAQs, isReordered };
     }),

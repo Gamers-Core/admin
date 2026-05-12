@@ -34,7 +34,7 @@ interface FAQCardProps extends FAQ {
 export const FAQCard = ({ preview = false, isDisabled = false, ...faq }: FAQCardProps) => {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: faq.id });
 
-  const deleteModalDisclosure = useDisclosure();
+  const updateModalDisclosure = useDisclosure();
   const previewModalDisclosure = useDisclosure();
 
   return (
@@ -58,10 +58,10 @@ export const FAQCard = ({ preview = false, isDisabled = false, ...faq }: FAQCard
             <Button
               isDisabled={isDisabled}
               icon={<HugeiconsIcon icon={PencilEdit02Icon} />}
-              onClick={deleteModalDisclosure.onOpen}
+              onClick={updateModalDisclosure.onOpen}
             />
 
-            <FAQFormModal disclosure={deleteModalDisclosure} faq={faq} />
+            <FAQFormModal disclosure={updateModalDisclosure} faq={faq} />
           </div>
 
           <RemoveFAQ isDisabled={isDisabled} {...faq} />

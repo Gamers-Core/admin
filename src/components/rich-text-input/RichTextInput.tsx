@@ -55,7 +55,8 @@ export const RichTextInput = ({
       if (tag === 'p') return Array.from(element.childNodes).some(hasMeaningfulNode);
 
       if (element.textContent && element.textContent.trim()) return true;
-      return true;
+
+      return Array.from(element.childNodes).some(hasMeaningfulNode);
     };
 
     return !Array.from(doc.body.childNodes).some(hasMeaningfulNode);
@@ -102,7 +103,6 @@ export const RichTextInput = ({
       }}
     >
       <div
-        id={id}
         className={cn(
           'w-full rounded-md border border-input bg-background ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2',
           className,
@@ -111,7 +111,7 @@ export const RichTextInput = ({
         <ToolbarPlugin dir={dir} />
         <div className="relative px-3 py-2">
           <RichTextPlugin
-            contentEditable={<ContentEditable className="min-h-40 outline-none text-base leading-relaxed" />}
+            contentEditable={<ContentEditable id={id} className="min-h-40 outline-none text-base leading-relaxed" />}
             placeholder={
               <div className="pointer-events-none absolute top-2 left-3 text-muted-foreground text-base">
                 {placeholder ?? 'Enter text...'}

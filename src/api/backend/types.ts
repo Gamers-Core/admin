@@ -82,6 +82,6 @@ export interface FAQ {
   question: Localized;
   answer: Localized;
   position: number;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }

@@ -39,7 +39,7 @@ export const FAQsList = () => {
   }, [faqsQuery.data, setQueryFAQs]);
 
   return (
-    <section className="flex-1 flex flex-col gap-8 min-w-auto">
+    <section className="flex-1 flex flex-col gap-8 min-w-0">
       {faqs.length ? (
         <div className="flex flex-col gap-6">
           <DndContext id={dndId} sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>

@@ -18,6 +18,8 @@ import {
 
 import { YouTubeNode } from '../nodes';
 
+const isSafeUrl = (url: string) => /^https?:\/\//i.test(url);
+
 export const AutoTransformPlugin = () => {
   const [editor] = useLexicalComposerContext();
 
@@ -35,6 +37,8 @@ export const AutoTransformPlugin = () => {
     const unregisterSpace = editor.registerCommand(
       KEY_SPACE_COMMAND,
       () => {
+        let transformed = false;
+
         editor.update(() => {
           const selection = $getSelection();
           if (!$isRangeSelection(selection)) return;
@@ -46,15 +50,17 @@ export const AutoTransformPlugin = () => {
           const markdownMatch = text.match(/\[([^\]]+)\]\(([^)]+)\)$/);
           if (markdownMatch) {
             const [full, label, url] = markdownMatch;
+            if (!isSafeUrl(url)) return; // reject javascript: etc.
             const before = text.slice(0, text.length - full.length);
 
-            const linkNode = $createLinkNode(url, { target: '_blank' });
+            const linkNode = $createLinkNode(url, { target: '_blank', rel: 'noopener noreferrer' });
             linkNode.append($createTextNode(label));
 
             anchor.setTextContent(before);
             anchor.insertAfter(linkNode);
             linkNode.insertAfter($createTextNode(' '));
             linkNode.selectNext();
+            transformed = true;
             return;
           }
 
@@ -73,9 +79,10 @@ export const AutoTransformPlugin = () => {
           anchor.insertAfter(linkNode);
           linkNode.insertAfter($createTextNode(' '));
           linkNode.selectNext();
+          transformed = true;
         });
 
-        return false;
+        return transformed;
       },
       COMMAND_PRIORITY_LOW,
     );
