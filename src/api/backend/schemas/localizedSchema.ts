@@ -17,3 +17,7 @@ export const localizedSchema = z.object({
 });
 
 export type Localized = z.infer<typeof localizedSchema>;
+
+export const defaultLocalizedValue = locales.reduce<Localized>((acc, locale) => ({ ...acc, [locale]: '' }), {
+  [defaultLocale]: '',
+});

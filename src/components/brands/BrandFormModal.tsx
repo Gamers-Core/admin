@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
@@ -8,11 +9,10 @@ import {
   BackendError,
   Brand,
   defaultLocale,
-  locales,
-  Localized,
   ValidationErrors,
   BrandSchema,
   brandSchema,
+  defaultLocalizedValue,
 } from '@/api';
 import { useUploadMediaStore } from '@/stores';
 import { Disclosure, useAddBrandMutation, useUpdateBrandMutation } from '@/hooks';
@@ -31,7 +31,7 @@ interface BrandFormModalProps {
 
 const defaultValues: BrandSchema = {
   imageId: null,
-  name: locales.reduce<Localized>((acc, locale) => ({ ...acc, [locale]: '' }), { [defaultLocale]: '' }),
+  name: defaultLocalizedValue,
 } as unknown as BrandSchema;
 
 export const BrandFormModal = ({ brand, disclosure }: BrandFormModalProps) => {
@@ -47,6 +47,11 @@ export const BrandFormModal = ({ brand, disclosure }: BrandFormModalProps) => {
   const isUploading = useUploadMediaStore((state) => state.files.some((f) => f.state === 'uploading'));
 
   const isLoading = updateBrandMutation.isPending || addBrandMutation.isPending;
+
+  useEffect(() => {
+    if (!disclosure.open) return;
+    form.reset(brand ? { imageId: brand.image?.id, name: brand.name } : defaultValues);
+  }, [brand, disclosure.open, form]);
 
   const onOpenChange = (open: boolean) => {
     if (isUploading) return;

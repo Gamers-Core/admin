@@ -6,14 +6,17 @@ import { defaultLocale, localeDir, locales, Localized } from '@/api';
 import { cn } from '@/lib/utils';
 
 import { Field, FieldError, FieldLabel, Input, Textarea } from './ui';
+import { RichTextInput } from './rich-text-input';
 
 type LocalizedFields<T> = {
   [K in keyof T]: T[K] extends Localized ? K : never;
 }[keyof T];
 
+type FormType = 'input' | 'textarea' | 'richtext';
+
 interface LocalizedFormProps<T extends Record<string, unknown>> {
   name: LocalizedFields<T> & string;
-  type?: 'input' | 'textarea';
+  type?: FormType;
 }
 
 export const LocalizedForm = <T extends Record<string, unknown>>({ name, type = 'input' }: LocalizedFormProps<T>) => {
@@ -27,7 +30,7 @@ export const LocalizedForm = <T extends Record<string, unknown>>({ name, type = 
         const isRequired = locale === defaultLocale;
         const dir = localeDir[locale];
 
-        const Component = type === 'textarea' ? Textarea : Input;
+        const Component = type === 'input' ? Input : type === 'textarea' ? Textarea : RichTextInput;
 
         return (
           <Controller
@@ -48,8 +51,9 @@ export const LocalizedForm = <T extends Record<string, unknown>>({ name, type = 
                   <Component
                     id={id}
                     dir={dir}
-                    className={cn('w-full p-2 px-3 text-sm/relaxed md:text-base/relaxed', {
+                    className={cn('w-full', {
                       'font-cairo': dir === 'rtl',
+                      'p-2 px-3 text-sm/relaxed md:text-base/relaxed': type !== 'richtext',
                     })}
                     {...inputProps}
                   />

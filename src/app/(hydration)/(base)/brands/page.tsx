@@ -4,10 +4,7 @@ import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query
 import { useBrandsQuery } from '@/hooks';
 import { BrandsList } from '@/components';
 
-export const metadata: Metadata = {
-  title: 'Gamers Core | Brands',
-  description: 'Discover our wide range of brands at Gamers Core.',
-};
+export const metadata: Metadata = { title: 'Gamers Core | Brands' };
 
 export default async function Brands() {
   const queryClient = new QueryClient();

@@ -3,6 +3,7 @@ import { DeliveryBox01FreeIcons, FileText, House, Store01Icon } from '@hugeicons
 import { SidebarItem } from './types';
 import { BrandsCTA } from '../brands';
 import { CategoriesCTA } from '../categories';
+import { FAQsCTA } from '../faqs';
 
 export const sidebarItems: SidebarItem[] = [
   {
@@ -46,6 +47,7 @@ export const sidebarItems: SidebarItem[] = [
       {
         title: 'Faqs',
         url: '/faqs',
+        cta: FAQsCTA,
       },
       {
         title: 'Policies',

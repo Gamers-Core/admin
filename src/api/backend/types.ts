@@ -76,3 +76,12 @@ export interface Category {
   id: number;
   name: Localized;
 }
+
+export interface FAQ {
+  id: number;
+  question: Localized;
+  answer: Localized;
+  position: number;
+  createdAt: string;
+  updatedAt: string;
+}

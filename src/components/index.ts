@@ -13,3 +13,6 @@ export * from './Modal';
 export * from './Form';
 export * from './brands';
 export * from './categories';
+export * from './rich-text-input';
+export * from './faqs';
+export * from './HTMLRender';
