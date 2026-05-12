@@ -41,14 +41,14 @@ export const Modal = (props: ModalProps) => {
 
 const MobileDrawer = ({ title, description, children, className, asChild, ...disclosure }: ModalProps) => (
   <Drawer direction="bottom" {...disclosure}>
-    <DrawerContent className="bg-transparent before:backdrop-blur-lg before:bg-popover/60 h-full p-6 pt-0">
-      <DrawerHeader className="flex flex-col gap-2 px-0">
+    <DrawerContent className="bg-transparent before:backdrop-blur-lg before:bg-popover/60 h-full pb-6 pt-0">
+      <DrawerHeader className="flex flex-col gap-2 px-6">
         <DrawerTitle className="text-xl font-bold">{title}</DrawerTitle>
 
         <DrawerDescription className="text-xs font-semibold text-muted-foreground">{description}</DrawerDescription>
       </DrawerHeader>
 
-      <div className="flex flex-col flex-1 min-h-0 overflow-y-auto">
+      <div className="flex flex-col flex-1 min-h-0 overflow-y-auto px-6">
         {asChild ? children : <div className={cn('flex flex-col flex-1 gap-4', className)}>{children}</div>}
       </div>
     </DrawerContent>

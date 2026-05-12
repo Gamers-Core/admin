@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
@@ -33,6 +34,11 @@ export const FAQFormModal = ({ faq, disclosure }: FAQFormModalProps) => {
   const addFAQMutation = useAddFAQMutation();
 
   const isLoading = updateFAQMutation.isPending || addFAQMutation.isPending;
+
+  useEffect(() => {
+    if (!disclosure.open) return;
+    form.reset(faq ?? defaultValues);
+  }, [faq, disclosure.open, form]);
 
   const onOpenChange = (open: boolean) => {
     if (!open) {
@@ -77,8 +83,10 @@ export const FAQFormModal = ({ faq, disclosure }: FAQFormModalProps) => {
       onOpenChange={onOpenChange}
     >
       <Form className="flex-1 min-h-0 flex flex-col gap-5" onSubmit={onSubmit} {...form}>
-        <LocalizedForm<FAQSchema> name="question" />
-        <LocalizedForm<FAQSchema> name="answer" type="richtext" />
+        <div className="flex-1 min-h-0 flex flex-col gap-5 overflow-y-auto">
+          <LocalizedForm<FAQSchema> name="question" />
+          <LocalizedForm<FAQSchema> name="answer" type="richtext" />
+        </div>
 
         <ModalFooter>
           <Button
