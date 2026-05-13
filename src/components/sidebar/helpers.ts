@@ -19,12 +19,11 @@ const findTrail = (items: RouteChild[], pathname: string, shallow = false): Rout
 export const getBreadcrumbs = (pathname: string) => {
   const segments = pathname.split('/').filter(Boolean);
   const base = '/' + (segments[0] ?? '');
-
   const knownCrumbs: { title: string; url?: string }[] = [];
 
   for (const route of routes) {
     if ('items' in route) {
-      const trail = findTrail(route.items, base);
+      const trail = findTrail(route.items, pathname);
 
       if (trail) {
         knownCrumbs.push({ title: route.title });

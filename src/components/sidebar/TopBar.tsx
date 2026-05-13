@@ -14,7 +14,6 @@ import {
 } from '../ui';
 import { getActiveItem, getBreadcrumbs } from './helpers';
 import { Link } from '../Link';
-import { cn } from '@/lib/utils';
 
 interface TopBarProps {
   pathname: string | null;
@@ -39,23 +38,26 @@ export const TopBar = (props: TopBarProps) => {
 
           <Breadcrumb className="line-clamp-1">
             <BreadcrumbList>
-              {breadcrumbs.map((crumb, index) => (
-                <React.Fragment key={index}>
-                  <BreadcrumbItem className="text-sm md:text-base font-medium capitalize">
-                    {'url' in crumb && crumb.url && breadcrumbs.length - 1 !== index ? (
-                      <Link href={crumb.url} prefetch>
-                        {crumb.title}
-                      </Link>
-                    ) : (
-                      <BreadcrumbPage className={cn({ 'text-muted-foreground': breadcrumbs.length - 1 !== index })}>
-                        {crumb.title}
-                      </BreadcrumbPage>
-                    )}
-                  </BreadcrumbItem>
+              {breadcrumbs.map((crumb, index) => {
+                const isLast = index === breadcrumbs.length - 1;
 
-                  {index < breadcrumbs.length - 1 && <BreadcrumbSeparator />}
-                </React.Fragment>
-              ))}
+                return (
+                  <React.Fragment key={index}>
+                    <BreadcrumbItem className="text-sm md:text-base font-medium capitalize">
+                      {'url' in crumb && crumb.url && !isLast ? (
+                        <Link href={crumb.url} prefetch>
+                          {crumb.title}
+                        </Link>
+                      ) : isLast ? (
+                        <BreadcrumbPage>{crumb.title}</BreadcrumbPage>
+                      ) : (
+                        <span>{crumb.title}</span>
+                      )}
+                    </BreadcrumbItem>
+                    {index < breadcrumbs.length - 1 && <BreadcrumbSeparator />}
+                  </React.Fragment>
+                );
+              })}
             </BreadcrumbList>
           </Breadcrumb>
         </div>
