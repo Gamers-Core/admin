@@ -139,7 +139,7 @@ const FAQModal = ({ faq, ...disclosure }: FAQModalProps) => (
       (locale) =>
         faq.question[locale] &&
         faq.answer[locale] && (
-          <div key={locale} className="bg-muted rounded-lg p-4">
+          <div key={locale} className="bg-muted rounded-lg p-4 flex flex-col gap-2">
             <p
               dir={localeDir[locale]}
               className={cn('text-base md:text-lg lg:text-xl text-start w-full', {
@@ -151,7 +151,7 @@ const FAQModal = ({ faq, ...disclosure }: FAQModalProps) => (
 
             <div
               dir={localeDir[locale]}
-              className={cn('text-sm text-muted-foreground text-start w-full mt-2', {
+              className={cn('text-sm text-muted-foreground text-start w-full', {
                 'font-cairo': localeDir[locale] === 'rtl',
               })}
             >
