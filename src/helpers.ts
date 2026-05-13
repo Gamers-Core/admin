@@ -9,3 +9,6 @@ export const chunk = <T>(arr: T[], size: number): T[][] => {
 
   return res;
 };
+
+export const formatNumber = (num: number, options?: Intl.NumberFormatOptions) =>
+  new Intl.NumberFormat('en-US', options).format(num);

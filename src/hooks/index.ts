@@ -11,3 +11,4 @@ export * from './brands';
 export * from './categories';
 export * from './faqs';
 export * from './user-reviews';
+export * from './useFormat';
