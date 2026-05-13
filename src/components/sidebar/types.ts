@@ -1,23 +1,22 @@
 import { IconSvgElement } from '@hugeicons/react';
 import { ReactNode } from 'react';
 
-export interface SubSidebarItem {
+export type RouteChild = {
   title: string;
   url: string;
-  cta?: () => ReactNode;
-}
+} & ({ cta?: () => ReactNode; items?: RouteChild[] } | object);
 
-export interface NavigationItem {
+export interface RouteURL {
   title: string;
   icon: IconSvgElement;
   url: string;
   cta?: () => ReactNode;
 }
 
-export interface NavigationItemWithSubItems {
+export interface RouteWithChildren {
   title: string;
   icon: IconSvgElement;
-  items: SubSidebarItem[];
+  items: RouteChild[];
 }
 
-export type SidebarItem = NavigationItem | NavigationItemWithSubItems;
+export type Route = RouteURL | RouteWithChildren;
