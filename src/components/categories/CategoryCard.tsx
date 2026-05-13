@@ -30,7 +30,7 @@ export const CategoryCard = ({ preview = false, ...category }: CategoryCardProps
   const modalDisclosure = useDisclosure();
 
   return (
-    <div className="relative flex flex-col items-center gap-4">
+    <div className="flex flex-col items-center gap-4">
       <div className="flex flex-col gap-4 w-full p-6 bg-border rounded-lg h-full">
         {locales.map((locale) => (
           <p

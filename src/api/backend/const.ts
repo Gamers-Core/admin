@@ -1,4 +1,4 @@
-import type { Locale, MediaFolder, MediaFormat } from './types';
+import type { Locale, MediaFolder, MediaFormat, PolicyType } from './types';
 
 export const authPurposes = ['admin_signin'] as const;
 
@@ -21,3 +21,11 @@ export const mediaFoldersTypeMap = {
 } as const satisfies Record<MediaFolder, MediaFormat | MediaFormat[]>;
 
 export const mediaRawFormats = ['.pdf', '.csv', '.txt', '.zip', '.doc', '.docx', '.xls', '.xlsx'] as const;
+
+export const policyTypes = ['terms-of-service', 'shipping', 'refund', 'privacy'] as const;
+export const policyTypeLabels: Record<PolicyType, string> = {
+  'terms-of-service': 'Terms of Service',
+  shipping: 'Shipping Policy',
+  refund: 'Refund Policy',
+  privacy: 'Privacy Policy',
+};

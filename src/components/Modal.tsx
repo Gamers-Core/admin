@@ -27,6 +27,7 @@ interface ModalProps extends Disclosure {
   title: string;
   description?: string;
   children: React.ReactNode;
+  fullscreen?: boolean;
   className?: string;
   asChild?: boolean;
 }
@@ -39,9 +40,13 @@ export const Modal = (props: ModalProps) => {
   return <Component {...props} onClose={() => props.onOpenChange(false)} />;
 };
 
-const MobileDrawer = ({ title, description, children, className, asChild, ...disclosure }: ModalProps) => (
+const MobileDrawer = ({ title, description, children, className, asChild, fullscreen, ...disclosure }: ModalProps) => (
   <Drawer direction="bottom" {...disclosure}>
-    <DrawerContent className="bg-transparent before:backdrop-blur-lg before:bg-popover/60 h-full pb-6 pt-0">
+    <DrawerContent
+      className={cn('bg-transparent before:backdrop-blur-lg before:bg-popover/60 h-full pb-6 pt-0', {
+        'h-screen': fullscreen,
+      })}
+    >
       <DrawerHeader className="flex flex-col gap-2 px-6">
         <DrawerTitle className="text-xl font-bold">{title}</DrawerTitle>
 
@@ -55,9 +60,12 @@ const MobileDrawer = ({ title, description, children, className, asChild, ...dis
   </Drawer>
 );
 
-const DesktopDialog = ({ title, description, children, className, asChild, ...disclosure }: ModalProps) => (
+const DesktopDialog = ({ title, description, children, className, asChild, fullscreen, ...disclosure }: ModalProps) => (
   <Dialog {...disclosure}>
-    <DialogContent showCloseButton={false} className="flex flex-col md:max-w-2xl max-h-[90dvh] px-0">
+    <DialogContent
+      showCloseButton={false}
+      className={cn('flex flex-col md:max-w-2xl max-h-[90dvh] px-0', { 'md:max-w-[90dvw]': fullscreen })}
+    >
       <DialogHeader className="flex flex-row justify-between items-center px-4">
         <div className="flex flex-col gap-2">
           <DialogTitle className="text-xl">{title}</DialogTitle>

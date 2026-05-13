@@ -64,7 +64,7 @@ export const UserReviewsCTA = () => {
         </div>
       )}
 
-      {(userReviews?.length || 0) < 3 && (
+      {userReviews && userReviews.length < 3 && (
         <div>
           <Button icon={<HugeiconsIcon icon={Plus} />} onClick={modalDisclosure.onOpen}>
             Add UserReview
