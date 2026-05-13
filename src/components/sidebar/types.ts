@@ -1,10 +1,12 @@
 import { IconSvgElement } from '@hugeicons/react';
 import { ReactNode } from 'react';
 
-export type RouteChild = {
+export interface RouteChild {
   title: string;
   url: string;
-} & ({ cta?: () => ReactNode; items?: RouteChild[] } | object);
+  cta?: () => ReactNode;
+  items?: RouteChild[];
+}
 
 export interface RouteURL {
   title: string;
