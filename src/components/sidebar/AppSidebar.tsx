@@ -34,10 +34,10 @@ import {
   useSidebar,
 } from '../ui';
 import { Logo } from '../Logo';
-import { sidebarItems } from './const';
-import { NavigationItem, NavigationItemWithSubItems, SubSidebarItem } from './types';
+import { routes } from './const';
+import { RouteWithChildren, RouteChild, Route } from './types';
 import { Link } from '../Link';
-import { getActiveItem } from './helpers';
+import { getActiveItem, matchesUrl } from './helpers';
 
 interface AppSidebarProps {
   pathname: string | null;
@@ -51,7 +51,7 @@ export const AppSidebar = (props: AppSidebarProps) => {
   const meQuery = useMeQuery();
   const logoutMutation = useLogoutMutation();
 
-  const activeItem = getActiveItem(pathname || props.pathname || '/');
+  const activeItem = getActiveItem(pathname || props.pathname || '/', true);
 
   return (
     <Sidebar
@@ -68,13 +68,16 @@ export const AppSidebar = (props: AppSidebarProps) => {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu className="flex flex-col gap-2">
-              {sidebarItems.map((item) => {
-                if ('items' in item) return <SubMenu key={item.title} item={item} activeItem={activeItem} />;
+              {routes.map((item) => {
+                if ('items' in item)
+                  return <SubMenu key={item.title} item={item} activeItem={activeItem} pathname={pathname} />;
 
                 return (
                   <SidebarMenuItem
                     key={item.title}
-                    className={cn({ 'bg-secondary rounded-lg': activeItem?.url === item.url })}
+                    className={cn({
+                      'bg-secondary rounded-lg': activeItem && 'url' in activeItem && activeItem.url === item.url,
+                    })}
                   >
                     <SidebarMenuButton tooltip={item.title} asChild>
                       <Link prefetch href={item.url} onClick={() => isMobile && setOpenMobile(false)}>
@@ -131,14 +134,15 @@ export const AppSidebar = (props: AppSidebarProps) => {
 };
 
 interface SubMenuProps {
-  item: NavigationItemWithSubItems;
-  activeItem: NavigationItem | SubSidebarItem | null;
+  pathname: string;
+  item: RouteWithChildren;
+  activeItem: Route | RouteChild | null;
 }
 
-const SubMenu = ({ item, activeItem }: SubMenuProps) => {
+const SubMenu = ({ pathname, item, activeItem }: SubMenuProps) => {
   const sidebar = useSidebar();
 
-  const [isOpen, setIsOpen] = useState(() => item.items.some((sub) => sub.url === activeItem?.url));
+  const [isOpen, setIsOpen] = useState(() => item.items.some((sub) => matchesUrl(sub.url, pathname)));
 
   const onOpenChange = (open: boolean) => {
     if (sidebar.open) return setIsOpen(open);
@@ -172,7 +176,7 @@ const SubMenu = ({ item, activeItem }: SubMenuProps) => {
                 prefetch
                 href={subItem.url}
                 className={cn('text-xs whitespace-nowrap', {
-                  'bg-secondary rounded-lg': activeItem?.url === subItem.url,
+                  'bg-secondary rounded-lg': activeItem && 'url' in activeItem && activeItem.url === subItem.url,
                 })}
                 onClick={() => sidebar.isMobile && sidebar.setOpenMobile(false)}
               >

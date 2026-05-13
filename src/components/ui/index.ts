@@ -15,3 +15,4 @@ export * from './alert-dialog';
 export * from './textarea';
 export * from './dialog';
 export * from './drawer';
+export * from './breadcrumb';

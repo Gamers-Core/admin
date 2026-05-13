@@ -1,12 +1,12 @@
 import { DeliveryBox01FreeIcons, FileText, House, Store01Icon } from '@hugeicons/core-free-icons';
 
-import { SidebarItem } from './types';
+import { Route } from './types';
 import { BrandsCTA } from '../brands';
 import { CategoriesCTA } from '../categories';
 import { FAQsCTA } from '../faqs';
 import { UserReviewsCTA } from '../user-reviews';
 
-export const sidebarItems: SidebarItem[] = [
+export const routes: Route[] = [
   {
     title: 'Home',
     url: '/',
