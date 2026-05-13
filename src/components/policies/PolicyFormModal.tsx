@@ -72,9 +72,7 @@ export const PolicyFormModal = ({ policy, policyType, disclosure }: PolicyFormMo
     <Modal
       title={policy ? `Update Policy ${policy.type}` : 'Add New Policy'}
       description={
-        policy
-          ? `Update the policy ${policy.type} information.`
-          : 'Add a new policy to the list of frequently asked questions.'
+        policy ? `Update the policy ${policy.type} information.` : 'Fill in the information below to add a new policy.'
       }
       asChild
       {...disclosure}

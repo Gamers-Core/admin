@@ -5,11 +5,13 @@ import { BackendError, Policy, PolicyType, gamersCoreAdmin } from '@/api';
 
 const queryKey = (policyType: PolicyType) => ['policies', policyType] as const;
 
-const queryFn = async ({ queryKey: [, policyType] }: QueryFunctionContext) =>
+type QueryKey = ReturnType<typeof queryKey>;
+
+const queryFn = async ({ queryKey: [, policyType] }: QueryFunctionContext<QueryKey>) =>
   gamersCoreAdmin.get<Policy[]>(`/policies/${policyType}/history`).then((res) => res.data);
 
 export const usePolicyHistoryQuery = (policyType: PolicyType) =>
-  useQuery<Policy[], AxiosError<BackendError>>({
+  useQuery<Policy[], AxiosError<BackendError>, Policy[], QueryKey>({
     queryKey: queryKey(policyType),
     queryFn,
     retry: false,

@@ -14,7 +14,7 @@ export const PoliciesList = () => {
         {policyTypes.map((policyType) => {
           const policy = policiesQuery.data?.[policyType];
 
-          return <PolicyCard key={policy?.id} type={policyType} policy={policy} />;
+          return <PolicyCard key={policyType} type={policyType} policy={policy} />;
         })}
       </div>
     </section>

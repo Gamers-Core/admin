@@ -100,7 +100,7 @@ export interface Policy {
   type: PolicyType;
   value: Localized;
   version: number;
-  updatedAt: Date;
+  updatedAt: string;
 }
 
 export type Policies = Record<PolicyType, Policy>;
