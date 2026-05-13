@@ -6,14 +6,16 @@ export default async function Layout({ children }: Readonly<{ children: React.Re
   const pathname = (await headers()).get('x-pathname');
 
   return (
-    <SidebarProvider>
+    <SidebarProvider className="md:p-2 ps-0 h-dvh">
       <AppSidebar pathname={pathname} />
 
-      <SidebarInset className="flex flex-col flex-1 bg-background md:m-2 ms-0! rounded-2xl">
+      <div className="flex flex-col flex-1 bg-background md:rounded-2xl min-h-0 overflow-hidden">
         <TopBar pathname={pathname} />
 
-        <main className="flex flex-1 w-full flex-col gap-4 p-4 py-4">{children}</main>
-      </SidebarInset>
+        <SidebarInset className="flex-1 md:m-0! overflow-y-auto">
+          <div className="flex-1 flex flex-col gap-4 p-4">{children}</div>
+        </SidebarInset>
+      </div>
     </SidebarProvider>
   );
 }

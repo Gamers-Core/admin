@@ -57,8 +57,8 @@ export const AppSidebar = (props: AppSidebarProps) => {
     <Sidebar
       variant="inset"
       collapsible="icon"
-      className="border-none outline-none py-5 md:px-2"
-      innerClassName="dark:bg-sidebar gap-4"
+      className="border-none outline-none py-5 md:px-2 bg-sidebar"
+      innerClassName="gap-4"
     >
       <SidebarHeader>
         <Logo className="px-1" isCompact={!open && !isMobile} onClick={() => isMobile && setOpenMobile(false)} />
