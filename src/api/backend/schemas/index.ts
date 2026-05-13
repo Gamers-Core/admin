@@ -4,3 +4,4 @@ export * from './brandSchema';
 export * from './categorySchema';
 export * from './faqSchema';
 export * from './userReviewSchema';
+export * from './policySchema';

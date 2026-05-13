@@ -1,4 +1,4 @@
-import { authPurposes, locales, mediaFolders, mediaFoldersTypeMap, mediaTypes } from './const';
+import { authPurposes, locales, mediaFolders, mediaFoldersTypeMap, mediaTypes, policyTypes } from './const';
 import type { Localized } from './schemas';
 
 interface ValidationError<P extends string = string> {
@@ -92,3 +92,15 @@ export interface UserReview {
   facebookURL: string;
   image: Media<'image'> | null;
 }
+
+export type PolicyType = (typeof policyTypes)[number];
+
+export interface Policy {
+  id: number;
+  type: PolicyType;
+  value: Localized;
+  version: number;
+  updatedAt: Date;
+}
+
+export type Policies = Record<PolicyType, Policy>;
