@@ -1,4 +1,12 @@
-import { authPurposes, locales, mediaFolders, mediaFoldersTypeMap, mediaTypes, policyTypes } from './const';
+import {
+  authPurposes,
+  locales,
+  mediaFolders,
+  mediaFoldersTypeMap,
+  mediaTypes,
+  policyTypes,
+  productStatuses,
+} from './const';
 import type { Localized } from './schemas';
 
 interface ValidationError<P extends string = string> {
@@ -104,3 +112,38 @@ export interface Policy {
 }
 
 export type Policies = Record<PolicyType, Policy>;
+
+export interface ProductMedia extends Media {
+  id: number;
+  order: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface Variant {
+  id: number;
+  externalId: string;
+  name: Localized | null;
+  isActive: boolean;
+  stock: number;
+  price: number;
+  costPerItem: number;
+  compareAt: number | null;
+  image: Media<'image'> | null;
+}
+
+export type ProductStatus = (typeof productStatuses)[number];
+
+export interface Product {
+  id: number;
+  name: Localized;
+  title: Localized;
+  description: Localized;
+  status: ProductStatus;
+  variants: Variant[];
+  media: ProductMedia[];
+  brand: Brand;
+  category: Category;
+  createdAt: Date;
+  updatedAt: Date;
+}

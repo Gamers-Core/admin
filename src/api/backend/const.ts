@@ -29,3 +29,5 @@ export const policyTypeLabels: Record<PolicyType, string> = {
   refund: 'Refund Policy',
   privacy: 'Privacy Policy',
 };
+
+export const productStatuses = ['active', 'draft', 'unlisted'] as const;
