@@ -12,12 +12,15 @@ import {
 import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 import { useEffect, useId } from 'react';
 
-import { useFAQsQuery } from '@/hooks';
-
-import { FAQCard } from './FAQCard';
+import { useCTA, useFAQsQuery } from '@/hooks';
 import { useFAQsReorderStore } from '@/stores';
 
+import { FAQCard } from './FAQCard';
+import { FAQsCTA } from './FAQsCTA';
+
 export const FAQsList = () => {
+  useCTA(FAQsCTA);
+
   const faqsQuery = useFAQsQuery();
 
   const faqs = useFAQsReorderStore((state) => state.items) ?? faqsQuery.data ?? [];

@@ -20,7 +20,7 @@ const defaultState: AuthStoreState = {
   user: null,
 };
 
-export const useAuthStore = create<AuthStore>((set) => ({
+export const useAuthStore = create<AuthStore>()((set) => ({
   ...defaultState,
   setIsLoggedIn: (isLoggedIn) => set({ isLoggedIn }),
   setUser: (user) => set({ user, isLoggedIn: !!user }),

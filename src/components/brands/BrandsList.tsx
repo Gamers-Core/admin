@@ -1,10 +1,13 @@
 'use client';
 
-import { useBrandsQuery } from '@/hooks';
+import { useBrandsQuery, useCTA } from '@/hooks';
 
 import { BrandCard } from './BrandCard';
+import { BrandsCTA } from './BrandsCTA';
 
 export const BrandsList = () => {
+  useCTA(BrandsCTA);
+
   const brandsQuery = useBrandsQuery();
 
   return (

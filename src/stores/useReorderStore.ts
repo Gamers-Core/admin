@@ -18,10 +18,10 @@ interface ReorderStoreActions<T extends ReorderableItem> {
   reset: () => void;
 }
 
-type ReorderStore<T extends ReorderableItem> = ReorderStoreState<T> & ReorderStoreActions<T>;
+export type ReorderStore<T extends ReorderableItem> = ReorderStoreState<T> & ReorderStoreActions<T>;
 
 export const createReorderStore = <T extends ReorderableItem>() =>
-  create<ReorderStore<T>>((set) => ({
+  create<ReorderStore<T>>()((set) => ({
     queryItems: [],
     items: null,
     isLoading: false,

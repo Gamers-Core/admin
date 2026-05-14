@@ -1,10 +1,6 @@
 import { DeliveryBox01FreeIcons, FileText, House, Store01Icon } from '@hugeicons/core-free-icons';
 
 import { Route } from './types';
-import { BrandsCTA } from '../brands';
-import { CategoriesCTA } from '../categories';
-import { FAQsCTA } from '../faqs';
-import { UserReviewsCTA } from '../user-reviews';
 
 export const routes: Route[] = [
   {
@@ -28,12 +24,10 @@ export const routes: Route[] = [
       {
         title: 'Brands',
         url: '/brands',
-        cta: BrandsCTA,
       },
       {
         title: 'Categories',
         url: '/categories',
-        cta: CategoriesCTA,
       },
       {
         title: 'Featured Variants',
@@ -48,7 +42,6 @@ export const routes: Route[] = [
       {
         title: 'Faqs',
         url: '/faqs',
-        cta: FAQsCTA,
       },
       {
         title: 'Policies',
@@ -57,7 +50,6 @@ export const routes: Route[] = [
       {
         title: 'User Reviews',
         url: '/user-reviews',
-        cta: UserReviewsCTA,
       },
     ],
   },

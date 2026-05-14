@@ -1,10 +1,13 @@
 'use client';
 
-import { useCategoriesQuery } from '@/hooks';
+import { useCategoriesQuery, useCTA } from '@/hooks';
 
 import { CategoryCard } from './CategoryCard';
+import { CategoriesCTA } from './CategoriesCTA';
 
 export const CategoriesList = () => {
+  useCTA(CategoriesCTA);
+
   const categoriesQuery = useCategoriesQuery();
 
   return (

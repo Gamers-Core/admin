@@ -12,12 +12,15 @@ import {
 import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 import { useEffect, useId } from 'react';
 
-import { useUserReviewsQuery } from '@/hooks';
-
-import { UserReviewCard } from './UserReviewCard';
+import { useCTA, useUserReviewsQuery } from '@/hooks';
 import { useUserReviewsReorderStore } from '@/stores';
 
+import { UserReviewCard } from './UserReviewCard';
+import { UserReviewsCTA } from './UserReviewsCTA';
+
 export const UserReviewsList = () => {
+  useCTA(UserReviewsCTA);
+
   const userReviewsQuery = useUserReviewsQuery();
 
   const userReviews = useUserReviewsReorderStore((state) => state.items) ?? userReviewsQuery.data ?? [];

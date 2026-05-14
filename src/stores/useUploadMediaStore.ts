@@ -30,7 +30,7 @@ const initialState: State = {
   files: [],
 };
 
-export const useUploadMediaStore = create<UploadMediaStore>((set, get) => ({
+export const useUploadMediaStore = create<UploadMediaStore>()((set, get) => ({
   ...initialState,
 
   addFiles: (files) =>

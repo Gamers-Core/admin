@@ -14,6 +14,7 @@ import {
 } from '../ui';
 import { getActiveItem, getBreadcrumbs } from './helpers';
 import { Link } from '../Link';
+import { useTopBarStore } from '@/stores';
 
 interface TopBarProps {
   pathname: string | null;
@@ -21,6 +22,8 @@ interface TopBarProps {
 
 export const TopBar = (props: TopBarProps) => {
   const pathname = usePathname();
+
+  const cta = useTopBarStore((state) => state.cta);
 
   const activeItem = getActiveItem(pathname || props.pathname || '/');
 
@@ -62,11 +65,7 @@ export const TopBar = (props: TopBarProps) => {
           </Breadcrumb>
         </div>
 
-        {'cta' in activeItem && activeItem.cta && (
-          <div className="flex items-center gap-2">
-            <activeItem.cta />
-          </div>
-        )}
+        {cta && <div className="flex items-center gap-2">{cta}</div>}
       </div>
     </header>
   );
