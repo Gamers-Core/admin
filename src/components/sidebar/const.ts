@@ -14,9 +14,13 @@ export const routes: Route[] = [
     icon: DeliveryBox01FreeIcons,
   },
   {
-    title: 'Products',
+    title: 'Store',
     icon: Store01Icon,
     items: [
+      {
+        title: 'Products',
+        url: '/products',
+      },
       {
         title: 'Inventory',
         url: '/inventory',
@@ -36,7 +40,7 @@ export const routes: Route[] = [
     ],
   },
   {
-    title: 'Static Content',
+    title: 'Content',
     icon: FileText,
     items: [
       {
