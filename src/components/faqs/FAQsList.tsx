@@ -1,18 +1,10 @@
 'use client';
 
-import {
-  DndContext,
-  closestCenter,
-  PointerSensor,
-  TouchSensor,
-  useSensor,
-  useSensors,
-  DragEndEvent,
-} from '@dnd-kit/core';
-import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
-import { useEffect, useId } from 'react';
+import { DndContext, closestCenter } from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { useEffect } from 'react';
 
-import { useCTA, useFAQsQuery } from '@/hooks';
+import { useCTA, useFAQsQuery, useReorder } from '@/hooks';
 import { useFAQsReorderStore } from '@/stores';
 
 import { FAQCard } from './FAQCard';
@@ -25,28 +17,9 @@ export const FAQsList = () => {
 
   const faqs = useFAQsReorderStore((state) => state.items) ?? faqsQuery.data ?? [];
   const isLoading = useFAQsReorderStore((state) => state.isLoading);
-  const setFAQs = useFAQsReorderStore((state) => state.setItems);
   const setQueryFAQs = useFAQsReorderStore((state) => state.setQueryItems);
 
-  const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
-    useSensor(TouchSensor, { activationConstraint: { delay: 150, tolerance: 8 } }),
-  );
-
-  const dndId = useId();
-
-  const onDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
-
-    if (!over || active.id === over.id) return;
-
-    const oldIndex = faqs.findIndex((f) => f.id === active.id);
-    const newIndex = faqs.findIndex((f) => f.id === over.id);
-
-    if (oldIndex === -1 || newIndex === -1 || oldIndex === newIndex) return;
-
-    setFAQs(arrayMove(faqs, oldIndex, newIndex));
-  };
+  const { dndId, onDragEnd, sensors } = useReorder(useFAQsReorderStore);
 
   useEffect(() => {
     if (!faqsQuery.data) return;

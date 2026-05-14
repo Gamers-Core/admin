@@ -14,3 +14,4 @@ export * from './user-reviews';
 export * from './policies';
 export * from './useFormat';
 export * from './useCTA';
+export * from './useReorder';

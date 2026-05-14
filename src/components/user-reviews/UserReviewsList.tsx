@@ -1,18 +1,10 @@
 'use client';
 
-import {
-  DndContext,
-  closestCenter,
-  PointerSensor,
-  TouchSensor,
-  useSensor,
-  useSensors,
-  DragEndEvent,
-} from '@dnd-kit/core';
-import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
-import { useEffect, useId } from 'react';
+import { DndContext, closestCenter } from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { useEffect } from 'react';
 
-import { useCTA, useUserReviewsQuery } from '@/hooks';
+import { useCTA, useReorder, useUserReviewsQuery } from '@/hooks';
 import { useUserReviewsReorderStore } from '@/stores';
 
 import { UserReviewCard } from './UserReviewCard';
@@ -25,28 +17,9 @@ export const UserReviewsList = () => {
 
   const userReviews = useUserReviewsReorderStore((state) => state.items) ?? userReviewsQuery.data ?? [];
   const isLoading = useUserReviewsReorderStore((state) => state.isLoading);
-  const setUserReviews = useUserReviewsReorderStore((state) => state.setItems);
   const setQueryUserReviews = useUserReviewsReorderStore((state) => state.setQueryItems);
 
-  const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
-    useSensor(TouchSensor, { activationConstraint: { delay: 150, tolerance: 8 } }),
-  );
-
-  const dndId = useId();
-
-  const onDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
-
-    if (!over || active.id === over.id) return;
-
-    const oldIndex = userReviews.findIndex((f) => f.id === active.id);
-    const newIndex = userReviews.findIndex((f) => f.id === over.id);
-
-    if (oldIndex === -1 || newIndex === -1 || oldIndex === newIndex) return;
-
-    setUserReviews(arrayMove(userReviews, oldIndex, newIndex));
-  };
+  const { dndId, onDragEnd, sensors } = useReorder(useUserReviewsReorderStore);
 
   useEffect(() => {
     if (!userReviewsQuery.data) return;
