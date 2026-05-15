@@ -8,7 +8,7 @@ import { Controller, useFormContext } from 'react-hook-form';
 
 import { AddProductSchema } from '@/api';
 import { useDisclosure } from '@/hooks';
-import { Button, Checkbox, Input, LocalizedForm, Media, UploadMediaModal } from '@/components';
+import { Button, Checkbox, FieldError, Input, LocalizedForm, Media, UploadMediaModal } from '@/components';
 
 interface AddProductVariantRowProps {
   index: number;
@@ -49,6 +49,7 @@ export const AddProductVariantRow = ({ index, onRemove }: AddProductVariantRowPr
             type="button"
             variant="outline"
             className="absolute inset-0 h-auto p-0 overflow-hidden"
+            aria-invalid={Boolean(form.formState.errors.variants?.[index]?.imageId)}
             onClick={uploadMediaDisclosure.onOpen}
             icon={!image ? <HugeiconsIcon icon={Plus} /> : undefined}
           >
@@ -77,19 +78,7 @@ export const AddProductVariantRow = ({ index, onRemove }: AddProductVariantRowPr
       </td>
 
       <td className="p-2 align-middle">
-        <Controller
-          name={`variants.${index}.stock`}
-          control={form.control}
-          render={({ field }) => (
-            <Input
-              type="number"
-              className="min-h-10 text-lg"
-              {...field}
-              value={field.value ?? 0}
-              onChange={(e) => field.onChange(Number(e.target.value) || 0)}
-            />
-          )}
-        />
+        <VariantNumberInput index={index} name="stock" />
       </td>
 
       <td className="p-2 align-middle text-center">
@@ -105,56 +94,50 @@ export const AddProductVariantRow = ({ index, onRemove }: AddProductVariantRowPr
       </td>
 
       <td className="p-2 align-middle">
-        <Controller
-          name={`variants.${index}.price`}
-          control={form.control}
-          render={({ field }) => (
-            <Input
-              type="number"
-              className="min-h-10 text-lg"
-              {...field}
-              value={field.value ?? 0}
-              onChange={(e) => field.onChange(Number(e.target.value) || 0)}
-            />
-          )}
-        />
+        <VariantNumberInput index={index} name="price" />
       </td>
 
       <td className="p-2 align-middle">
-        <Controller
-          name={`variants.${index}.costPerItem`}
-          control={form.control}
-          render={({ field }) => (
-            <Input
-              type="number"
-              className="min-h-10 text-lg"
-              {...field}
-              value={field.value ?? 0}
-              onChange={(e) => field.onChange(Number(e.target.value) || 0)}
-            />
-          )}
-        />
+        <VariantNumberInput index={index} name="costPerItem" />
       </td>
 
       <td className="p-2 align-middle">
-        <Controller
-          name={`variants.${index}.compareAt`}
-          control={form.control}
-          render={({ field }) => (
-            <Input
-              type="number"
-              className="min-h-10 text-lg"
-              {...field}
-              value={field.value ?? 0}
-              onChange={(e) => field.onChange(Number(e.target.value) || 0)}
-            />
-          )}
-        />
+        <VariantNumberInput index={index} name="compareAt" />
       </td>
 
       <td className="p-2 align-middle">
         <Button type="button" variant="ghost" size="lg" onClick={onRemove} icon={<HugeiconsIcon icon={X} />} />
       </td>
     </tr>
+  );
+};
+
+interface VariantNumberInputProps {
+  index: number;
+  name: 'stock' | 'price' | 'costPerItem' | 'compareAt';
+}
+
+const VariantNumberInput = ({ index, name }: VariantNumberInputProps) => {
+  const form = useFormContext<AddProductSchema>();
+
+  return (
+    <Controller
+      name={`variants.${index}.${name}` as const}
+      control={form.control}
+      render={({ field, fieldState }) => (
+        <div className="flex flex-col gap-1">
+          <Input
+            type="number"
+            className="min-h-10"
+            {...field}
+            min={0}
+            value={field.value ?? 0}
+            onChange={(e) => field.onChange(Number(e.target.value) || 0)}
+          />
+
+          {fieldState.invalid && <FieldError errors={[fieldState.error]} className="text-xs" />}
+        </div>
+      )}
+    />
   );
 };

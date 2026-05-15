@@ -32,14 +32,10 @@ export const AddProductVariants = () => {
 
   const onDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
+
     if (!over || active.id === over.id) return;
 
-    const oldIndex = fields.findIndex((_, i) => i === active.id);
-    const newIndex = fields.findIndex((_, i) => i === over.id);
-
-    if (oldIndex === -1 || newIndex === -1) return;
-
-    move(oldIndex, newIndex);
+    move(active.id as number, over.id as number);
   };
 
   return (
@@ -57,12 +53,14 @@ export const AddProductVariants = () => {
         </Button>
       </div>
 
-      {fields.length > 0 ? (
-        <Controller
-          name="variants"
-          control={form.control}
-          render={({ fieldState }) => (
-            <Field>
+      {fields.length < 1 && <p className="text-sm text-muted-foreground m-auto">No variants added yet.</p>}
+
+      <Controller
+        name="variants"
+        control={form.control}
+        render={({ fieldState }) => (
+          <Field>
+            {fields.length > 0 && (
               <div className="overflow-x-auto rounded-lg border bg-background">
                 <DndContext id={dndId} sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
                   <SortableContext items={fields.map((_, index) => index)} strategy={verticalListSortingStrategy}>
@@ -70,13 +68,25 @@ export const AddProductVariants = () => {
                       <thead className="bg-muted/50 border-b">
                         <tr>
                           <th className="w-12 p-2" />
-                          <th className="w-24 p-2 text-left font-medium">Image</th>
-                          <th className="min-w-65 p-2 text-left font-medium">Label</th>
-                          <th className="w-28 p-2 text-left font-medium">Stock</th>
+                          <th className="w-24 p-2 text-left font-medium">
+                            Image <span className="text-destructive">*</span>
+                          </th>
+                          <th className="min-w-65 p-2 text-left font-medium">
+                            Label <span className="text-destructive">*</span>
+                          </th>
+                          <th className="w-28 p-2 text-left font-medium">
+                            Stock <span className="text-destructive">*</span>
+                          </th>
                           <th className="w-24 p-2 text-center font-medium">Active</th>
-                          <th className="w-32 p-2 text-left font-medium">Price</th>
-                          <th className="w-32 p-2 text-left font-medium">Cost / Item</th>
-                          <th className="w-32 p-2 text-left font-medium">Compare At</th>
+                          <th className="w-32 p-2 text-left font-medium">
+                            Price <span className="text-destructive">*</span>
+                          </th>
+                          <th className="w-32 p-2 text-left font-medium">
+                            Cost / Item <span className="text-destructive">*</span>
+                          </th>
+                          <th className="w-32 p-2 text-left font-medium">
+                            Compare At <span className="text-destructive">*</span>
+                          </th>
                           <th className="w-14 p-2" />
                         </tr>
                       </thead>
@@ -90,16 +100,20 @@ export const AddProductVariants = () => {
                   </SortableContext>
                 </DndContext>
               </div>
+            )}
 
-              {fieldState.invalid && (
-                <FieldError className="text-sm/normal lg:text-sm/relaxed" errors={[fieldState.error]} />
-              )}
-            </Field>
-          )}
-        />
-      ) : (
-        <p className="text-sm text-muted-foreground m-auto">No variants added yet.</p>
-      )}
+            {Array.isArray(fieldState.error) && (
+              <FieldError className="text-sm/normal lg:text-sm/relaxed">
+                There&apos;s an error with the variants.
+              </FieldError>
+            )}
+
+            {fieldState.error && (
+              <FieldError className="text-sm/normal lg:text-sm/relaxed" errors={[fieldState.error]} />
+            )}
+          </Field>
+        )}
+      />
     </section>
   );
 };
