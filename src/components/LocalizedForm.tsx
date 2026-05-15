@@ -17,13 +17,18 @@ type FormType = 'input' | 'textarea' | 'richtext';
 interface LocalizedFormProps<T extends Record<string, unknown>> {
   name: LocalizedFields<T> & string;
   type?: FormType;
+  className?: string;
 }
 
-export const LocalizedForm = <T extends Record<string, unknown>>({ name, type = 'input' }: LocalizedFormProps<T>) => {
+export const LocalizedForm = <T extends Record<string, unknown>>({
+  name,
+  type = 'input',
+  className,
+}: LocalizedFormProps<T>) => {
   const form = useFormContext<T>();
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className={cn('flex flex-col gap-4', className)}>
       {locales.map((locale) => {
         const fieldName = `${name}.${locale}` as FieldPath<T>;
         const id = `${name}-${locale}`;

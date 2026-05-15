@@ -18,3 +18,4 @@ export * from './faqs';
 export * from './HTMLRender';
 export * from './user-reviews';
 export * from './policies';
+export * from './products';

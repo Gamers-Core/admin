@@ -20,6 +20,7 @@ export const routes: Route[] = [
       {
         title: 'Products',
         url: '/products',
+        items: [{ title: 'Add Product', url: '/products/add' }],
       },
       {
         title: 'Inventory',
