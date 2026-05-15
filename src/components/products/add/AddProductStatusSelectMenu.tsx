@@ -19,38 +19,36 @@ export const AddProductStatusSelectMenu = () => {
   const form = useFormContext<AddProductSchema>();
 
   return (
-    <section className="bg-sidebar p-4 rounded-lg flex flex-col gap-2 h-fit">
-      <Controller
-        name="status"
-        control={form.control}
-        render={({ field, fieldState }) => (
-          <Field>
-            <FieldLabel htmlFor="status" className="text-lg font-semibold">
-              Status
-            </FieldLabel>
+    <Controller
+      name="status"
+      control={form.control}
+      render={({ field, fieldState }) => (
+        <Field>
+          <FieldLabel htmlFor="status" className="text-lg font-semibold">
+            Status
+          </FieldLabel>
 
-            <Select onValueChange={(value) => field.onChange(value)}>
-              <SelectTrigger className="w-full text-sm capitalize">
-                <SelectValue placeholder={field.value} />
-              </SelectTrigger>
+          <Select onValueChange={(value) => field.onChange(value)}>
+            <SelectTrigger className="w-full text-sm capitalize">
+              <SelectValue placeholder={field.value} />
+            </SelectTrigger>
 
-              <SelectContent position="popper">
-                <SelectGroup>
-                  {productStatuses.map((status) => (
-                    <SelectItem key={status} value={status} className="capitalize text-sm">
-                      {status}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+            <SelectContent position="popper">
+              <SelectGroup>
+                {productStatuses.map((status) => (
+                  <SelectItem key={status} value={status} className="capitalize text-sm">
+                    {status}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
 
-            {fieldState.invalid && (
-              <FieldError className="text-sm/normal md:text-sm/relaxed" errors={[fieldState.error]} />
-            )}
-          </Field>
-        )}
-      />
-    </section>
+          {fieldState.invalid && (
+            <FieldError className="text-sm/normal md:text-sm/relaxed" errors={[fieldState.error]} />
+          )}
+        </Field>
+      )}
+    />
   );
 };
