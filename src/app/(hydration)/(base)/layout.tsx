@@ -13,7 +13,7 @@ export default async function Layout({ children }: Readonly<{ children: React.Re
         <TopBar pathname={pathname} />
 
         <SidebarInset className="flex-1 md:m-0! overflow-y-auto">
-          <div className="flex-1 flex flex-col gap-4 p-4">{children}</div>
+          <div className="flex-1 flex flex-col gap-4 p-4 overflow-y-auto">{children}</div>
         </SidebarInset>
       </div>
     </SidebarProvider>
