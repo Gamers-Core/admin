@@ -2,7 +2,7 @@
 
 import { Controller, useFormContext } from 'react-hook-form';
 import { HugeiconsIcon } from '@hugeicons/react';
-import { DragDropVerticalIcon, X } from '@hugeicons/core-free-icons';
+import { DragDropVerticalIcon, Plus, X } from '@hugeicons/core-free-icons';
 import { closestCenter, DndContext } from '@dnd-kit/core';
 import { rectSortingStrategy, SortableContext, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -38,7 +38,7 @@ export const AddProductUploadMedia = () => {
       <div className="flex justify-between gap-2">
         <h3 className="text-lg font-semibold">Media</h3>
 
-        <Button size="sm" variant="outline" onClick={uploadMediaDisclosure.onOpen}>
+        <Button size="sm" variant="outline" icon={<HugeiconsIcon icon={Plus} />} onClick={uploadMediaDisclosure.onOpen}>
           Add Media
         </Button>
       </div>

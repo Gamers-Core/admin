@@ -129,6 +129,7 @@ export interface Variant {
   price: number;
   costPerItem: number;
   compareAt: number | null;
+  position: number;
   image: Media<'image'> | null;
 }
 
