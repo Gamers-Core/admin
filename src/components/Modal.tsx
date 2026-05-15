@@ -54,7 +54,7 @@ const MobileDrawer = ({ title, description, children, className, asChild, fullsc
       </DrawerHeader>
 
       <div className="flex flex-col flex-1 min-h-0 overflow-y-auto px-6">
-        {asChild ? children : <div className={cn('flex flex-col flex-1 gap-4', className)}>{children}</div>}
+        {asChild ? children : <div className={cn('flex flex-col flex-1 gap-4 min-h-0', className)}>{children}</div>}
       </div>
     </DrawerContent>
   </Drawer>
@@ -79,7 +79,7 @@ const DesktopDialog = ({ title, description, children, className, asChild, fulls
       </DialogHeader>
 
       <div className="flex flex-col flex-1 min-h-0 overflow-y-auto px-4">
-        {asChild ? children : <div className={cn('flex flex-col flex-1 gap-4', className)}>{children}</div>}
+        {asChild ? children : <div className={cn('flex flex-col flex-1 gap-4 min-h-0', className)}>{children}</div>}
       </div>
     </DialogContent>
   </Dialog>

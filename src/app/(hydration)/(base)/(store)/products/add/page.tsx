@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 
-import { AddProductForm, LocalizedForm } from '@/components';
+import { AddProductForm, AddProductUploadMedia, LocalizedForm } from '@/components';
 import { AddProductSchema } from '@/api';
 
 export const metadata: Metadata = { title: 'Gamers Core | Products | Add Product' };
@@ -16,6 +16,8 @@ export default async function AddProduct() {
 
           <LocalizedForm<AddProductSchema> name="description" type="richtext" />
         </section>
+
+        <AddProductUploadMedia />
       </div>
 
       <div className="min-w-0 flex-1">T2</div>
