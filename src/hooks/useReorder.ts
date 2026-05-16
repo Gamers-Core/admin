@@ -35,8 +35,10 @@ export const useReorder = <T extends { id: number; position: number }>(
 
     if (oldIndex === -1 || newIndex === -1 || oldIndex === newIndex) return;
 
-    setItems(arrayMove(items, oldIndex, newIndex));
-    options.onReorder?.(arrayMove(items, oldIndex, newIndex));
+    const movedArray = arrayMove(items, oldIndex, newIndex);
+
+    setItems(movedArray);
+    options.onReorder?.(movedArray);
   };
 
   return { sensors, dndId, onDragEnd };
