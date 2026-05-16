@@ -38,20 +38,31 @@ export const AddProductForm = (props: AddProductFormProps) => {
   const onSubmit: SubmitHandler<AddProductSchema> = async (data) => {
     if (!form.formState.isValid || addProductMutation.isPending) return;
 
-    await addProductMutation.mutateAsync(data, {
-      onSuccess: () => {
-        toast.success('Product added successfully.');
-
-        router.push('/products');
+    await addProductMutation.mutateAsync(
+      {
+        ...data,
+        variants: data.variants.map((variant) => ({
+          ...variant,
+          compareAt: variant.compareAt === 0 ? null : variant.compareAt,
+        })),
       },
-      onError: (validationErrors) => {
-        if (!validationErrors) return;
+      {
+        onSuccess: () => {
+          toast.success('Product added successfully.');
 
-        validationErrors.errors.forEach((error) => {
-          form.setError(error.property, { message: error.messages[0] });
-        });
+          router.push('/products');
+        },
+        onError: (validationErrors) => {
+          if (!validationErrors) return;
+
+          validationErrors.errors.forEach((error) => {
+            form.setError(error.property, { message: error.messages[0] });
+          });
+
+          toast.error('Please review the form and fix the errors before submitting again.');
+        },
       },
-    });
+    );
   };
 
   return <Form {...form} onSubmit={onSubmit} {...props} />;

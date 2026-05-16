@@ -13,7 +13,7 @@ export const addVariantSchema = z
     image: z.custom<MediaByFolder<'variant'>>().optional(),
     costPerItem: z.number().int().min(0),
     position: z.number().int().min(0),
-    compareAt: z.number().int().min(0).optional(),
+    compareAt: z.number().int().min(0).nullable().optional(),
   })
   .refine((data) => !data.compareAt || data.compareAt > data.price, {
     message: 'Compare at price must be greater than price',
