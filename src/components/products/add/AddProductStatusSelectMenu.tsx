@@ -28,7 +28,7 @@ export const AddProductStatusSelectMenu = () => {
             Status
           </FieldLabel>
 
-          <Select onValueChange={(value) => field.onChange(value)}>
+          <Select value={field.value} onValueChange={(value) => field.onChange(value)}>
             <SelectTrigger className="w-full text-sm capitalize">
               <SelectValue placeholder={field.value} />
             </SelectTrigger>

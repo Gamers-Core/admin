@@ -57,7 +57,7 @@ export const UploadMedia = <F extends MediaFolder>({ folder, onSuccess, classNam
     <div className={cn('flex w-full flex-col gap-3 flex-1 min-h-0', className)}>
       <div
         title={canUpload ? 'Drag files to upload' : undefined}
-        className="flex min-h-57.5 w-full flex-col gap-1.5"
+        className="flex w-full flex-col gap-1.5"
         onDragOver={(e) => e.preventDefault()}
         onDrop={(e) => {
           e.preventDefault();
