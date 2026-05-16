@@ -16,3 +16,5 @@ export * from './textarea';
 export * from './dialog';
 export * from './drawer';
 export * from './breadcrumb';
+export * from './checkbox';
+export * from './select';

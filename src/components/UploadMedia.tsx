@@ -41,9 +41,11 @@ export const UploadMedia = <F extends MediaFolder>({ folder, onSuccess, classNam
     const batches = chunk(validated, 2);
 
     for (const batch of batches) {
-      await Promise.allSettled(
-        batch.map((file) => uploadMutation.mutateAsync(file, { onSuccess: (media) => results.push(media) })),
-      );
+      const settled = await Promise.allSettled(batch.map((file) => uploadMutation.mutateAsync(file)));
+
+      settled.forEach((result) => {
+        if (result.status === 'fulfilled') results.push(result.value);
+      });
     }
 
     if (!results.length) return;
@@ -52,10 +54,10 @@ export const UploadMedia = <F extends MediaFolder>({ folder, onSuccess, classNam
   };
 
   return (
-    <div className={cn('flex w-full flex-col gap-3', className)}>
+    <div className={cn('flex w-full flex-col gap-3 flex-1 min-h-0', className)}>
       <div
         title={canUpload ? 'Drag files to upload' : undefined}
-        className="flex min-h-57.5 w-full flex-col gap-1.5"
+        className="flex w-full flex-col gap-1.5"
         onDragOver={(e) => e.preventDefault()}
         onDrop={(e) => {
           e.preventDefault();
@@ -121,7 +123,7 @@ export const UploadMedia = <F extends MediaFolder>({ folder, onSuccess, classNam
       </div>
 
       {files.length > 0 && (
-        <ul className="flex flex-col gap-2 overflow-y-auto max-h-64">
+        <ul className="flex flex-col gap-2 overflow-y-auto flex-1">
           {files.map((entry, i) => (
             <UploadState key={i} {...entry} onRemove={onRemove} onRetry={uploadMutation.mutate} isRetrying={false} />
           ))}

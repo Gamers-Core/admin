@@ -24,14 +24,14 @@ interface MediaProps {
 
 type ImageProps = BaseProps & XOR<SrcProps, MediaProps>;
 
-export const Image = (props: ImageProps) => {
+export const Image = ({ image, ...props }: ImageProps) => {
   const [isImageLoading, setIsImageLoading] = useState(true);
 
   const isSrc = 'src' in props;
   const isFill = 'fill' in props && props.fill;
 
-  const src = (isSrc ? props.src : props.image?.src) ?? '/assets/placeholder.svg';
-  const blurDataURL = !isSrc && props.image?.blurDataURL ? props.image?.blurDataURL : undefined;
+  const src = (isSrc ? props.src : image?.src) ?? '/assets/placeholder.svg';
+  const blurDataURL = !isSrc && image?.blurDataURL ? image?.blurDataURL : undefined;
 
   return (
     <NextImage
@@ -40,8 +40,8 @@ export const Image = (props: ImageProps) => {
       {...props}
       src={src}
       alt={props.alt ?? ''}
-      width={isFill ? undefined : ((isSrc ? props.width : props.image?.width) ?? 600)}
-      height={isFill ? undefined : ((isSrc ? props.height : props.image?.height) ?? 400)}
+      width={isFill ? undefined : ((isSrc ? props.width : image?.width) ?? 600)}
+      height={isFill ? undefined : ((isSrc ? props.height : image?.height) ?? 400)}
       className={cn('duration-500 ease-in-out blur-[0px]', { 'blur-sm': isImageLoading }, props.className)}
       onLoad={() => setIsImageLoading(false)}
     />

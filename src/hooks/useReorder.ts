@@ -7,8 +7,13 @@ import { StoreApi, UseBoundStore } from 'zustand';
 
 import { ReorderStore } from '@/stores';
 
+interface UseReorderOptions<T extends { id: number; position: number }> {
+  onReorder?: (items: T[]) => void;
+}
+
 export const useReorder = <T extends { id: number; position: number }>(
   store: UseBoundStore<StoreApi<ReorderStore<T>>>,
+  options: UseReorderOptions<T> = {},
 ) => {
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
@@ -30,7 +35,10 @@ export const useReorder = <T extends { id: number; position: number }>(
 
     if (oldIndex === -1 || newIndex === -1 || oldIndex === newIndex) return;
 
-    setItems(arrayMove(items, oldIndex, newIndex));
+    const movedArray = arrayMove(items, oldIndex, newIndex);
+
+    setItems(movedArray);
+    options.onReorder?.(movedArray);
   };
 
   return { sensors, dndId, onDragEnd };
