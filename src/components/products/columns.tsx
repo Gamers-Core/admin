@@ -23,9 +23,10 @@ export const columns: ColumnDef<Product>[] = [
   },
   {
     accessorKey: 'name',
+    size: 130,
     header: () => <SortHeader label="Product" sortKey="title" />,
     cell: ({ row }) => (
-      <Link href={`/products/${row.original.id}`} className="flex flex-col min-w-0">
+      <Link href={`/products/${row.original.id}`} className="flex flex-col w-48">
         <span className="font-medium text-sm truncate">{row.original.name[defaultLocale]}</span>
 
         <span className="text-xs text-muted-foreground truncate">{row.original.title[defaultLocale]}</span>
@@ -60,6 +61,7 @@ export const columns: ColumnDef<Product>[] = [
   {
     accessorKey: 'variants',
     id: 'price',
+    size: 230,
     header: () => <SortHeader label="Price" sortKey="price" />,
     cell: ({ row }) => {
       const formatCurrency = useFormatCurrency();
