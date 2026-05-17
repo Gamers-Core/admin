@@ -24,7 +24,7 @@ export const FilterHeader = <T extends keyof SearchSchema>({ label, filterKey, o
   return (
     <Select value={currentStatus ?? 'all'} onValueChange={onSelect}>
       <SelectTrigger
-        className={cn('text-sm capitalize bg-transparent! border-0!', { 'text-sidebar-primary': currentStatus })}
+        className={cn('text-xs capitalize bg-transparent! border-0!', { 'text-sidebar-primary': currentStatus })}
       >
         {label}
       </SelectTrigger>
