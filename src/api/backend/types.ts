@@ -116,8 +116,8 @@ export type Policies = Record<PolicyType, Policy>;
 export interface ProductMedia extends Media {
   id: number;
   order: number;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Variant {
@@ -145,6 +145,6 @@ export interface Product {
   media: ProductMedia[];
   brand: Brand;
   category: Category;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
