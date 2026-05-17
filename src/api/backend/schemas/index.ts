@@ -6,3 +6,4 @@ export * from './faqSchema';
 export * from './userReviewSchema';
 export * from './policySchema';
 export * from './products';
+export * from './searchSchema';

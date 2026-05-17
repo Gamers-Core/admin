@@ -22,3 +22,4 @@ export * from './products';
 export * from './Media';
 export * from './UploadMediaModal';
 export * from './DataTable';
+export * from './Searchbar';
