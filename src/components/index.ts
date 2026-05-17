@@ -23,3 +23,4 @@ export * from './Media';
 export * from './UploadMediaModal';
 export * from './DataTable';
 export * from './Searchbar';
+export * from './FilterHeader';

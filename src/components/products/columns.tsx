@@ -2,13 +2,15 @@
 
 import { ColumnDef } from '@tanstack/react-table';
 
-import { defaultLocale, Product } from '@/api';
+import { defaultLocale, Product, stockFilters } from '@/api';
+import { useBrandsQuery, useCategoriesQuery, useFormatCurrency, useFormatDate } from '@/hooks';
+import { cn } from '@/lib/utils';
 
 import { Media } from '../Media';
 import { StatusBadge } from './StatusBadge';
-import { useFormatCurrency, useFormatDate } from '@/hooks';
-import { cn } from '@/lib/utils';
 import { Link } from '../Link';
+import { SortHeader } from './SortHeader';
+import { FilterHeader } from '../FilterHeader';
 
 export const columns: ColumnDef<Product>[] = [
   {
@@ -21,7 +23,7 @@ export const columns: ColumnDef<Product>[] = [
   },
   {
     accessorKey: 'name',
-    header: 'Product',
+    header: () => <SortHeader label="Product" sortKey="title" />,
     cell: ({ row }) => (
       <Link href={`/products/${row.original.id}`} className="flex flex-col min-w-0">
         <span className="font-medium text-sm truncate">{row.original.name[defaultLocale]}</span>
@@ -37,7 +39,7 @@ export const columns: ColumnDef<Product>[] = [
   },
   {
     accessorKey: 'variants',
-    header: 'Inventory',
+    header: () => <FilterHeader label="Inventory" filterKey="stock" options={stockFilters} />,
     cell: ({ row }) => {
       const total = row.original.variants.reduce((sum, v) => sum + v.stock, 0);
       const active = row.original.variants.filter((v) => v.isActive).length;
@@ -58,7 +60,7 @@ export const columns: ColumnDef<Product>[] = [
   {
     accessorKey: 'variants',
     id: 'price',
-    header: 'Price',
+    header: () => <SortHeader label="Price" sortKey="price" />,
     cell: ({ row }) => {
       const formatCurrency = useFormatCurrency();
 
@@ -82,12 +84,20 @@ export const columns: ColumnDef<Product>[] = [
   },
   {
     accessorKey: 'category',
-    header: 'Category',
+    header: () => {
+      const categoriesQuery = useCategoriesQuery();
+
+      return <FilterHeader label="Category" filterKey="categoryId" options={categoriesQuery.data!} />;
+    },
     cell: ({ row }) => <span className="text-sm truncate">{row.original.category.name[defaultLocale]}</span>,
   },
   {
     accessorKey: 'brand',
-    header: 'Brand',
+    header: () => {
+      const brandsQuery = useBrandsQuery();
+
+      return <FilterHeader label="Brand" filterKey="brandId" options={brandsQuery.data!} />;
+    },
     cell: ({ row }) => (
       <div className="flex items-center gap-2 min-w-0">
         <Media
@@ -102,7 +112,7 @@ export const columns: ColumnDef<Product>[] = [
   },
   {
     accessorKey: 'createdAt',
-    header: 'Added',
+    header: () => <SortHeader label="Added" sortKey="created" />,
     cell: ({ row }) => {
       const formatDate = useFormatDate();
 

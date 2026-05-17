@@ -32,10 +32,9 @@ export const policyTypeLabels: Record<PolicyType, string> = {
 
 export const productStatuses = ['active', 'draft', 'unlisted'] as const;
 
-export const stockFilters = ['all', 'in-stock', 'out-of-stock'] as const;
+export const stockFilters = ['in-stock', 'out-of-stock'] as const;
 
 export const sortOptions = [
-  'most-relevant',
   'created-descending',
   'created-ascending',
   'title-ascending',

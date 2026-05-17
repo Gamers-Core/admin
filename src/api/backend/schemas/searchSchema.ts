@@ -1,6 +1,6 @@
 import z from 'zod';
 
-import { sortOptions, stockFilters } from '../const';
+import { productStatuses, sortOptions, stockFilters } from '../const';
 
 const priceRangeRefinement = (
   { minPrice, maxPrice }: { minPrice?: string; maxPrice?: string },
@@ -24,6 +24,7 @@ export const filtersSchema = z
     maxPrice: z.string().optional().refine(refineOptionalStringNumber, { message: 'Invalid price range' }),
     stock: z.enum(stockFilters).optional(),
     sort: z.enum(sortOptions).optional(),
+    status: z.enum(productStatuses).optional(),
   })
   .superRefine(priceRangeRefinement);
 
