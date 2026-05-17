@@ -24,7 +24,7 @@ export const Searchbar = ({ q }: SearchOptionsProps) => {
     <Input
       value={search ?? ''}
       onChange={(e) => setSearch(e.target.value)}
-      placeholder="Search for a titles, names, descriptions, etc."
+      placeholder="Search for titles, names, descriptions, etc."
       className="w-full min-h-10 p-2 px-3 text-sm/relaxed md:text-base/relaxed bg-accent"
     />
   );

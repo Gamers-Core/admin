@@ -8,7 +8,7 @@ import { DataTable } from '../DataTable';
 import { columns } from './columns';
 
 interface ProductsListProps {
-  searchParams?: SearchSchema;
+  searchParams: SearchSchema | undefined;
 }
 
 export const ProductsList = ({ searchParams }: ProductsListProps) => {

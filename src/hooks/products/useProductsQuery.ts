@@ -1,5 +1,5 @@
 import { QueryFunctionContext, useQuery, useQueryClient } from '@tanstack/react-query';
-import { AxiosResponse } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 
 import { BackendError, gamersCoreAdmin, Product, SearchSchema } from '@/api';
 
@@ -14,7 +14,7 @@ const queryFn = ({ queryKey: [, ...paramsArr] }: QueryFunctionContext<QueryKey>)
     .then((res) => res.data);
 
 export const useProductsQuery = (searchOptions: SearchSchema = {}) =>
-  useQuery<Product[], BackendError, Product[], QueryKey>({
+  useQuery<Product[], AxiosError<BackendError>, Product[], QueryKey>({
     queryKey: queryKey(searchOptions),
     queryFn,
     staleTime: 1000 * 60 * 5, // 5 minutes
