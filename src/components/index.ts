@@ -21,3 +21,4 @@ export * from './policies';
 export * from './products';
 export * from './Media';
 export * from './UploadMediaModal';
+export * from './DataTable';
