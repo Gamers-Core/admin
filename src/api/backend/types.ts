@@ -6,6 +6,8 @@ import {
   mediaTypes,
   policyTypes,
   productStatuses,
+  sortOptions,
+  stockFilters,
 } from './const';
 import type { Localized } from './schemas';
 
@@ -116,8 +118,8 @@ export type Policies = Record<PolicyType, Policy>;
 export interface ProductMedia extends Media {
   id: number;
   order: number;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Variant {
@@ -145,6 +147,13 @@ export interface Product {
   media: ProductMedia[];
   brand: Brand;
   category: Category;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
+
+export type StockFilter = (typeof stockFilters)[number];
+export type SortOption = (typeof sortOptions)[number];
+
+type ExtractSortKey<T extends string> = T extends `${infer Key}-ascending` | `${infer Key}-descending` ? Key : never;
+
+export type SortKey = ExtractSortKey<SortOption>;

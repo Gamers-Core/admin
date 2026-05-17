@@ -16,3 +16,4 @@ export * from './useFormat';
 export * from './useCTA';
 export * from './useReorder';
 export * from './products';
+export * from './useDebounce';

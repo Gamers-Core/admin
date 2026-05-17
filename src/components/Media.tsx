@@ -1,5 +1,5 @@
 import { HugeiconsIcon, IconSvgElement } from '@hugeicons/react';
-import { AudioBook01Icon, File01Icon } from '@hugeicons/core-free-icons';
+import { AudioBook01Icon, File01Icon, FileNotFoundIcon } from '@hugeicons/core-free-icons';
 
 import { type Media as MediaFile, MediaType } from '@/api';
 import { cn } from '@/lib/utils';
@@ -7,12 +7,14 @@ import { cn } from '@/lib/utils';
 import { Image } from './Image';
 
 interface MediaProps<T extends MediaType> {
-  media: MediaFile<T>;
+  media: MediaFile<T> | null;
   alt?: string;
   className?: string;
 }
 
 export const Media = <T extends MediaType>({ media, alt, className }: MediaProps<T>) => {
+  if (!media?.type) return <MediaPlaceholder className={className} icon={FileNotFoundIcon} />;
+
   switch (media.type) {
     case 'image':
       return <Image image={media as MediaFile<'image'>} alt={alt} className={className} />;

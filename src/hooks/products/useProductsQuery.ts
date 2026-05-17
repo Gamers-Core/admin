@@ -1,23 +1,29 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { AxiosResponse } from 'axios';
+import { QueryFunctionContext, useQuery, useQueryClient } from '@tanstack/react-query';
+import { AxiosError, AxiosResponse } from 'axios';
 
-import { BackendError, gamersCore, Product } from '@/api';
+import { BackendError, gamersCoreAdmin, Product, SearchSchema } from '@/api';
 
-const queryKey = () => ['products'] as const;
+const queryKey = (searchOptions: SearchSchema = {}) =>
+  ['products', ...Object.entries(searchOptions).sort(([a], [b]) => a.localeCompare(b))] as const;
 
-const queryFn = () => gamersCore.get<Product[], AxiosResponse<Product[]>>('/products').then((res) => res.data);
+type QueryKey = ReturnType<typeof queryKey>;
 
-export const useProductsQuery = () =>
-  useQuery<Product[], BackendError>({
-    queryKey: queryKey(),
+const queryFn = ({ queryKey: [, ...paramsArr] }: QueryFunctionContext<QueryKey>) =>
+  gamersCoreAdmin
+    .get<Product[], AxiosResponse<Product[]>>('/products', { params: Object.fromEntries(paramsArr) })
+    .then((res) => res.data);
+
+export const useProductsQuery = (searchOptions: SearchSchema = {}) =>
+  useQuery<Product[], AxiosError<BackendError>, Product[], QueryKey>({
+    queryKey: queryKey(searchOptions),
     queryFn,
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 
-export const useInvalidateProductsQuery = () => {
+export const useInvalidateProductsQuery = (searchOptions: SearchSchema = {}) => {
   const queryClient = useQueryClient();
 
-  return () => queryClient.invalidateQueries({ queryKey: queryKey() });
+  return () => queryClient.invalidateQueries({ queryKey: queryKey(searchOptions) });
 };
 
 useProductsQuery.queryKey = queryKey;

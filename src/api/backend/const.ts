@@ -31,3 +31,14 @@ export const policyTypeLabels: Record<PolicyType, string> = {
 };
 
 export const productStatuses = ['active', 'draft', 'unlisted'] as const;
+
+export const stockFilters = ['in-stock', 'out-of-stock'] as const;
+
+export const sortOptions = [
+  'created-descending',
+  'created-ascending',
+  'title-ascending',
+  'title-descending',
+  'price-ascending',
+  'price-descending',
+] as const;
