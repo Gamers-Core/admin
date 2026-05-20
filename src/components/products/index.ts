@@ -11,3 +11,4 @@ export * from './ProductVariantRow';
 export * from './ProductStatusSelectMenu';
 export * from './SelectProductRelations';
 export * from './SubmitProductButton';
+export * from './ProductFormCTA';

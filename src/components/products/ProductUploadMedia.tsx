@@ -17,19 +17,7 @@ export const ProductUploadMedia = () => {
 
   const { onDragEnd, sensors, state } = useReorder({
     items: form.watch('media'),
-    onReorder: (items) => {
-      console.log('Reorder Items', items);
-
-      console.log(
-        'Form Items before',
-        form.watch('media').map(({ id }) => id),
-      );
-      form.setValue('media', items, { shouldDirty: true });
-      console.log(
-        'Form Items after',
-        form.watch('media').map(({ id }) => id),
-      );
-    },
+    onReorder: (items) => form.setValue('media', items, { shouldDirty: true }),
   });
 
   return (

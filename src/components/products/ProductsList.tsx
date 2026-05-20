@@ -1,7 +1,8 @@
 'use client';
 
-import { useCTA, useProductsQuery } from '@/hooks';
+import { TopBarCTA } from '@/components';
 import { SearchSchema } from '@/api';
+import { useProductsQuery } from '@/hooks';
 
 import { ProductsCTA } from './ProductsCTA';
 import { DataTable } from '../DataTable';
@@ -12,9 +13,15 @@ interface ProductsListProps {
 }
 
 export const ProductsList = ({ searchParams }: ProductsListProps) => {
-  useCTA(() => <ProductsCTA />);
-
   const productsQuery = useProductsQuery(searchParams);
 
-  return <DataTable data={productsQuery.data ?? []} columns={columns} placeholder="No products found." />;
+  return (
+    <>
+      <TopBarCTA>
+        <ProductsCTA />
+      </TopBarCTA>
+
+      <DataTable data={productsQuery.data ?? []} columns={columns} placeholder="No products found." />
+    </>
+  );
 };
