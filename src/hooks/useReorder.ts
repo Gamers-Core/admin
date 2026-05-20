@@ -5,7 +5,7 @@ import { DragEndEvent, PointerSensor, TouchSensor, useSensor, useSensors } from 
 import { arrayMove } from '@dnd-kit/sortable';
 
 export interface ReorderState<T> {
-  items: T[] | null;
+  items: T[];
   isReordered: boolean;
   isLoading: boolean;
 }
@@ -30,7 +30,7 @@ export interface UseReorderReturn<T> {
 }
 
 export const useReorder = <T>({ items: initialItems, onReorder }: UseReorderOptions<T>): UseReorderReturn<T> => {
-  const [items, setItemsState] = useState<T[] | null>(initialItems ?? null);
+  const [items, setItemsState] = useState<T[]>(initialItems ?? []);
   const [originalItems, setOriginalItems] = useState<T[]>(initialItems ?? []);
   const [isReordered, setIsReordered] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -60,7 +60,7 @@ export const useReorder = <T>({ items: initialItems, onReorder }: UseReorderOpti
   }, [originalItems]);
 
   useEffect(() => {
-    setItemsState(initialItems ?? null);
+    setItemsState(initialItems ?? []);
     setOriginalItems(initialItems ?? []);
     setIsReordered(false);
     setIsLoading(false);

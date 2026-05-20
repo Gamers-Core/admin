@@ -7,31 +7,30 @@ import { closestCenter, DndContext } from '@dnd-kit/core';
 import { rectSortingStrategy, SortableContext, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
-import { AddProductSchema, MediaByFolder } from '@/api';
+import { ProductSchema, MediaByFolder } from '@/api';
 import { Button, Field, FieldError, Media, UploadMediaModal } from '@/components';
 import { useDisclosure, useReorder } from '@/hooks';
-import { useProductsMediaReorderStore } from '@/stores';
 
-export const AddProductUploadMedia = () => {
-  const form = useFormContext<AddProductSchema>();
+export const ProductUploadMedia = () => {
+  const form = useFormContext<ProductSchema>();
   const uploadMediaDisclosure = useDisclosure();
 
-  const media = useProductsMediaReorderStore((state) => state.items) ?? [];
-  const setMedia = useProductsMediaReorderStore((state) => state.setItems);
+  const { onDragEnd, sensors, state } = useReorder({
+    items: form.watch('media'),
+    onReorder: (items) => {
+      console.log('Reorder Items', items);
 
-  const setMediaIds = (items: typeof media) =>
-    form.setValue(
-      'mediaIds',
-      items.map((m) => m.id),
-      { shouldDirty: true },
-    );
-
-  const updateMedia = (items: typeof media) => {
-    setMedia(items);
-    setMediaIds(items);
-  };
-
-  const { dndId, onDragEnd, sensors } = useReorder(useProductsMediaReorderStore, { onReorder: setMediaIds });
+      console.log(
+        'Form Items before',
+        form.watch('media').map(({ id }) => id),
+      );
+      form.setValue('media', items, { shouldDirty: true });
+      console.log(
+        'Form Items after',
+        form.watch('media').map(({ id }) => id),
+      );
+    },
+  });
 
   return (
     <section className="bg-sidebar p-4 rounded-lg flex flex-col gap-4 min-h-44">
@@ -43,53 +42,58 @@ export const AddProductUploadMedia = () => {
         </Button>
       </div>
 
-      {media.length > 0 ? (
+      {state.items.length > 0 ? (
         <Controller
-          name="mediaIds"
+          name="media"
           control={form.control}
           render={({ fieldState }) => (
-            <Field>
-              <ul className="grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] lg:grid-cols-[repeat(auto-fill,minmax(90px,1fr))] gap-4">
-                <DndContext id={dndId} sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
-                  <SortableContext items={media.map(({ id }) => id)} strategy={rectSortingStrategy}>
-                    {media.map((m) => (
-                      <MediaCard
-                        {...m}
-                        key={m.id}
-                        onRemove={() => updateMedia(media.filter((item) => item.id !== m.id))}
-                      />
-                    ))}
-                  </SortableContext>
-                </DndContext>
-              </ul>
+            <>
+              <Field>
+                <ul className="grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] lg:grid-cols-[repeat(auto-fill,minmax(90px,1fr))] gap-4">
+                  <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
+                    <SortableContext items={state.items.map((_, index) => index)} strategy={rectSortingStrategy}>
+                      {state.items.map((m, index) => (
+                        <MediaCard
+                          {...m}
+                          key={m.id}
+                          index={index}
+                          onRemove={() => {
+                            const newMedia = state.items.filter((_, i) => i !== index);
+                            state.setItems(newMedia);
+                          }}
+                        />
+                      ))}
+                    </SortableContext>
+                  </DndContext>
+                </ul>
 
-              {fieldState.invalid && (
-                <FieldError className="text-sm/normal lg:text-sm/relaxed" errors={[fieldState.error]} />
-              )}
-            </Field>
+                {fieldState.invalid && (
+                  <FieldError className="text-sm/normal lg:text-sm/relaxed" errors={[fieldState.error]} />
+                )}
+              </Field>
+
+              <UploadMediaModal
+                folder="product"
+                onSuccess={(newMedia) => state.setItems([...state.items, ...newMedia])}
+                {...uploadMediaDisclosure}
+              />
+            </>
           )}
         />
       ) : (
         <p className="text-sm text-muted-foreground m-auto">No media added yet.</p>
       )}
-
-      <UploadMediaModal
-        folder="product"
-        onSuccess={(newMedia) =>
-          updateMedia([...media, ...newMedia.map((m, i) => ({ ...m, position: media.length + i }))])
-        }
-        {...uploadMediaDisclosure}
-      />
     </section>
   );
 };
 
 interface MediaCardProps extends MediaByFolder<'product'> {
+  index: number;
   onRemove: () => void;
 }
 
-const MediaCard = ({ onRemove, ...media }: MediaCardProps) => {
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: media.id });
+const MediaCard = ({ index, onRemove, ...media }: MediaCardProps) => {
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: index });
 
   return (
     <li

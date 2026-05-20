@@ -6,17 +6,17 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import { AddProductSchema } from '@/api';
+import { ProductSchema } from '@/api';
 import { useDisclosure } from '@/hooks';
 import { Button, Checkbox, FieldError, Input, LocalizedForm, Media, UploadMediaModal } from '@/components';
 
-interface AddProductVariantRowProps {
+interface ProductVariantRowProps {
   index: number;
   onRemove: () => void;
 }
 
-export const AddProductVariantRow = ({ index, onRemove }: AddProductVariantRowProps) => {
-  const form = useFormContext<AddProductSchema>();
+export const ProductVariantRow = ({ index, onRemove }: ProductVariantRowProps) => {
+  const form = useFormContext<ProductSchema>();
 
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: index });
 
@@ -74,7 +74,7 @@ export const AddProductVariantRow = ({ index, onRemove }: AddProductVariantRowPr
       </td>
 
       <td className="p-2 align-middle">
-        <LocalizedForm<AddProductSchema> name={`variants.${index}.name`} hideLabel className="gap-2 text-xs" />
+        <LocalizedForm<ProductSchema> name={`variants.${index}.name`} hideLabel className="gap-2 text-xs" />
       </td>
 
       <td className="p-2 align-middle">
@@ -118,7 +118,7 @@ interface VariantNumberInputProps {
 }
 
 const VariantNumberInput = ({ index, name }: VariantNumberInputProps) => {
-  const form = useFormContext<AddProductSchema>();
+  const form = useFormContext<ProductSchema>();
 
   return (
     <Controller

@@ -2,7 +2,7 @@
 
 import { Controller, useFormContext } from 'react-hook-form';
 
-import { AddProductSchema, defaultLocale } from '@/api';
+import { ProductSchema, defaultLocale } from '@/api';
 import {
   Field,
   FieldError,
@@ -16,8 +16,8 @@ import {
 } from '@/components';
 import { useBrandsQuery, useCategoriesQuery } from '@/hooks';
 
-export const AddProductRelations = () => {
-  const form = useFormContext<AddProductSchema>();
+export const SelectProductRelations = () => {
+  const form = useFormContext<ProductSchema>();
 
   const brandsQuery = useBrandsQuery();
   const categoriesQuery = useCategoriesQuery();

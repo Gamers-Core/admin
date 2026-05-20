@@ -2,7 +2,7 @@
 
 import { Controller, useFormContext } from 'react-hook-form';
 
-import { AddProductSchema, productStatuses } from '@/api';
+import { ProductSchema, productStatuses } from '@/api';
 import {
   Field,
   FieldError,
@@ -15,8 +15,8 @@ import {
   SelectValue,
 } from '@/components';
 
-export const AddProductStatusSelectMenu = () => {
-  const form = useFormContext<AddProductSchema>();
+export const ProductStatusSelectMenu = () => {
+  const form = useFormContext<ProductSchema>();
 
   return (
     <Controller

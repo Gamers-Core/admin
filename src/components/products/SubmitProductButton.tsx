@@ -2,12 +2,16 @@
 
 import { useFormContext } from 'react-hook-form';
 
-import { AddProductSchema } from '@/api';
+import { ProductSchema } from '@/api';
 import { Button } from '@/components';
 import { useBrandsQuery, useCategoriesQuery } from '@/hooks';
 
-export const AddProductButton = () => {
-  const form = useFormContext<AddProductSchema>();
+interface SubmitProductButtonProps {
+  mode?: 'add' | 'edit';
+}
+
+export const SubmitProductButton = ({ mode = 'add' }: SubmitProductButtonProps) => {
+  const form = useFormContext<ProductSchema>();
 
   const brandsQuery = useBrandsQuery();
   const categoriesQuery = useCategoriesQuery();
@@ -15,11 +19,11 @@ export const AddProductButton = () => {
   return (
     <Button
       type="submit"
-      isDisabled={!form.formState.isValid}
+      isDisabled={!form.formState.isValid || !form.formState.isDirty}
       isLoading={form.formState.isSubmitting || categoriesQuery.isPending || brandsQuery.isPending}
       className="w-full h-12 text-base"
     >
-      Add Product
+      {mode === 'edit' ? 'Save Changes' : 'Add Product'}
     </Button>
   );
 };

@@ -1,19 +1,18 @@
 'use client';
 
-import { closestCenter, DragEndEvent, DndContext } from '@dnd-kit/core';
+import { closestCenter, DndContext } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { Plus } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
-import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 
-import { AddProductSchema, AddVariantSchema, defaultLocalizedValue } from '@/api';
+import { ProductSchema, VariantSchema, defaultLocalizedValue } from '@/api';
 import { Button, Field, FieldError } from '@/components';
 import { useReorder } from '@/hooks';
-import { useProductVariantsReorderStore } from '@/stores';
 
-import { AddProductVariantRow } from './AddProductVariantRow';
+import { ProductVariantRow } from './ProductVariantRow';
 
-const defaultVariantValues: AddVariantSchema = {
+const defaultVariantValues: VariantSchema = {
   name: defaultLocalizedValue,
   price: 0,
   imageId: null as unknown as number,
@@ -24,19 +23,13 @@ const defaultVariantValues: AddVariantSchema = {
   isActive: true,
 };
 
-export const AddProductVariants = () => {
-  const form = useFormContext<AddProductSchema>();
-  const { fields, append, remove, move } = useFieldArray({ control: form.control, name: 'variants' });
+export const ProductVariantsTable = () => {
+  const form = useFormContext<ProductSchema>();
 
-  const { dndId, sensors } = useReorder(useProductVariantsReorderStore);
-
-  const onDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
-
-    if (!over || active.id === over.id) return;
-
-    move(active.id as number, over.id as number);
-  };
+  const { dndId, sensors, onDragEnd, state } = useReorder({
+    items: form.watch('variants'),
+    onReorder: (items) => form.setValue('variants', items, { shouldDirty: true }),
+  });
 
   return (
     <section className="bg-sidebar p-4 rounded-lg flex flex-col gap-6 min-h-48">
@@ -47,23 +40,25 @@ export const AddProductVariants = () => {
           variant="outline"
           size="sm"
           icon={<HugeiconsIcon icon={Plus} />}
-          onClick={() => append({ ...defaultVariantValues, position: fields.length })}
+          onClick={() =>
+            state.items && state.setItems([...state.items, { ...defaultVariantValues, position: state.items?.length }])
+          }
         >
           Add Variant
         </Button>
       </div>
 
-      {fields.length < 1 && <p className="text-sm text-muted-foreground m-auto">No variants added yet.</p>}
+      {state.items.length < 1 && <p className="text-sm text-muted-foreground m-auto">No variants added yet.</p>}
 
       <Controller
         name="variants"
         control={form.control}
         render={({ fieldState }) => (
           <Field>
-            {fields.length > 0 && (
+            {state.items.length > 0 && (
               <div className="overflow-x-auto rounded-lg border bg-background">
                 <DndContext id={dndId} sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
-                  <SortableContext items={fields.map((_, index) => index)} strategy={verticalListSortingStrategy}>
+                  <SortableContext items={state.items.map((_, index) => index)} strategy={verticalListSortingStrategy}>
                     <table className="w-full min-w-300 text-sm">
                       <thead className="bg-muted/50 border-b">
                         <tr>
@@ -92,8 +87,12 @@ export const AddProductVariants = () => {
                       </thead>
 
                       <tbody>
-                        {fields.map((field, index) => (
-                          <AddProductVariantRow key={field.id} index={index} onRemove={() => remove(index)} />
+                        {state.items.map((item, index) => (
+                          <ProductVariantRow
+                            key={index}
+                            index={index}
+                            onRemove={() => state.setItems(state.items.filter((_, i) => i !== index))}
+                          />
                         ))}
                       </tbody>
                     </table>
