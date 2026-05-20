@@ -2,7 +2,6 @@ import { Metadata } from 'next';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 
 import {
-  SubmitProductButton,
   ProductForm,
   SelectProductRelations,
   ProductStatusSelectMenu,
@@ -37,15 +36,11 @@ export default async function AddProduct() {
           <ProductVariantsTable />
         </div>
 
-        <div className="lg:sticky lg:top-0 lg:self-start min-w-0 flex-1 gap-4 flex flex-col">
-          <section className="bg-sidebar p-4 rounded-lg gap-4 grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] md:grid-cols-2 lg:grid-cols-1 ">
-            <ProductStatusSelectMenu />
+        <section className="lg:sticky lg:top-4 lg:self-start min-w-0 flex-1 bg-sidebar p-4 rounded-lg gap-4 grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] md:grid-cols-2 lg:grid-cols-1">
+          <ProductStatusSelectMenu />
 
-            <SelectProductRelations />
-          </section>
-
-          <SubmitProductButton />
-        </div>
+          <SelectProductRelations />
+        </section>
       </ProductForm>
     </HydrationBoundary>
   );
