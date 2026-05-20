@@ -89,7 +89,7 @@ export const ProductVariantsTable = () => {
                       <tbody>
                         {state.items.map((item, index) => (
                           <ProductVariantRow
-                            key={index}
+                            key={item.id}
                             index={index}
                             onRemove={() => state.setItems(state.items.filter((_, i) => i !== index))}
                           />
