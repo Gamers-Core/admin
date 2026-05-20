@@ -6,7 +6,7 @@ import { CategoryCard } from './CategoryCard';
 import { CategoriesCTA } from './CategoriesCTA';
 
 export const CategoriesList = () => {
-  useCTA(CategoriesCTA);
+  useCTA(() => <CategoriesCTA />);
 
   const categoriesQuery = useCategoriesQuery();
 

@@ -12,7 +12,7 @@ interface ProductsListProps {
 }
 
 export const ProductsList = ({ searchParams }: ProductsListProps) => {
-  useCTA(ProductsCTA);
+  useCTA(() => <ProductsCTA />);
 
   const productsQuery = useProductsQuery(searchParams);
 

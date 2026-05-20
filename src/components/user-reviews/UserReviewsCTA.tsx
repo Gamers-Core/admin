@@ -4,34 +4,34 @@ import { Checkmark, Plus, Refresh01FreeIcons } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react';
 import { toast } from 'sonner';
 
-import { useDisclosure, useReorderUserReviewMutation } from '@/hooks';
-import { useUserReviewsReorderStore } from '@/stores';
+import { ReorderProps, useDisclosure, useReorderUserReviewMutation } from '@/hooks';
 
 import { Button } from '../Button';
 import { UserReviewFormModal } from './UserReviewFormModal';
+import { UserReview } from '@/api';
 
-export const UserReviewsCTA = () => {
+export const UserReviewsCTA = ({
+  items,
+  isLoading,
+  isReordered,
+  reset,
+  setIsLoading,
+  setItems,
+}: ReorderProps<UserReview>) => {
   const modalDisclosure = useDisclosure();
 
   const reorderMutation = useReorderUserReviewMutation();
 
-  const userReviews = useUserReviewsReorderStore((state) => state.items);
-  const isLoading = useUserReviewsReorderStore((state) => state.isLoading);
-  const isReordered = useUserReviewsReorderStore((state) => state.isReordered);
-  const setUserReviews = useUserReviewsReorderStore((state) => state.setItems);
-  const resetUserReviews = useUserReviewsReorderStore((state) => state.reset);
-  const setIsLoading = useUserReviewsReorderStore((state) => state.setIsLoading);
-
   const onReorder = () => {
-    if (!userReviews) return;
+    if (!items) return;
 
     setIsLoading(true);
 
     reorderMutation.mutate(
-      userReviews.map((f) => f.id),
+      items.map((f) => f.id),
       {
         onSuccess: (data) => {
-          setUserReviews(data);
+          setItems(data);
 
           toast.success('User reviews reordered successfully.');
         },
@@ -59,12 +59,12 @@ export const UserReviewsCTA = () => {
             isLoading={isLoading}
             loadingIconClassName="size-4"
             icon={<HugeiconsIcon icon={Refresh01FreeIcons} />}
-            onClick={resetUserReviews}
+            onClick={reset}
           />
         </div>
       )}
 
-      {userReviews && userReviews.length < 3 && (
+      {items && items.length < 3 && (
         <div>
           <Button icon={<HugeiconsIcon icon={Plus} />} onClick={modalDisclosure.onOpen}>
             Add UserReview

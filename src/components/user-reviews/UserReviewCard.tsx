@@ -27,12 +27,13 @@ import { Image } from '../Image';
 import { Link } from '../Link';
 
 interface UserReviewCardProps extends UserReview {
+  index: number;
   isDisabled?: boolean;
   preview?: boolean;
 }
 
-export const UserReviewCard = ({ preview = false, isDisabled = false, ...userReview }: UserReviewCardProps) => {
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: userReview.id });
+export const UserReviewCard = ({ preview = false, isDisabled = false, index, ...userReview }: UserReviewCardProps) => {
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: index });
 
   const updateModalDisclosure = useDisclosure();
 

@@ -29,10 +29,11 @@ import { HTMLRender } from '../HTMLRender';
 interface FAQCardProps extends FAQ {
   isDisabled?: boolean;
   preview?: boolean;
+  index: number;
 }
 
-export const FAQCard = ({ preview = false, isDisabled = false, ...faq }: FAQCardProps) => {
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: faq.id });
+export const FAQCard = ({ preview = false, isDisabled = false, index, ...faq }: FAQCardProps) => {
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: index });
 
   const updateModalDisclosure = useDisclosure();
   const previewModalDisclosure = useDisclosure();

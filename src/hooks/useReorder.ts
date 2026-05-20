@@ -1,45 +1,93 @@
 'use client';
 
-import { useId } from 'react';
+import { useState, useCallback, useEffect, useId } from 'react';
 import { DragEndEvent, PointerSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { arrayMove } from '@dnd-kit/sortable';
-import { StoreApi, UseBoundStore } from 'zustand';
 
-import { ReorderStore } from '@/stores';
+export interface ReorderState<T> {
+  items: T[] | null;
+  isReordered: boolean;
+  isLoading: boolean;
+}
 
-interface UseReorderOptions<T extends { id: number; position: number }> {
+export interface ReorderProps<T> extends ReorderState<T> {
+  setItems: (items: T[]) => void;
+  setIsLoading: (isLoading: boolean) => void;
+  setIsReordered: (isReordered: boolean) => void;
+  reset: () => void;
+}
+
+interface UseReorderOptions<T> {
+  items: T[] | undefined;
   onReorder?: (items: T[]) => void;
 }
 
-export const useReorder = <T extends { id: number; position: number }>(
-  store: UseBoundStore<StoreApi<ReorderStore<T>>>,
-  options: UseReorderOptions<T> = {},
-) => {
+export interface UseReorderReturn<T> {
+  dndId: string;
+  sensors: ReturnType<typeof useSensors>;
+  onDragEnd: (event: DragEndEvent) => void;
+  state: ReorderProps<T>;
+}
+
+export const useReorder = <T>({ items: initialItems, onReorder }: UseReorderOptions<T>): UseReorderReturn<T> => {
+  const [items, setItemsState] = useState<T[] | null>(initialItems ?? null);
+  const [originalItems, setOriginalItems] = useState<T[]>(initialItems ?? []);
+  const [isReordered, setIsReordered] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
     useSensor(TouchSensor, { activationConstraint: { delay: 150, tolerance: 8 } }),
   );
 
-  const items = store((state) => state.items) ?? [];
-  const setItems = store((state) => state.setItems);
-
   const dndId = useId();
 
-  const onDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
+  const setItems = useCallback(
+    (newItems: T[]) => {
+      const hasChanged =
+        newItems.length !== originalItems.length || newItems.some((item, index) => item !== originalItems[index]);
 
-    if (!over || active.id === over.id) return;
+      setItemsState(newItems);
+      setIsReordered(hasChanged);
+    },
+    [originalItems],
+  );
 
-    const oldIndex = items.findIndex((item) => item.id === active.id);
-    const newIndex = items.findIndex((item) => item.id === over.id);
+  const reset = useCallback(() => {
+    setItemsState(originalItems);
+    setIsReordered(false);
+    setIsLoading(false);
+  }, [originalItems]);
 
-    if (oldIndex === -1 || newIndex === -1 || oldIndex === newIndex) return;
+  useEffect(() => {
+    setItemsState(initialItems ?? null);
+    setOriginalItems(initialItems ?? []);
+    setIsReordered(false);
+    setIsLoading(false);
+  }, [initialItems]);
 
-    const movedArray = arrayMove(items, oldIndex, newIndex);
+  const onDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      const { active, over } = event;
 
-    setItems(movedArray);
-    options.onReorder?.(movedArray);
+      if (!over || active.id === over.id || !items) return;
+
+      const oldIndex = Number(active.id);
+      const newIndex = Number(over.id);
+
+      const reordered = arrayMove(items, oldIndex, newIndex);
+
+      setItems(reordered);
+      onReorder?.(reordered);
+    },
+    [items, setItems, onReorder],
+  );
+
+  return {
+    dndId,
+    sensors,
+    onDragEnd,
+
+    state: { items, setItems, isReordered, setIsReordered, isLoading, setIsLoading, reset },
   };
-
-  return { sensors, dndId, onDragEnd };
 };

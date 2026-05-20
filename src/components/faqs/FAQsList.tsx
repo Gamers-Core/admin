@@ -2,43 +2,31 @@
 
 import { DndContext, closestCenter } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { useEffect } from 'react';
 
 import { useCTA, useFAQsQuery, useReorder } from '@/hooks';
-import { useFAQsReorderStore } from '@/stores';
 
 import { FAQCard } from './FAQCard';
 import { FAQsCTA } from './FAQsCTA';
 
 export const FAQsList = () => {
-  useCTA(FAQsCTA);
-
   const faqsQuery = useFAQsQuery();
 
-  const faqs = useFAQsReorderStore((state) => state.items) ?? faqsQuery.data ?? [];
-  const isLoading = useFAQsReorderStore((state) => state.isLoading);
-  const setQueryFAQs = useFAQsReorderStore((state) => state.setQueryItems);
+  const { dndId, onDragEnd, sensors, state } = useReorder({ items: faqsQuery.data ?? [] });
 
-  const { dndId, onDragEnd, sensors } = useReorder(useFAQsReorderStore);
-
-  useEffect(() => {
-    if (!faqsQuery.data) return;
-
-    setQueryFAQs(faqsQuery.data);
-  }, [faqsQuery.data, setQueryFAQs]);
+  useCTA(() => <FAQsCTA {...state} />);
 
   return (
     <section className="flex-1 flex flex-col gap-8 min-w-0">
-      {faqs.length ? (
+      {state.items?.length ? (
         <div className="flex flex-col gap-6">
           <DndContext id={dndId} sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
             <SortableContext
-              disabled={isLoading}
-              items={faqs.map(({ id }) => id)}
+              disabled={state.isLoading}
+              items={state.items.map((_, index) => index)}
               strategy={verticalListSortingStrategy}
             >
-              {faqs.map((faq) => (
-                <FAQCard key={faq.id} isDisabled={isLoading} {...faq} />
+              {state.items.map((faq, index) => (
+                <FAQCard key={faq.id} isDisabled={state.isLoading} index={index} {...faq} />
               ))}
             </SortableContext>
           </DndContext>

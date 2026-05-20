@@ -6,7 +6,7 @@ import { BrandCard } from './BrandCard';
 import { BrandsCTA } from './BrandsCTA';
 
 export const BrandsList = () => {
-  useCTA(BrandsCTA);
+  useCTA(() => <BrandsCTA />);
 
   const brandsQuery = useBrandsQuery();
 
