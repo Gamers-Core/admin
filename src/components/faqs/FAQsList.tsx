@@ -12,7 +12,7 @@ import { FAQsCTA } from './FAQsCTA';
 export const FAQsList = () => {
   const faqsQuery = useFAQsQuery();
 
-  const { dndId, onDragEnd, sensors, state } = useReorder({ items: faqsQuery.data ?? [] });
+  const { dndId, onDragEnd, sensors, state } = useReorder({ items: faqsQuery.data });
 
   return (
     <>

@@ -16,7 +16,7 @@ export const UserReviewsCTA = ({
   isReordered,
   reset,
   setIsLoading,
-  setItems,
+  commit,
 }: ReorderProps<UserReview>) => {
   const modalDisclosure = useDisclosure();
 
@@ -31,7 +31,7 @@ export const UserReviewsCTA = ({
       items.map((f) => f.id),
       {
         onSuccess: (data) => {
-          setItems(data);
+          commit(data);
 
           toast.success('User reviews reordered successfully.');
         },

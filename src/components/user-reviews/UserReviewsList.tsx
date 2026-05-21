@@ -12,7 +12,7 @@ import { UserReviewsCTA } from './UserReviewsCTA';
 export const UserReviewsList = () => {
   const userReviewsQuery = useUserReviewsQuery();
 
-  const { dndId, onDragEnd, sensors, state } = useReorder({ items: userReviewsQuery.data ?? [] });
+  const { dndId, onDragEnd, sensors, state } = useReorder({ items: userReviewsQuery.data });
 
   return (
     <>

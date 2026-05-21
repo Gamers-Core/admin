@@ -10,7 +10,7 @@ import { FAQ } from '@/api';
 import { Button } from '../Button';
 import { FAQFormModal } from './FAQFormModal';
 
-export const FAQsCTA = ({ items, setItems, isLoading, isReordered, reset, setIsLoading }: ReorderProps<FAQ>) => {
+export const FAQsCTA = ({ items, commit, isLoading, isReordered, reset, setIsLoading }: ReorderProps<FAQ>) => {
   const modalDisclosure = useDisclosure();
 
   const reorderMutation = useReorderFAQMutation();
@@ -24,7 +24,7 @@ export const FAQsCTA = ({ items, setItems, isLoading, isReordered, reset, setIsL
       items.map((f) => f.id),
       {
         onSuccess: (data) => {
-          setItems(data);
+          commit(data);
 
           toast.success('FAQs reordered successfully.');
         },
