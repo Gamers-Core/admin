@@ -24,8 +24,8 @@ const defaultValues: ProductSchema = {
   categoryId: null as unknown as number,
 };
 
-export const ProductForm = (props: ProductFormProps) => {
-  const values = useMemo(() => (props.product ? mapProductToSchema(props.product) : defaultValues), [props.product]);
+export const ProductForm = ({ product, ...props }: ProductFormProps) => {
+  const values = useMemo(() => (product ? mapProductToSchema(product) : defaultValues), [product]);
 
   const form = useForm<ProductSchema>({
     defaultValues: values,
@@ -37,7 +37,7 @@ export const ProductForm = (props: ProductFormProps) => {
 
   return (
     <Form {...form} {...props}>
-      <ProductFormCTA isEditMode={!!props.product} productId={props.product?.id} />
+      <ProductFormCTA isEditMode={!!product} productId={product?.id} />
 
       {props.children}
     </Form>

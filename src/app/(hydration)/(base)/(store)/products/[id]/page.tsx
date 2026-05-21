@@ -18,13 +18,14 @@ export const metadata: Metadata = { title: 'Gamers Core | Products | Edit Produc
 
 export default async function EditProduct(props: PagePropsWithParams<{ id: string }>) {
   const { id } = await props.params;
-  if (Number.isNaN(id)) return notFound();
+  const productId = Number(id);
+  if (!Number.isFinite(productId)) return notFound();
 
   const queryClient = new QueryClient();
 
   const [product] = await Promise.allSettled([
     queryClient.fetchQuery({
-      queryKey: useProductQuery.queryKey(Number(id)),
+      queryKey: useProductQuery.queryKey(productId),
       queryFn: useProductQuery.queryFn,
     }),
     queryClient.prefetchQuery(useBrandsQuery),
