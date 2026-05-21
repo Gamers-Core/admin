@@ -30,7 +30,7 @@ export const ProductFormCTA = ({ isEditMode, productId }: ProductFormCTAProps) =
     updateProductMutation.isPending;
 
   const onSubmit: SubmitHandler<ProductSchema> = async (data) => {
-    if (!form.formState.isValid || isLoading) return;
+    if (isLoading) return;
 
     const onSuccess = (product: Product) => {
       toast.success(`Product ${product.name[defaultLocale]} ${isEditMode ? 'updated' : 'added'} successfully.`);
@@ -61,12 +61,7 @@ export const ProductFormCTA = ({ isEditMode, productId }: ProductFormCTAProps) =
 
   return (
     <TopBarCTA>
-      <Button
-        isDisabled={!form.formState.isValid || !form.formState.isDirty}
-        isLoading={isLoading}
-        onClick={form.handleSubmit(onSubmit, console.warn)}
-        loadingIconClassName="size-4"
-      >
+      <Button isLoading={isLoading} onClick={form.handleSubmit(onSubmit, console.warn)} loadingIconClassName="size-4">
         {isEditMode ? 'Save' : 'Add'}
       </Button>
 

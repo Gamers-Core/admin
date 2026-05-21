@@ -31,6 +31,7 @@ export const ProductForm = (props: ProductFormProps) => {
     defaultValues: values,
     mode: 'onBlur',
     reValidateMode: 'onChange',
+    shouldFocusError: true,
     resolver: zodResolver(productSchema),
   });
 
@@ -47,10 +48,9 @@ const mapProductToSchema = ({ brand, category, variants, ...product }: Product):
   ...product,
   brandId: brand?.id ?? (null as unknown as number),
   categoryId: category?.id ?? (null as unknown as number),
-  variants: variants.map(({ image, compareAt, ...variant }) => ({
+  variants: variants.map(({ compareAt, ...variant }) => ({
     ...variant,
-    image,
-    imageId: image.id,
+    imageId: variant.image.id,
     compareAt: compareAt ?? 0,
   })),
 });

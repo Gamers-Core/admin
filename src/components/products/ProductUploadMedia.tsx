@@ -93,7 +93,7 @@ const MediaCard = ({ index, onRemove, ...media }: MediaCardProps) => {
         className="w-full aspect-square object-cover overflow-hidden rounded-lg"
       />
 
-      <div className="lg:absolute inset-0 lg:bg-black bg-opacity-50 flex flex-col items-center justify-between gap-2 p-4 lg:opacity-0 hover:opacity-100 transition-opacity rounded-lg">
+      <div className="lg:absolute inset-0 lg:bg-black bg-opacity-50 flex flex-col items-center justify-between gap-2 py-4 px-3 lg:opacity-0 hover:opacity-100 transition-opacity rounded-lg">
         <p className="text-xs">
           {media.type}/{media.format}
         </p>
