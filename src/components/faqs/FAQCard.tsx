@@ -3,12 +3,11 @@
 import { HugeiconsIcon } from '@hugeicons/react';
 import { DragDropVerticalIcon, PencilEdit02Icon, Trash } from '@hugeicons/core-free-icons';
 import { toast } from 'sonner';
-import { useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
 
 import { FAQ, localeDir, locales } from '@/api';
 import { Disclosure, useDisclosure, useRemoveFAQMutation } from '@/hooks';
 import { cn } from '@/lib/utils';
+import type { ReorderableItemProps } from '@/components';
 
 import {
   AlertDialog,
@@ -26,28 +25,26 @@ import { Button } from '../Button';
 import { Modal } from '../Modal';
 import { HTMLRender } from '../HTMLRender';
 
-interface FAQCardProps extends FAQ {
+interface FAQCardProps extends FAQ, ReorderableItemProps {
   isDisabled?: boolean;
   preview?: boolean;
 }
 
-export const FAQCard = ({ preview = false, isDisabled = false, ...faq }: FAQCardProps) => {
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: faq.id });
-
+export const FAQCard = ({
+  sortable: { buttonProps, containerProps },
+  preview = false,
+  isDisabled = false,
+  ...faq
+}: FAQCardProps) => {
   const updateModalDisclosure = useDisclosure();
   const previewModalDisclosure = useDisclosure();
 
   return (
-    <div
-      ref={setNodeRef}
-      style={{ transform: CSS.Transform.toString(transform), transition }}
-      className="flex-1 flex items-center gap-4"
-    >
+    <div {...containerProps} className="flex-1 flex items-center gap-4">
       {!preview && (
         <div className="flex flex-col gap-2">
           <Button
-            {...attributes}
-            {...listeners}
+            {...buttonProps}
             className={cn('cursor-grab aria-pressed:cursor-grabbing touch-none')}
             isDisabled={isDisabled}
             variant="outline"

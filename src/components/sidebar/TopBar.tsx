@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   Breadcrumb,
@@ -14,22 +14,26 @@ import {
 } from '../ui';
 import { getActiveItem, getBreadcrumbs } from './helpers';
 import { Link } from '../Link';
-import { useTopBarStore } from '@/stores';
 
 interface TopBarProps {
   pathname: string | null;
+  onPortalReady?: (el: HTMLElement | null) => void;
 }
 
 export const TopBar = (props: TopBarProps) => {
+  const { pathname: fallbackPathname, onPortalReady } = props;
   const pathname = usePathname();
+  const [portalElement, setPortalElement] = useState<HTMLDivElement | null>(null);
 
-  const cta = useTopBarStore((state) => state.cta);
+  const activeItem = getActiveItem(pathname || fallbackPathname || '/');
 
-  const activeItem = getActiveItem(pathname || props.pathname || '/');
+  const breadcrumbs = getBreadcrumbs(pathname || fallbackPathname || '/');
+
+  useEffect(() => {
+    onPortalReady?.(portalElement);
+  }, [portalElement, onPortalReady]);
 
   if (!activeItem) return null;
-
-  const breadcrumbs = getBreadcrumbs(pathname || props.pathname || '/');
 
   return (
     <header className="right-(--removed-body-scroll-bar-size,0) z-50 transition-all duration-300 border-b-2 border-sidebar">
@@ -65,7 +69,9 @@ export const TopBar = (props: TopBarProps) => {
           </Breadcrumb>
         </div>
 
-        {cta && <div className="flex items-center gap-2">{cta}</div>}
+        <div className="flex items-center gap-2">
+          <div ref={setPortalElement} className="flex items-center gap-2" />
+        </div>
       </div>
     </header>
   );

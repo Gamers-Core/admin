@@ -3,12 +3,15 @@ import { JSX } from 'react';
 
 type SerializedYouTubeNode = Spread<{ videoId: string }, SerializedLexicalNode>;
 
+const YOUTUBE_REGEX = /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([^&\s?"]+)/;
+
 export class YouTubeNode extends DecoratorNode<JSX.Element> {
   __videoId: string;
 
   static getType() {
     return 'youtube';
   }
+
   static clone(node: YouTubeNode) {
     return new YouTubeNode(node.__videoId, node.__key);
   }
@@ -17,17 +20,18 @@ export class YouTubeNode extends DecoratorNode<JSX.Element> {
     return {
       iframe: (domNode) => {
         if (!(domNode instanceof HTMLIFrameElement)) return null;
-        const src = domNode.getAttribute('src') ?? '';
-        const videoId = extractYouTubeId(src);
-        if (!videoId) return null;
+
+        const match = (domNode.getAttribute('src') ?? '').match(YOUTUBE_REGEX);
+        if (!match) return null;
 
         return {
-          conversion: () => ({ node: new YouTubeNode(videoId) }),
+          conversion: () => ({ node: new YouTubeNode(match[1]) }),
           priority: 2,
         };
       },
       div: (domNode) => {
         if (!(domNode instanceof HTMLDivElement)) return null;
+
         const videoId = domNode.dataset.youtubeId;
         if (!videoId) return null;
 
@@ -47,6 +51,7 @@ export class YouTubeNode extends DecoratorNode<JSX.Element> {
   createDOM() {
     return document.createElement('div');
   }
+
   updateDOM() {
     return false;
   }
@@ -54,6 +59,7 @@ export class YouTubeNode extends DecoratorNode<JSX.Element> {
   static importJSON(data: SerializedYouTubeNode) {
     return new YouTubeNode(data.videoId);
   }
+
   exportJSON(): SerializedYouTubeNode {
     return { ...super.exportJSON(), type: 'youtube', videoId: this.__videoId };
   }
@@ -87,13 +93,3 @@ export class YouTubeNode extends DecoratorNode<JSX.Element> {
     );
   }
 }
-
-const extractYouTubeId = (input: string): string | null => {
-  const urlMatch = input.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
-  if (urlMatch) return urlMatch[1];
-
-  const iframeMatch = input.match(/youtube\.com\/embed\/([^?"\s]+)/);
-  if (iframeMatch) return iframeMatch[1];
-
-  return null;
-};

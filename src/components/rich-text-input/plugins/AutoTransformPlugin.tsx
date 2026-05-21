@@ -1,7 +1,5 @@
 'use client';
-
 import { useEffect } from 'react';
-
 import { $createLinkNode } from '@lexical/link';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import {
@@ -18,20 +16,11 @@ import {
 
 import { YouTubeNode } from '../nodes';
 
+const YOUTUBE_REGEX = /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([^&\s?"]+)/;
 const isSafeUrl = (url: string) => /^https?:\/\//i.test(url);
 
 export const AutoTransformPlugin = () => {
   const [editor] = useLexicalComposerContext();
-
-  const extractYouTubeId = (input: string): string | null => {
-    const urlMatch = input.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
-    if (urlMatch) return urlMatch[1];
-
-    const iframeMatch = input.match(/youtube\.com\/embed\/([^?"]+)/);
-    if (iframeMatch) return iframeMatch[1];
-
-    return null;
-  };
 
   useEffect(() => {
     const unregisterSpace = editor.registerCommand(
@@ -47,12 +36,13 @@ export const AutoTransformPlugin = () => {
           if (!(anchor instanceof TextNode)) return;
 
           const text = anchor.getTextContent();
+
           const markdownMatch = text.match(/\[([^\]]+)\]\(([^)]+)\)$/);
           if (markdownMatch) {
             const [full, label, url] = markdownMatch;
-            if (!isSafeUrl(url)) return; // reject javascript: etc.
-            const before = text.slice(0, text.length - full.length);
+            if (!isSafeUrl(url)) return;
 
+            const before = text.slice(0, -full.length);
             const linkNode = $createLinkNode(url, { target: '_blank', rel: 'noopener noreferrer' });
             linkNode.append($createTextNode(label));
 
@@ -69,8 +59,6 @@ export const AutoTransformPlugin = () => {
 
           const url = urlMatch[1];
           const urlStartIndex = text.lastIndexOf(url);
-          if (urlStartIndex < 0) return;
-
           const before = text.slice(0, urlStartIndex);
           const linkNode = $createLinkNode(url, { target: '_blank' });
           linkNode.append($createTextNode(url));
@@ -91,27 +79,26 @@ export const AutoTransformPlugin = () => {
       PASTE_COMMAND,
       (e: ClipboardEvent) => {
         const text = e.clipboardData?.getData('text/plain') ?? '';
-        const videoId = extractYouTubeId(text);
-        if (!videoId) return false;
+        const match = text.match(YOUTUBE_REGEX);
+        if (!match) return false;
 
         e.preventDefault();
+
         editor.update(() => {
           const selection = $getSelection();
           if (!$isRangeSelection(selection)) return;
 
           const anchor = selection.anchor.getNode();
           const topLevel = anchor.getKey() === 'root' ? $getRoot() : anchor.getTopLevelElementOrThrow();
-          const youtubeNode = new YouTubeNode(videoId);
+          const youtubeNode = new YouTubeNode(match[1]);
           const paragraph = $createParagraphNode();
 
-          if (topLevel.getKey() === 'root') {
-            topLevel.append(youtubeNode, paragraph);
-            paragraph.select();
-            return;
+          if (topLevel.getKey() === 'root') topLevel.append(youtubeNode, paragraph);
+          else {
+            topLevel.insertAfter(youtubeNode);
+            youtubeNode.insertAfter(paragraph);
           }
 
-          topLevel.insertAfter(youtubeNode);
-          youtubeNode.insertAfter(paragraph);
           paragraph.select();
         });
 

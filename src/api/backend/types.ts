@@ -125,14 +125,14 @@ export interface ProductMedia extends Media {
 export interface Variant {
   id: number;
   externalId: string;
-  name: Localized | null;
+  name: Localized;
   isActive: boolean;
   stock: number;
   price: number;
   costPerItem: number;
   compareAt: number | null;
   position: number;
-  image: Media<'image'> | null;
+  image: Media<'image'>;
 }
 
 export type ProductStatus = (typeof productStatuses)[number];

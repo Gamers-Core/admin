@@ -4,34 +4,27 @@ import { Checkmark, Plus, Refresh01FreeIcons } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react';
 import { toast } from 'sonner';
 
-import { useDisclosure, useReorderFAQMutation } from '@/hooks';
-import { useFAQsReorderStore } from '@/stores';
+import { ReorderProps, useDisclosure, useReorderFAQMutation } from '@/hooks';
+import { FAQ } from '@/api';
 
 import { Button } from '../Button';
 import { FAQFormModal } from './FAQFormModal';
 
-export const FAQsCTA = () => {
+export const FAQsCTA = ({ items, commit, isLoading, isReordered, reset, setIsLoading }: ReorderProps<FAQ>) => {
   const modalDisclosure = useDisclosure();
 
   const reorderMutation = useReorderFAQMutation();
 
-  const faqs = useFAQsReorderStore((state) => state.items);
-  const isLoading = useFAQsReorderStore((state) => state.isLoading);
-  const isReordered = useFAQsReorderStore((state) => state.isReordered);
-  const setFAQs = useFAQsReorderStore((state) => state.setItems);
-  const resetFAQs = useFAQsReorderStore((state) => state.reset);
-  const setIsLoading = useFAQsReorderStore((state) => state.setIsLoading);
-
   const onReorder = () => {
-    if (!faqs) return;
+    if (!items) return;
 
     setIsLoading(true);
 
     reorderMutation.mutate(
-      faqs.map((f) => f.id),
+      items.map((f) => f.id),
       {
         onSuccess: (data) => {
-          setFAQs(data);
+          commit(data);
 
           toast.success('FAQs reordered successfully.');
         },
@@ -59,7 +52,7 @@ export const FAQsCTA = () => {
             isLoading={isLoading}
             loadingIconClassName="size-4"
             icon={<HugeiconsIcon icon={Refresh01FreeIcons} />}
-            onClick={resetFAQs}
+            onClick={reset}
           />
         </div>
       )}
