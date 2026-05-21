@@ -29,7 +29,8 @@ export const ProductForm = (props: ProductFormProps) => {
 
   const form = useForm<ProductSchema>({
     defaultValues: values,
-    mode: 'onChange',
+    mode: 'onBlur',
+    reValidateMode: 'onChange',
     resolver: zodResolver(productSchema),
   });
 

@@ -49,7 +49,9 @@ export const useReorder = <T>({ items: initialItems, onReorder }: UseReorderOpti
 
       setItemsState(newItems);
       setIsReordered(hasChanged);
+      onReorder?.(newItems);
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [originalItems],
   );
 

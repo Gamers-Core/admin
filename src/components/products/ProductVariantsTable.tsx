@@ -28,7 +28,7 @@ export const ProductVariantsTable = () => {
 
   const { dndId, sensors, onDragEnd, state } = useReorder({
     items: form.watch('variants'),
-    onReorder: (items) => form.setValue('variants', items, { shouldDirty: true }),
+    onReorder: (items) => form.setValue('variants', items, { shouldDirty: true, shouldValidate: true }),
   });
 
   return (

@@ -17,7 +17,7 @@ export const ProductUploadMedia = () => {
 
   const { onDragEnd, sensors, state } = useReorder({
     items: form.watch('media'),
-    onReorder: (items) => form.setValue('media', items, { shouldDirty: true }),
+    onReorder: (items) => form.setValue('media', items, { shouldDirty: true, shouldValidate: true }),
   });
 
   return (
@@ -30,13 +30,13 @@ export const ProductUploadMedia = () => {
         </Button>
       </div>
 
-      {state.items.length > 0 ? (
-        <Controller
-          name="media"
-          control={form.control}
-          render={({ fieldState }) => (
-            <>
-              <Field>
+      <Controller
+        name="media"
+        control={form.control}
+        render={({ fieldState }) => (
+          <>
+            <Field className="flex-1">
+              {state.items.length > 0 ? (
                 <ul className="grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] lg:grid-cols-[repeat(auto-fill,minmax(90px,1fr))] gap-4">
                   <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
                     <SortableContext items={state.items.map((_, index) => index)} strategy={rectSortingStrategy}>
@@ -45,32 +45,29 @@ export const ProductUploadMedia = () => {
                           {...m}
                           key={m.id}
                           index={index}
-                          onRemove={() => {
-                            const newMedia = state.items.filter((_, i) => i !== index);
-                            state.setItems(newMedia);
-                          }}
+                          onRemove={() => state.setItems(state.items.filter((_, i) => i !== index))}
                         />
                       ))}
                     </SortableContext>
                   </DndContext>
                 </ul>
+              ) : (
+                <p className="text-sm text-muted-foreground text-center m-auto">No media added yet.</p>
+              )}
 
-                {fieldState.invalid && (
-                  <FieldError className="text-sm/normal lg:text-sm/relaxed" errors={[fieldState.error]} />
-                )}
-              </Field>
+              {fieldState.invalid && (
+                <FieldError className="text-sm/normal lg:text-sm/relaxed" errors={[fieldState.error]} />
+              )}
+            </Field>
 
-              <UploadMediaModal
-                folder="product"
-                onSuccess={(newMedia) => state.setItems([...state.items, ...newMedia])}
-                {...uploadMediaDisclosure}
-              />
-            </>
-          )}
-        />
-      ) : (
-        <p className="text-sm text-muted-foreground m-auto">No media added yet.</p>
-      )}
+            <UploadMediaModal
+              folder="product"
+              onSuccess={(newMedia) => state.setItems([...state.items, ...newMedia])}
+              {...uploadMediaDisclosure}
+            />
+          </>
+        )}
+      />
     </section>
   );
 };
