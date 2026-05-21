@@ -3,22 +3,23 @@
 import { Controller, useFormContext } from 'react-hook-form';
 import { HugeiconsIcon } from '@hugeicons/react';
 import { DragDropVerticalIcon, Plus, X } from '@hugeicons/core-free-icons';
-import { closestCenter, DndContext } from '@dnd-kit/core';
-import { rectSortingStrategy, SortableContext, useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
+import { rectSortingStrategy } from '@dnd-kit/sortable';
 
 import { ProductSchema, MediaByFolder } from '@/api';
-import { Button, Field, FieldError, Media, UploadMediaModal } from '@/components';
-import { useDisclosure, useReorder } from '@/hooks';
+import {
+  Button,
+  Field,
+  FieldError,
+  Media,
+  UploadMediaModal,
+  ReorderList,
+  type ReorderableItemProps,
+} from '@/components';
+import { useDisclosure } from '@/hooks';
 
 export const ProductUploadMedia = () => {
   const form = useFormContext<ProductSchema>();
   const uploadMediaDisclosure = useDisclosure();
-
-  const { onDragEnd, sensors, state } = useReorder({
-    items: form.watch('media'),
-    onReorder: (items) => form.setValue('media', items, { shouldDirty: true, shouldValidate: true }),
-  });
 
   return (
     <section className="bg-sidebar p-4 rounded-lg flex flex-col gap-4 min-h-44">
@@ -34,59 +35,56 @@ export const ProductUploadMedia = () => {
         name="media"
         control={form.control}
         render={({ fieldState }) => (
-          <>
-            <Field className="flex-1">
-              {state.items.length > 0 ? (
-                <ul className="grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] lg:grid-cols-[repeat(auto-fill,minmax(90px,1fr))] gap-4">
-                  <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
-                    <SortableContext items={state.items.map((_, index) => index)} strategy={rectSortingStrategy}>
-                      {state.items.map((m, index) => (
-                        <MediaCard
-                          {...m}
-                          key={m.id}
-                          index={index}
-                          onRemove={() => state.setItems(state.items.filter((_, i) => i !== index))}
-                        />
-                      ))}
-                    </SortableContext>
-                  </DndContext>
-                </ul>
-              ) : (
-                <p className="text-sm text-muted-foreground text-center m-auto">No media added yet.</p>
-              )}
+          <ReorderList
+            items={form.watch('media')}
+            onReorder={(items) => form.setValue('media', items, { shouldDirty: true, shouldValidate: true })}
+            strategy={rectSortingStrategy}
+            renderEmpty={() => <p className="text-sm text-muted-foreground text-center m-auto">No media added yet.</p>}
+            renderItem={(media, sortable, index, state) => (
+              <MediaCard
+                {...media}
+                sortable={sortable}
+                onRemove={() => state.setItems(state.items.filter((_, i) => i !== index))}
+              />
+            )}
+          >
+            {(children, state) => (
+              <>
+                <Field className="flex-1">
+                  <ul className="grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] lg:grid-cols-[repeat(auto-fill,minmax(90px,1fr))] gap-4">
+                    {children}
+                  </ul>
 
-              {fieldState.invalid && (
-                <FieldError className="text-sm/normal lg:text-sm/relaxed" errors={[fieldState.error]} />
-              )}
-            </Field>
+                  {fieldState.invalid && (
+                    <FieldError className="text-sm/normal lg:text-sm/relaxed" errors={[fieldState.error]} />
+                  )}
+                </Field>
 
-            <UploadMediaModal
-              folder="product"
-              onSuccess={(newMedia) => state.setItems([...state.items, ...newMedia])}
-              {...uploadMediaDisclosure}
-            />
-          </>
+                <UploadMediaModal
+                  folder="product"
+                  onSuccess={(newMedia) => state.setItems([...state.items, ...newMedia])}
+                  {...uploadMediaDisclosure}
+                />
+              </>
+            )}
+          </ReorderList>
         )}
       />
     </section>
   );
 };
 
-interface MediaCardProps extends MediaByFolder<'product'> {
-  index: number;
+interface MediaCardProps extends MediaByFolder<'product'>, ReorderableItemProps {
   onRemove: () => void;
 }
 
-const MediaCard = ({ index, onRemove, ...media }: MediaCardProps) => {
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: index });
-
+const MediaCard = ({
+  sortable: { containerProps, buttonProps: sortButtonProps },
+  onRemove,
+  ...media
+}: MediaCardProps) => {
   return (
-    <li
-      ref={setNodeRef}
-      style={{ transform: CSS.Transform.toString(transform), transition }}
-      key={media.id}
-      className="relative"
-    >
+    <li {...containerProps} className="relative">
       <Media
         media={media}
         alt={`Product Media ${media.id}`}
@@ -102,8 +100,7 @@ const MediaCard = ({ index, onRemove, ...media }: MediaCardProps) => {
           <Button size="sm" variant="outline" icon={<HugeiconsIcon icon={X} className="size-3" />} onClick={onRemove} />
 
           <Button
-            {...attributes}
-            {...listeners}
+            {...sortButtonProps}
             size="sm"
             className="cursor-grab aria-pressed:cursor-grabbing touch-none"
             variant="outline"

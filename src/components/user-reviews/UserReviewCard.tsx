@@ -3,12 +3,11 @@
 import { HugeiconsIcon } from '@hugeicons/react';
 import { DragDropVerticalIcon, PencilEdit02Icon, Trash } from '@hugeicons/core-free-icons';
 import { toast } from 'sonner';
-import { useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
 
 import { UserReview } from '@/api';
 import { useDisclosure, useRemoveUserReviewMutation } from '@/hooks';
 import { cn } from '@/lib/utils';
+import type { ReorderableItemProps } from '@/components';
 
 import {
   AlertDialog,
@@ -26,28 +25,31 @@ import { Button } from '../Button';
 import { Image } from '../Image';
 import { Link } from '../Link';
 
-interface UserReviewCardProps extends UserReview {
-  index: number;
+interface UserReviewCardProps extends UserReview, ReorderableItemProps {
   isDisabled?: boolean;
   preview?: boolean;
 }
 
-export const UserReviewCard = ({ preview = false, isDisabled = false, index, ...userReview }: UserReviewCardProps) => {
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: index });
+export const UserReviewCard = ({
+  preview = false,
+  isDisabled = false,
+  sortable,
+  ...userReview
+}: UserReviewCardProps) => {
+  const { containerProps: container, buttonProps: itemOptions } = sortable;
 
   const updateModalDisclosure = useDisclosure();
 
   return (
     <div
-      ref={setNodeRef}
-      style={{ transform: CSS.Transform.toString(transform), transition }}
+      ref={container.ref}
+      style={container.style}
       className="flex-1 flex flex-col-reverse md:flex-row items-center gap-4"
     >
       {!preview && (
         <div className="flex gap-2 md:flex-col">
           <Button
-            {...attributes}
-            {...listeners}
+            {...itemOptions}
             className={cn('cursor-grab aria-pressed:cursor-grabbing touch-none')}
             isDisabled={isDisabled}
             variant="outline"

@@ -2,39 +2,34 @@
 
 import { X, Plus, DragDropVerticalIcon } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
-import { useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
 import { Controller, useFormContext } from 'react-hook-form';
 
 import { ProductSchema } from '@/api';
 import { useDisclosure } from '@/hooks';
 import { Button, Checkbox, FieldError, Input, LocalizedForm, Media, UploadMediaModal } from '@/components';
+import type { ReorderableItemProps } from '@/components';
 
-interface ProductVariantRowProps {
+interface ProductVariantRowProps extends ReorderableItemProps {
   index: number;
   onRemove: () => void;
 }
 
-export const ProductVariantRow = ({ index, onRemove }: ProductVariantRowProps) => {
+export const ProductVariantRow = ({
+  sortable: { containerProps, buttonProps },
+  index,
+  onRemove,
+}: ProductVariantRowProps) => {
   const form = useFormContext<ProductSchema>();
-
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: index });
 
   const uploadMediaDisclosure = useDisclosure();
 
   const image = form.watch(`variants.${index}.image`);
 
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  };
-
   return (
-    <tr ref={setNodeRef} style={style} className="border-b last:border-0 bg-background">
+    <tr ref={containerProps.ref} style={containerProps.style} className="border-b last:border-0 bg-background">
       <td className="p-2 align-middle">
         <Button
-          {...attributes}
-          {...listeners}
+          {...buttonProps}
           type="button"
           variant="ghost"
           size="lg"
@@ -59,14 +54,9 @@ export const ProductVariantRow = ({ index, onRemove }: ProductVariantRowProps) =
           <UploadMediaModal
             folder="variant"
             onSuccess={([media]) => {
-              form.setValue(`variants.${index}.imageId`, media.id, {
-                shouldDirty: true,
-                shouldValidate: true,
-              });
+              form.setValue(`variants.${index}.imageId`, media.id, { shouldDirty: true, shouldValidate: true });
 
-              form.setValue(`variants.${index}.image`, media, {
-                shouldDirty: true,
-              });
+              form.setValue(`variants.${index}.image`, media, { shouldDirty: true });
             }}
             {...uploadMediaDisclosure}
           />
