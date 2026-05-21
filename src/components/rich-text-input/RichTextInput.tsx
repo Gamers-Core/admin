@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect, useRef } from 'react';
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import { ContentEditable } from '@lexical/react/LexicalContentEditable';
@@ -9,17 +10,19 @@ import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary';
 import { ListPlugin } from '@lexical/react/LexicalListPlugin';
 import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin';
 import { TabIndentationPlugin } from '@lexical/react/LexicalTabIndentationPlugin';
-import { $generateHtmlFromNodes } from '@lexical/html';
+import { $generateHtmlFromNodes, $generateNodesFromDOM } from '@lexical/html';
 import { ListNode, ListItemNode } from '@lexical/list';
 import { HeadingNode, QuoteNode } from '@lexical/rich-text';
-import { EditorState, LexicalEditor, $getRoot } from 'lexical';
+import { $createParagraphNode, $getRoot, EditorState, LexicalEditor } from 'lexical';
 import { LinkNode } from '@lexical/link';
 
 import { cn } from '@/lib/utils';
 import { defaultLocale, localeDir } from '@/api';
 
-import { AutoTransformPlugin, InitialValuePlugin, ToolbarPlugin } from './plugins';
+import { AutoTransformPlugin, ToolbarPlugin } from './plugins';
+import { cleanHtml, isHtmlEmpty, isEmptyParagraph } from './helpers';
 import { YouTubeNode } from './nodes';
+import { HTMLRender } from '../HTMLRender';
 
 export interface RichTextInputProps {
   id?: string;
@@ -38,39 +41,42 @@ export const RichTextInput = ({
   placeholder,
   className,
 }: RichTextInputProps) => {
-  const isHtmlEffectivelyEmpty = (html: string) => {
-    const trimmed = html.trim();
-    if (!trimmed) return true;
+  const [isMounted, setIsMounted] = useState(false);
+  const isInitializingRef = useRef(true);
 
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(trimmed, 'text/html');
-
-    const hasMeaningfulNode = (node: ChildNode): boolean => {
-      if (node.nodeType === 3) return Boolean(node.textContent?.trim());
-      if (node.nodeType !== 1) return false;
-
-      const element = node as HTMLElement;
-      const tag = element.tagName.toLowerCase();
-      if (tag === 'br') return false;
-      if (tag === 'p') return Array.from(element.childNodes).some(hasMeaningfulNode);
-
-      if (element.textContent && element.textContent.trim()) return true;
-
-      return Array.from(element.childNodes).some(hasMeaningfulNode);
-    };
-
-    return !Array.from(doc.body.childNodes).some(hasMeaningfulNode);
-  };
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const handleChange = (editorState: EditorState, editor: LexicalEditor) => {
+    if (isInitializingRef.current) {
+      isInitializingRef.current = false;
+      return;
+    }
+
     editorState.read(() => {
-      const root = $getRoot();
-      const html = $generateHtmlFromNodes(editor);
-      const isEmpty = root.getTextContent().trim() === '' && isHtmlEffectivelyEmpty(html);
-      const nextValue = isEmpty ? '' : html;
-      onChange?.(nextValue);
+      const html = cleanHtml($generateHtmlFromNodes(editor));
+      onChange?.(isHtmlEmpty(html) ? '' : html);
     });
   };
+
+  const normalizedValue = cleanHtml(value);
+
+  if (!isMounted)
+    return (
+      <div className={cn('w-full rounded-md border border-input bg-background', className)}>
+        <div className="flex flex-wrap items-center gap-0.5 p-1.5 border-b border-border bg-muted/30 rounded-t-md h-10" />
+        <div className="relative px-3 py-2">
+          <div className="min-h-40 text-base leading-relaxed">
+            {normalizedValue ? (
+              <Placeholder html={normalizedValue} />
+            ) : (
+              <div className="text-muted-foreground">{placeholder ?? 'Enter text...'}</div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
 
   return (
     <LexicalComposer
@@ -78,6 +84,21 @@ export const RichTextInput = ({
         namespace: 'RichText',
         nodes: [HeadingNode, QuoteNode, ListNode, ListItemNode, LinkNode, YouTubeNode],
         onError: console.error,
+        editable: true,
+        editorState: (editor) => {
+          const root = $getRoot();
+          root.clear();
+
+          if (!normalizedValue) return root.append($createParagraphNode());
+
+          const parser = new DOMParser();
+          const dom = parser.parseFromString(normalizedValue, 'text/html');
+          const nodes = $generateNodesFromDOM(editor, dom).filter((node) => !isEmptyParagraph(node));
+
+          if (nodes.length === 0) return root.append($createParagraphNode());
+
+          nodes.forEach((node) => root.append(node));
+        },
         theme: {
           paragraph: 'mb-1 text-base leading-relaxed',
           heading: {
@@ -109,9 +130,12 @@ export const RichTextInput = ({
         )}
       >
         <ToolbarPlugin dir={dir} />
+
         <div className="relative px-3 py-2">
           <RichTextPlugin
-            contentEditable={<ContentEditable id={id} className="min-h-40 outline-none text-base leading-relaxed" />}
+            contentEditable={
+              <ContentEditable id={id} className="min-h-40 outline-none text-base leading-relaxed" autoFocus={false} />
+            }
             placeholder={
               <div className="pointer-events-none absolute top-2 left-3 text-muted-foreground text-base">
                 {placeholder ?? 'Enter text...'}
@@ -121,13 +145,15 @@ export const RichTextInput = ({
           />
         </div>
       </div>
+
       <HistoryPlugin />
       <ListPlugin />
       <LinkPlugin />
       <TabIndentationPlugin />
       <AutoTransformPlugin />
       <OnChangePlugin onChange={handleChange} ignoreSelectionChange />
-      <InitialValuePlugin value={value} />
     </LexicalComposer>
   );
 };
+
+const Placeholder = HTMLRender('RichTextInput Placeholder');
