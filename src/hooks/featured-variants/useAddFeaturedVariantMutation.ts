@@ -14,13 +14,13 @@ export const useAddFeaturedVariantMutation = () => {
   const invalidateFeaturedVariantsQuery = useInvalidateFeaturedVariantsQuery();
 
   return useMutation<
-    FeaturedVariant[],
+    FeaturedVariant,
     BackendError<ValidationErrors<keyof FeaturedVariantSchema>> | null,
     FeaturedVariantSchema
   >({
     mutationFn: (data) =>
       gamersCoreAdmin
-        .post<FeaturedVariant[], AxiosResponse<FeaturedVariant[]>, FeaturedVariantSchema>('/featured-variants', data)
+        .post<FeaturedVariant, AxiosResponse<FeaturedVariant>, FeaturedVariantSchema>('/featured-variants', data)
         .then((res) => res.data)
         .catch((err: AxiosError<BackendError>) => {
           throw errorHandler(err);

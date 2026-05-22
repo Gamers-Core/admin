@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
@@ -29,16 +29,17 @@ interface FeaturedVariantFormModalProps {
   disclosure: Disclosure;
 }
 
-const defaultValues: FeaturedVariantSchema = {
-  variantId: null as unknown as number,
-  title: defaultLocalizedValue,
-};
-
 export const FeaturedVariantFormModal = ({ featuredVariant, disclosure }: FeaturedVariantFormModalProps) => {
-  const [variant, setVariant] = useState<VariantWithProduct | null>(null);
+  const [variant, setVariant] = useState<VariantWithProduct | null>(featuredVariant?.variant ?? null);
+
+  const defaultValues = useMemo(() => {
+    if (!featuredVariant) return { variantId: null as unknown as number, title: defaultLocalizedValue };
+
+    return { variantId: featuredVariant.variant.id, title: featuredVariant.title };
+  }, [featuredVariant]);
 
   const form = useForm<FeaturedVariantSchema>({
-    defaultValues: featuredVariant ?? defaultValues,
+    defaultValues,
     mode: 'onChange',
     resolver: zodResolver(featuredVariantSchema),
   });
@@ -52,13 +53,13 @@ export const FeaturedVariantFormModal = ({ featuredVariant, disclosure }: Featur
 
   useEffect(() => {
     if (!disclosure.open) return;
-    form.reset(featuredVariant ?? defaultValues);
-  }, [featuredVariant, disclosure.open, form]);
+
+    form.reset(defaultValues);
+  }, [disclosure.open, form, defaultValues]);
 
   const onOpenChange = (open: boolean) => {
     if (!open) {
       form.reset();
-      setVariant(null);
       updateFeaturedVariantMutation.reset();
       addFeaturedVariantMutation.reset();
     }
@@ -69,8 +70,10 @@ export const FeaturedVariantFormModal = ({ featuredVariant, disclosure }: Featur
   const onSubmit: SubmitHandler<FeaturedVariantSchema> = async (data) => {
     if (!form.formState.isValid || isLoading) return;
 
-    const onSuccess = () => {
+    const onSuccess = (data: FeaturedVariant) => {
       toast.success(`Featured variant ${featuredVariant ? 'updated' : 'added'} successfully.`);
+
+      setVariant(data.variant);
 
       onOpenChange(false);
     };
@@ -110,13 +113,13 @@ export const FeaturedVariantFormModal = ({ featuredVariant, disclosure }: Featur
             control={form.control}
             render={({ field, fieldState }) => (
               <Field className="flex-1">
-                <div className="relative min-h-28 min-w-full">
-                  {variant && <ProductPreviewCard variant={variant} />}
+                <div className={cn('relative min-h-28 min-w-full', { 'min-h-0': !!variant })}>
+                  {!!variant && <ProductPreviewCard variant={variant!} />}
 
                   <Button
                     variant="secondary"
                     onClick={productVariantsModalDisclosure.onOpen}
-                    className={cn('absolute inset-0 h-auto', { 'opacity-0 hover:opacity-100': variant })}
+                    className={cn('absolute inset-0 h-auto', { 'opacity-0 hover:opacity-100': !!variant })}
                   >
                     Select Variant
                   </Button>
