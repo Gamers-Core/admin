@@ -1,19 +1,21 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { Check } from '@hugeicons/core-free-icons';
 
-import { defaultLocale, Product, Variant } from '@/api';
+import { defaultLocale, Product, VariantWithProduct } from '@/api';
 import { Disclosure, useDebounce, useFormatCurrency, useProductsQuery } from '@/hooks';
 import { cn } from '@/lib/utils';
 
 import { Modal, ModalFooter } from '../Modal';
-import { Checkbox, Input, Spinner } from '../ui';
+import { Input, Spinner } from '../ui';
 import { Button } from '../Button';
 import { Media } from '../Media';
 
 interface ProductVariantsModalProps<M extends 'single' | 'multiple'> extends Disclosure {
   mode: M;
-  onVariantSelect?: (variantId: [Variant] | Variant[]) => void;
+  onVariantSelect?: (variantId: [VariantWithProduct] | VariantWithProduct[]) => void;
   variantIds?: number[];
 }
 
@@ -35,22 +37,21 @@ export const ProductVariantsModal = <M extends 'single' | 'multiple'>({
 
   const productsQuery = useProductsQuery({ q: debouncedSearch });
 
-  const [selectedVariants, setSelectedVariants] = useState<Variant[]>(
+  const selectedVariantsById = useMemo(
     () =>
       productsQuery.data
-        ?.flatMap((product) => product.variants)
-        .filter((variant) => variantIds?.includes(variant.id)) || [],
+        ?.flatMap((product) => product.variants.map((variant) => ({ ...variant, product })))
+        .filter((variant) => variantIds?.includes(variant.id)),
+    [productsQuery.data, variantIds],
   );
+
+  const [selectedVariants, setSelectedVariants] = useState<VariantWithProduct[]>(selectedVariantsById ?? []);
 
   useEffect(() => {
     if (!productsQuery.data || !variantIds) return;
 
-    const newSelectedVariants = productsQuery.data
-      .flatMap((product) => product.variants)
-      .filter((variant) => variantIds.includes(variant.id));
-
-    setSelectedVariants(newSelectedVariants);
-  }, [variantIds, productsQuery.data]);
+    setSelectedVariants(selectedVariantsById ?? []);
+  }, [variantIds, productsQuery.data, selectedVariantsById]);
 
   return (
     <Modal title="Select Variants" {...disclosure}>
@@ -89,7 +90,7 @@ export const ProductVariantsModal = <M extends 'single' | 'multiple'>({
           isDisabled={selectedVariants.length === 0 || (isSingleMode && selectedVariants.length > 1)}
           isLoading={productsQuery.isPending}
           onClick={() => {
-            onVariantSelect?.(mode === 'single' ? ([selectedVariants[0]] as [Variant]) : selectedVariants);
+            onVariantSelect?.(mode === 'single' ? ([selectedVariants[0]] as [VariantWithProduct]) : selectedVariants);
 
             disclosure.onClose();
           }}
@@ -103,8 +104,8 @@ export const ProductVariantsModal = <M extends 'single' | 'multiple'>({
 
 interface ProductCardProps {
   product: Product;
-  onSelect: (variant: Variant) => void;
-  selectedVariants?: Variant[];
+  onSelect: (variant: VariantWithProduct) => void;
+  selectedVariants?: VariantWithProduct[];
 }
 
 const ProductCard = ({ product, onSelect, selectedVariants }: ProductCardProps) => {
@@ -130,7 +131,7 @@ const ProductCard = ({ product, onSelect, selectedVariants }: ProductCardProps) 
               isDisabled={!variant.isActive}
               variant="outline"
               className="relative p-4 border-b justify-between text-start last:border-0 h-auto hover:opacity-80 transition-opacity duration-300"
-              onClick={() => onSelect(variant)}
+              onClick={() => onSelect({ ...variant, product })}
             >
               <div className="flex flex-1 items-center gap-4">
                 <div className="size-16">
@@ -164,7 +165,19 @@ const ProductCard = ({ product, onSelect, selectedVariants }: ProductCardProps) 
                   )}
                 </div>
 
-                <Checkbox checked={isSelected} />
+                <div
+                  className={cn(
+                    'size-6 flex justify-center items-center rounded-full border bg-transparent transition-colors duration-300',
+                    { 'border-primary bg-primary': isSelected },
+                  )}
+                >
+                  <HugeiconsIcon
+                    icon={Check}
+                    className={cn('text-muted-foreground transition-colors duration-300 invisible', {
+                      'text-foreground visible': isSelected,
+                    })}
+                  />
+                </div>
               </div>
 
               {!variant.isActive && (
