@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 
 import { ProductsList, Searchbar, StatusFilter } from '@/components';
 import { useProductsQuery } from '@/hooks';
-import { SearchProductSchema } from '@/api';
+import { productStatuses, SearchProductSchema } from '@/api';
 import { PagePropsWithSearchParams } from '@/app/types';
 
 export const metadata: Metadata = { title: 'Gamers Core | Products' };
@@ -23,7 +23,7 @@ export default async function Products(props: PagePropsWithSearchParams<SearchPr
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div className="flex gap-2">
-        <StatusFilter value={searchParams.status} />
+        <StatusFilter value={searchParams.status} options={productStatuses} />
 
         <Searchbar q={searchParams.q} />
       </div>

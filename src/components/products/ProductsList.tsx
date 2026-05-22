@@ -6,7 +6,7 @@ import { useProductsQuery } from '@/hooks';
 
 import { ProductsCTA } from './ProductsCTA';
 import { DataTable } from '../DataTable';
-import { columns } from './columns';
+import { productColumns } from './productColumns';
 
 interface ProductsListProps {
   searchParams: SearchProductSchema | undefined;
@@ -21,7 +21,7 @@ export const ProductsList = ({ searchParams }: ProductsListProps) => {
         <ProductsCTA />
       </TopBarCTA>
 
-      <DataTable data={productsQuery.data ?? []} columns={columns} placeholder="No products found." />
+      <DataTable data={productsQuery.data ?? []} columns={productColumns} placeholder="No products found." />
     </>
   );
 };

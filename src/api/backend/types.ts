@@ -154,10 +154,6 @@ export interface Product {
 export type StockFilter = (typeof stockFilters)[number];
 export type SortOption = (typeof sortProductOptions)[number];
 
-type ExtractSortKey<T extends string> = T extends `${infer Key}-ascending` | `${infer Key}-descending` ? Key : never;
-
-export type SortKey = ExtractSortKey<SortOption>;
-
 export interface VariantWithProduct extends Variant {
   product: Product;
 }
