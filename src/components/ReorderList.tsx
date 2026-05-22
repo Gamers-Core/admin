@@ -66,12 +66,12 @@ export const ReorderList = <T,>({
 
       if (!over || active.id === over.id || !items) return;
 
-      const oldIndex = items.findIndex((item) => state.getItemId(item) === active.id);
-      const newIndex = items.findIndex((item) => state.getItemId(item) === over.id);
+      const oldIndex = state.items.findIndex((item) => state.getItemId(item) === active.id);
+      const newIndex = state.items.findIndex((item) => state.getItemId(item) === over.id);
 
       if (oldIndex < 0 || newIndex < 0) return;
 
-      const reordered = arrayMove(items, oldIndex, newIndex);
+      const reordered = arrayMove(state.items, oldIndex, newIndex);
 
       state.setItems(reordered);
     },
