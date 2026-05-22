@@ -4,6 +4,9 @@ import {
   mediaFolders,
   mediaFoldersTypeMap,
   mediaTypes,
+  orderStatuses,
+  paymentMethods,
+  paymentStatuses,
   policyTypes,
   productStatuses,
   sortProductOptions,
@@ -163,4 +166,61 @@ export interface FeaturedVariant {
   position: number;
   title: Localized;
   variant: VariantWithProduct;
+}
+
+export type OrderStatus = (typeof orderStatuses)[number];
+export type PaymentStatus = (typeof paymentStatuses)[number];
+export type PaymentMethod = (typeof paymentMethods)[number];
+
+export interface OrderItem {
+  id: number;
+  productId: number;
+  productTitle: string;
+  variantExternalId: string;
+  variantName: string | null;
+  imageURL: string | null;
+  quantity: number;
+  unitPrice: number;
+  lineTotal: number;
+}
+
+export interface OrderAddress {
+  id: number;
+  nameAr: string;
+  phoneNumber: string;
+  detailedAddress: string;
+  districtName: string;
+  cityName: string;
+}
+
+export interface OrderStatusHistory {
+  status: OrderStatus;
+  createdAt: string;
+}
+
+export interface OrderAllowedActions {
+  statuses: OrderStatus[];
+  paymentStatuses: PaymentStatus[];
+}
+
+export interface Order {
+  id: number;
+  orderNumber: string;
+  status: OrderStatus;
+  paymentMethod: PaymentMethod;
+  paymentStatus: PaymentStatus;
+  items: OrderItem[];
+  shippingAddress: OrderAddress;
+  canOpenPackage: boolean;
+  note: string | null;
+  trackingNumber: string | null;
+  subtotal: number;
+  shippingFee: number;
+  total: number;
+  currency: string;
+  createdAt: string;
+  updatedAt: string;
+  history: OrderStatusHistory[];
+  allowedActions: OrderAllowedActions;
+  user: BasicUser;
 }
