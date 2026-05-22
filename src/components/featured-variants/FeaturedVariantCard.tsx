@@ -4,7 +4,7 @@ import { HugeiconsIcon } from '@hugeicons/react';
 import { DragDropVerticalIcon, PencilEdit02Icon, Trash } from '@hugeicons/core-free-icons';
 import { toast } from 'sonner';
 
-import { defaultLocale, FeaturedVariant } from '@/api';
+import { defaultLocale, FeaturedVariant, localeDir, locales } from '@/api';
 import { useDisclosure, useRemoveFeaturedVariantMutation } from '@/hooks';
 import { cn } from '@/lib/utils';
 import { ProductPreviewCard, type ReorderableItemProps } from '@/components';
@@ -61,7 +61,26 @@ export const FeaturedVariantCard = ({
       </div>
 
       <div className="flex-1 relative">
-        <ProductPreviewCard variant={featuredVariant.variant} />
+        <div className="flex flex-col gap-2 border rounded-lg shadow-sm w-full">
+          <div className="p-4 pb-0 flex flex-col gap-2">
+            {locales.map(
+              (locale) =>
+                featuredVariant.title[locale] && (
+                  <p
+                    key={locale}
+                    dir={localeDir[locale]}
+                    className={cn('text-base md:text-lg lg:text-xl text-start w-full line-clamp-1', {
+                      'font-cairo': localeDir[locale] === 'rtl',
+                    })}
+                  >
+                    {featuredVariant.title[locale]}
+                  </p>
+                ),
+            )}
+          </div>
+
+          <ProductPreviewCard variant={featuredVariant.variant} />
+        </div>
 
         {isMain && (
           <span className="absolute -top-2 -inset-e-2 bg-primary text-primary-foreground rounded p-1 text-sm">
