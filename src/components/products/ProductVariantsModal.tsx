@@ -114,9 +114,9 @@ const ProductCard = ({ product, onSelect, selectedVariants }: ProductCardProps) 
   return (
     <div className="flex flex-col gap-4 border rounded-lg shadow-sm">
       <div className="flex justify-between items-center gap-4 p-4 pb-0">
-        <h3 className="font-medium text-sm">{product.name[defaultLocale]}</h3>
+        <h3 className="font-medium text-sm line-clamp-1 min-w-0">{product.name[defaultLocale]}</h3>
 
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-muted-foreground text-nowrap">
           {product.variants.length} variant{product.variants.length > 1 ? 's' : ''}
         </p>
       </div>
@@ -133,8 +133,8 @@ const ProductCard = ({ product, onSelect, selectedVariants }: ProductCardProps) 
               className="relative p-4 border-b justify-between text-start last:border-0 h-auto hover:opacity-80 transition-opacity duration-300"
               onClick={() => onSelect({ ...variant, product })}
             >
-              <div className="flex flex-1 items-center gap-4">
-                <div className="size-16">
+              <div className="flex flex-1 items-center gap-4 min-w-0">
+                <div className="size-16 shrink-0">
                   <Media
                     media={variant.image}
                     alt={`Variant ${variant.id} Image`}
@@ -142,8 +142,8 @@ const ProductCard = ({ product, onSelect, selectedVariants }: ProductCardProps) 
                   />
                 </div>
 
-                <div className="flex flex-col justify-between gap-1">
-                  <p className="text-sm">{variant.name[defaultLocale]}</p>
+                <div className="flex flex-col justify-between gap-1 flex-1 min-w-0">
+                  <p className="text-sm line-clamp-1 flex-1 min-w-0">{variant.name[defaultLocale]}</p>
 
                   <p
                     className={cn('text-sm', {
