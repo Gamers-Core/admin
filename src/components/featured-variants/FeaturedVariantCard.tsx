@@ -37,7 +37,7 @@ export const FeaturedVariantCard = ({
   const updateModalDisclosure = useDisclosure();
 
   return (
-    <div {...containerProps} className="flex-1 flex items-center gap-4">
+    <div {...containerProps} className="flex-1 flex items-center gap-4 bg-background">
       <div className="flex flex-col gap-2">
         <Button
           {...buttonProps}
