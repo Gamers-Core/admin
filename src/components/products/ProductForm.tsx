@@ -2,7 +2,7 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import { Form, ProductFormCTA } from '@/components';
 import { productSchema, ProductSchema, defaultLocalizedValue, Product } from '@/api';
@@ -29,11 +29,17 @@ export const ProductForm = ({ product, ...props }: ProductFormProps) => {
 
   const form = useForm<ProductSchema>({
     defaultValues: values,
-    mode: 'onBlur',
+    mode: 'onChange',
     reValidateMode: 'onChange',
-    shouldFocusError: true,
     resolver: zodResolver(productSchema),
+    shouldUnregister: false,
   });
+
+  useEffect(() => {
+    if (!product) return;
+
+    form.trigger();
+  }, [form, product]);
 
   return (
     <Form {...form} {...props}>

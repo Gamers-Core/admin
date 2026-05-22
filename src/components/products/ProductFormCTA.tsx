@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { SubmitHandler, useFormContext } from 'react-hook-form';
+import { SubmitHandler, useFormContext, useFormState } from 'react-hook-form';
 import { toast } from 'sonner';
 
 import {
@@ -35,8 +35,9 @@ interface ProductFormCTAProps {
 export const ProductFormCTA = ({ product }: ProductFormCTAProps) => {
   const isEditMode = !!product;
 
-  const form = useFormContext<ProductSchema>();
   const router = useRouter();
+  const form = useFormContext<ProductSchema>();
+  const formState = useFormState({ control: form.control });
 
   const brandsQuery = useBrandsQuery();
   const categoriesQuery = useCategoriesQuery();
@@ -77,9 +78,11 @@ export const ProductFormCTA = ({ product }: ProductFormCTAProps) => {
     addProductMutation.mutate(data, { onSuccess, onError });
   };
 
+  const canSubmit = formState.isDirty && formState.isValid;
+
   return (
     <TopBarCTA>
-      {form.formState.isDirty && form.formState.isValid && (
+      {canSubmit && (
         <>
           <Button
             isLoading={isLoading}
