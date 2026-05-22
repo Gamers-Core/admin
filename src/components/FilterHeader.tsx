@@ -1,16 +1,16 @@
 import { useSearchParams } from '@/hooks';
-import { defaultLocale, Localized, SearchSchema } from '@/api';
+import { defaultLocale, Localized } from '@/api';
 import { cn } from '@/lib/utils';
 
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger } from './ui';
 
-interface FilterHeaderProps<T extends keyof SearchSchema> {
+interface FilterHeaderProps<T extends string> {
   label: string;
   filterKey: T;
-  options?: readonly SearchSchema[T][] | { id: number; name: Localized }[];
+  options?: readonly string[] | { id: number; name: Localized }[];
 }
 
-export const FilterHeader = <T extends keyof SearchSchema>({ label, filterKey, options }: FilterHeaderProps<T>) => {
+export const FilterHeader = <T extends string>({ label, filterKey, options }: FilterHeaderProps<T>) => {
   const { get, set } = useSearchParams();
 
   const currentStatus = get(filterKey) ?? undefined;

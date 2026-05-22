@@ -1,7 +1,7 @@
 'use client';
 
 import { TopBarCTA } from '@/components';
-import { SearchSchema } from '@/api';
+import { SearchProductSchema } from '@/api';
 import { useProductsQuery } from '@/hooks';
 
 import { ProductsCTA } from './ProductsCTA';
@@ -9,7 +9,7 @@ import { DataTable } from '../DataTable';
 import { columns } from './columns';
 
 interface ProductsListProps {
-  searchParams: SearchSchema | undefined;
+  searchParams: SearchProductSchema | undefined;
 }
 
 export const ProductsList = ({ searchParams }: ProductsListProps) => {

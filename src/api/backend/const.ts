@@ -34,7 +34,7 @@ export const productStatuses = ['active', 'draft', 'unlisted'] as const;
 
 export const stockFilters = ['in-stock', 'out-of-stock'] as const;
 
-export const sortOptions = [
+export const sortProductOptions = [
   'created-descending',
   'created-ascending',
   'title-ascending',

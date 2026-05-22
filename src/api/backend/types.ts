@@ -6,7 +6,7 @@ import {
   mediaTypes,
   policyTypes,
   productStatuses,
-  sortOptions,
+  sortProductOptions,
   stockFilters,
 } from './const';
 import type { Localized } from './schemas';
@@ -152,7 +152,7 @@ export interface Product {
 }
 
 export type StockFilter = (typeof stockFilters)[number];
-export type SortOption = (typeof sortOptions)[number];
+export type SortOption = (typeof sortProductOptions)[number];
 
 type ExtractSortKey<T extends string> = T extends `${infer Key}-ascending` | `${infer Key}-descending` ? Key : never;
 
