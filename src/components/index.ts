@@ -25,3 +25,4 @@ export * from './DataTable';
 export * from './Searchbar';
 export * from './FilterHeader';
 export * from './ReorderList';
+export * from './featured-variants';

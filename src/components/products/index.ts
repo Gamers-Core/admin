@@ -11,3 +11,5 @@ export * from './ProductStatusSelectMenu';
 export * from './SelectProductRelations';
 export * from './ProductFormCTA';
 export * from './ProductVariantCard';
+export * from './ProductVariantsModal';
+export * from './ProductPreviewCard';
