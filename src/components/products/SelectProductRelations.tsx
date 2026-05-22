@@ -34,7 +34,10 @@ export const SelectProductRelations = () => {
                 Brand
               </FieldLabel>
 
-              <Select value={String(field.value)} onValueChange={(value) => field.onChange(Number(value))}>
+              <Select
+                value={field.value != null ? String(field.value) : ''}
+                onValueChange={(value) => field.onChange(Number(value))}
+              >
                 <SelectTrigger className="w-full text-sm capitalize">
                   <SelectValue placeholder="Select a brand" />
                 </SelectTrigger>
@@ -67,7 +70,10 @@ export const SelectProductRelations = () => {
               Category
             </FieldLabel>
 
-            <Select value={String(field.value)} onValueChange={(value) => field.onChange(Number(value))}>
+            <Select
+              value={field.value != null ? String(field.value) : ''}
+              onValueChange={(value) => field.onChange(Number(value))}
+            >
               <SelectTrigger className="w-full text-sm capitalize">
                 <SelectValue placeholder="Select a category" />
               </SelectTrigger>

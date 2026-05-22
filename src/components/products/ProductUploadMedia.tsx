@@ -34,12 +34,11 @@ export const ProductUploadMedia = () => {
       <Controller
         name="media"
         control={form.control}
-        render={({ fieldState }) => (
+        render={({ field, fieldState }) => (
           <ReorderList
-            items={form.watch('media')}
+            items={field.value}
             onReorder={(items) => form.setValue('media', items, { shouldDirty: true, shouldValidate: true })}
             strategy={rectSortingStrategy}
-            renderEmpty={() => <p className="text-sm text-muted-foreground text-center m-auto">No media added yet.</p>}
             renderItem={(media, sortable, index, state) => (
               <MediaCard
                 {...media}
@@ -51,9 +50,13 @@ export const ProductUploadMedia = () => {
             {(children, state) => (
               <>
                 <Field className="flex-1">
-                  <ul className="grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] lg:grid-cols-[repeat(auto-fill,minmax(90px,1fr))] gap-4">
-                    {children}
-                  </ul>
+                  {state.items.length ? (
+                    <ul className="grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] lg:grid-cols-[repeat(auto-fill,minmax(90px,1fr))] gap-4">
+                      {children}
+                    </ul>
+                  ) : (
+                    <p className="text-sm text-muted-foreground text-center m-auto">No media added yet.</p>
+                  )}
 
                   {fieldState.invalid && (
                     <FieldError className="text-sm/normal lg:text-sm/relaxed" errors={[fieldState.error]} />

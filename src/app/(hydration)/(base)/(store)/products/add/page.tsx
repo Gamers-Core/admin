@@ -6,7 +6,7 @@ import {
   SelectProductRelations,
   ProductStatusSelectMenu,
   ProductUploadMedia,
-  ProductVariantsTable,
+  ProductVariants,
   LocalizedForm,
 } from '@/components';
 import { ProductSchema } from '@/api';
@@ -33,7 +33,7 @@ export default async function AddProduct() {
 
           <ProductUploadMedia />
 
-          <ProductVariantsTable />
+          <ProductVariants />
         </div>
 
         <section className="lg:sticky lg:top-4 lg:self-start min-w-0 flex-1 bg-sidebar p-4 rounded-lg gap-4 grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] md:grid-cols-2 lg:grid-cols-1">

@@ -89,11 +89,11 @@ export const ProductFormCTA = ({ product }: ProductFormCTAProps) => {
             {isEditMode ? 'Save' : 'Add'}
           </Button>
 
-      {isEditMode && (
-        <Button variant="destructive" isDisabled={isLoading} onClick={() => form.reset()}>
-          Discard
-        </Button>
-      )}
+          {isEditMode && (
+            <Button variant="destructive" isDisabled={isLoading} onClick={() => form.reset()}>
+              Discard
+            </Button>
+          )}
         </>
       )}
 
