@@ -157,3 +157,14 @@ export type SortOption = (typeof sortOptions)[number];
 type ExtractSortKey<T extends string> = T extends `${infer Key}-ascending` | `${infer Key}-descending` ? Key : never;
 
 export type SortKey = ExtractSortKey<SortOption>;
+
+export interface VariantWithProduct extends Variant {
+  product: Product;
+}
+
+export interface FeaturedVariant {
+  id: number;
+  position: number;
+  title: Localized;
+  variant: VariantWithProduct;
+}
