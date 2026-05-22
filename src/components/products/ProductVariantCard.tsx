@@ -69,8 +69,8 @@ export const ProductVariantCard = ({
       </div>
 
       <div className="flex flex-col gap-4 p-4">
-        <div className="flex flex-col gap-4 sm:flex-row">
-          <div className="relative size-20 shrink-0 self-center sm:self-start">
+        <div className="flex gap-4">
+          <div className="relative size-20 shrink-0 self-center">
             <Button
               type="button"
               variant="outline"
@@ -93,7 +93,11 @@ export const ProductVariantCard = ({
             />
           </div>
 
-          <LocalizedForm<ProductSchema> name={`variants.${index}.name`} hideLabel className="flex-1 gap-2" />
+          <LocalizedForm<ProductSchema>
+            name={`variants.${index}.name`}
+            hideLabel
+            className="flex-1 gap-2 justify-between"
+          />
         </div>
 
         <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
