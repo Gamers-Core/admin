@@ -2,16 +2,18 @@ import { HugeiconsIcon } from '@hugeicons/react';
 import { ArrowDown01Icon, ArrowUp01Icon, ArrowUpDownIcon } from '@hugeicons/core-free-icons';
 
 import { useSearchParams } from '@/hooks';
-import { SortKey } from '@/api';
 
-import { Button } from '../Button';
+import { Button } from './Button';
 
-interface SortHeaderProps<T> {
+type ExtractSortKey<T extends string> = T extends `${infer Key}-ascending` | `${infer Key}-descending` ? Key : never;
+
+interface SortHeaderProps<T extends readonly string[]> {
+  sortOptions: T;
   label: string;
-  sortKey: T;
+  sortKey: ExtractSortKey<T[number]>;
 }
 
-export const SortHeader = <T extends SortKey>({ label, sortKey }: SortHeaderProps<T>) => {
+export const SortHeader = <T extends readonly string[]>({ label, sortKey }: SortHeaderProps<T>) => {
   const { get, set } = useSearchParams();
 
   const current = get('sort');

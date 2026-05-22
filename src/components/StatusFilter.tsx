@@ -1,21 +1,21 @@
 'use client';
 
 import { useSearchParams } from '@/hooks';
-import { ProductStatus, productStatuses } from '@/api';
 
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../ui';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from './ui';
 
-interface StatusFilterProps {
-  value?: ProductStatus;
+interface StatusFilterProps<T extends readonly string[]> {
+  options: T;
+  value?: T[number];
 }
 
-export const StatusFilter = ({ value }: StatusFilterProps) => {
+export const StatusFilter = <T extends readonly string[]>({ value, options }: StatusFilterProps<T>) => {
   const { set, get } = useSearchParams();
 
   const onSelect = (value: string) => {
     if (value === 'all') return set('status', undefined, 'replace');
 
-    set('status', value as ProductStatus, 'replace');
+    set('status', value, 'replace');
   };
 
   const currentStatus = get('status') ?? value;
@@ -32,7 +32,7 @@ export const StatusFilter = ({ value }: StatusFilterProps) => {
             all
           </SelectItem>
 
-          {productStatuses.map((status) => (
+          {options.map((status) => (
             <SelectItem key={status} value={status} className="capitalize text-sm">
               {status}
             </SelectItem>

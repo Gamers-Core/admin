@@ -1,30 +1,36 @@
 import { useSearchParams } from '@/hooks';
-import { defaultLocale, Localized, SearchSchema } from '@/api';
+import { defaultLocale, Localized } from '@/api';
 import { cn } from '@/lib/utils';
 
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger } from './ui';
 
-interface FilterHeaderProps<T extends keyof SearchSchema> {
+type FilterOption = string | { id: number; name: Localized };
+
+interface FilterHeaderProps<T extends readonly FilterOption[]> {
   label: string;
-  filterKey: T;
-  options?: readonly SearchSchema[T][] | { id: number; name: Localized }[];
+  options: T;
+  filterKey: string;
 }
 
-export const FilterHeader = <T extends keyof SearchSchema>({ label, filterKey, options }: FilterHeaderProps<T>) => {
+export const FilterHeader = <T extends readonly FilterOption[]>({
+  label,
+  filterKey,
+  options,
+}: FilterHeaderProps<T>) => {
   const { get, set } = useSearchParams();
-
-  const currentStatus = get(filterKey) ?? undefined;
+  const currentValue = get(filterKey) ?? undefined;
 
   const onSelect = (value: string) => {
     if (value === 'all') return set(filterKey, undefined, 'replace');
-
     set(filterKey, value, 'replace');
   };
 
   return (
-    <Select value={currentStatus ?? 'all'} onValueChange={onSelect}>
+    <Select value={currentValue ?? 'all'} onValueChange={onSelect}>
       <SelectTrigger
-        className={cn('text-xs capitalize bg-transparent! border-0!', { 'text-sidebar-primary': currentStatus })}
+        className={cn('text-xs capitalize bg-transparent! border-0!', {
+          'text-sidebar-primary': currentValue,
+        })}
       >
         {label}
       </SelectTrigger>
@@ -35,16 +41,15 @@ export const FilterHeader = <T extends keyof SearchSchema>({ label, filterKey, o
             All
           </SelectItem>
 
-          {options?.map((option) => {
+          {options.map((option) => {
             const isObject = typeof option === 'object';
             const optionValue = isObject ? option.id : option;
+            const optionLabel = isObject ? option.name[defaultLocale] : option;
 
             return (
-              option && (
-                <SelectItem key={optionValue} value={String(optionValue)} className="capitalize text-sm">
-                  {isObject ? option.name[defaultLocale] : option}
-                </SelectItem>
-              )
+              <SelectItem key={optionValue} value={String(optionValue)} className="capitalize text-sm">
+                {optionLabel}
+              </SelectItem>
             );
           })}
         </SelectGroup>

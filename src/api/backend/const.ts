@@ -34,7 +34,7 @@ export const productStatuses = ['active', 'draft', 'unlisted'] as const;
 
 export const stockFilters = ['in-stock', 'out-of-stock'] as const;
 
-export const sortOptions = [
+export const sortProductOptions = [
   'created-descending',
   'created-ascending',
   'title-ascending',
@@ -42,3 +42,26 @@ export const sortOptions = [
   'price-ascending',
   'price-descending',
 ] as const;
+
+export const sortOrderOptions = [
+  'created-ascending',
+  'created-descending',
+  'total-ascending',
+  'total-descending',
+] as const;
+
+export const orderStatuses = [
+  'pending',
+  'confirmed',
+  'on-hold',
+  'on-progress',
+  'shipped',
+  'delivered',
+  'completed',
+  'returned',
+  'cancelled',
+] as const;
+
+export const paymentStatuses = ['unpaid', 'paid', 'refunded'] as const;
+
+export const paymentMethods = ['cod', 'instapay', 'valu', 'card'] as const;

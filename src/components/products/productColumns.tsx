@@ -2,17 +2,17 @@
 
 import { ColumnDef } from '@tanstack/react-table';
 
-import { defaultLocale, Product, stockFilters } from '@/api';
+import { defaultLocale, Product, sortProductOptions, stockFilters } from '@/api';
 import { useBrandsQuery, useCategoriesQuery, useFormatCurrency, useFormatDate } from '@/hooks';
 import { cn } from '@/lib/utils';
 
 import { Media } from '../Media';
 import { StatusBadge } from './StatusBadge';
 import { Link } from '../Link';
-import { SortHeader } from './SortHeader';
+import { SortHeader } from '../SortHeader';
 import { FilterHeader } from '../FilterHeader';
 
-export const columns: ColumnDef<Product>[] = [
+export const productColumns: ColumnDef<Product>[] = [
   {
     accessorKey: 'media',
     header: '',
@@ -24,7 +24,7 @@ export const columns: ColumnDef<Product>[] = [
   {
     accessorKey: 'name',
     size: 130,
-    header: () => <SortHeader label="Product" sortKey="title" />,
+    header: () => <SortHeader label="Product" sortKey="title" sortOptions={sortProductOptions} />,
     cell: ({ row }) => (
       <Link href={`/products/${row.original.id}`} className="flex flex-col w-48">
         <span className="font-medium text-sm truncate">{row.original.name[defaultLocale]}</span>
@@ -62,7 +62,7 @@ export const columns: ColumnDef<Product>[] = [
     accessorKey: 'variants',
     id: 'price',
     size: 230,
-    header: () => <SortHeader label="Price" sortKey="price" />,
+    header: () => <SortHeader label="Price" sortKey="price" sortOptions={sortProductOptions} />,
     cell: ({ row }) => {
       const formatCurrency = useFormatCurrency();
 
@@ -114,7 +114,7 @@ export const columns: ColumnDef<Product>[] = [
   },
   {
     accessorKey: 'createdAt',
-    header: () => <SortHeader label="Added" sortKey="created" />,
+    header: () => <SortHeader label="Added" sortKey="created" sortOptions={sortProductOptions} />,
     cell: ({ row }) => {
       const formatDate = useFormatDate();
 

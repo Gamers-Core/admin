@@ -38,9 +38,10 @@ export const getBreadcrumbs = (pathname: string) => {
     }
   }
 
-  const extraCrumbs = segments.slice(knownCrumbs.length - 1).map((seg, i) => ({
+  const coveredSegments = knownCrumbs.filter((c) => c.url).length;
+  const extraCrumbs = segments.slice(coveredSegments).map((seg, i) => ({
     title: seg.charAt(0).toUpperCase() + seg.slice(1),
-    url: '/' + segments.slice(0, knownCrumbs.length + i).join('/'),
+    url: '/' + segments.slice(0, coveredSegments + i + 1).join('/'),
   }));
 
   return [...knownCrumbs, ...extraCrumbs];
