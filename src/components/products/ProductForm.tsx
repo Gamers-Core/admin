@@ -37,7 +37,7 @@ export const ProductForm = ({ product, ...props }: ProductFormProps) => {
 
   return (
     <Form {...form} {...props}>
-      <ProductFormCTA isEditMode={!!product} productId={product?.id} />
+      <ProductFormCTA product={product} />
 
       {props.children}
     </Form>

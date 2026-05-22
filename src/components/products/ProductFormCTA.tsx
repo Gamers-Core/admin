@@ -4,16 +4,37 @@ import { useRouter } from 'next/navigation';
 import { SubmitHandler, useFormContext } from 'react-hook-form';
 import { toast } from 'sonner';
 
-import { TopBarCTA, Button } from '@/components';
+import {
+  TopBarCTA,
+  Button,
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from '@/components';
 import { ProductSchema, Product, BackendError, ValidationErrors, defaultLocale } from '@/api';
-import { useBrandsQuery, useCategoriesQuery, useAddProductMutation, useUpdateProductMutation } from '@/hooks';
+import {
+  useBrandsQuery,
+  useCategoriesQuery,
+  useAddProductMutation,
+  useUpdateProductMutation,
+  useRemoveProductMutation,
+} from '@/hooks';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { Trash } from '@hugeicons/core-free-icons';
 
 interface ProductFormCTAProps {
-  isEditMode: boolean;
-  productId?: number;
+  product?: Product;
 }
 
-export const ProductFormCTA = ({ isEditMode, productId }: ProductFormCTAProps) => {
+export const ProductFormCTA = ({ product }: ProductFormCTAProps) => {
+  const isEditMode = !!product;
+
   const form = useFormContext<ProductSchema>();
   const router = useRouter();
 
@@ -23,7 +44,6 @@ export const ProductFormCTA = ({ isEditMode, productId }: ProductFormCTAProps) =
   const updateProductMutation = useUpdateProductMutation();
 
   const isLoading =
-    form.formState.isSubmitting ||
     brandsQuery.isPending ||
     categoriesQuery.isPending ||
     addProductMutation.isPending ||
@@ -49,27 +69,81 @@ export const ProductFormCTA = ({ isEditMode, productId }: ProductFormCTAProps) =
     };
 
     if (isEditMode) {
-      if (!productId) return;
+      if (!product) return;
 
-      return updateProductMutation.mutate({ id: productId, ...data }, { onSuccess, onError });
+      return updateProductMutation.mutate({ id: product.id, ...data }, { onSuccess, onError });
     }
 
-    await addProductMutation.mutateAsync(data, { onSuccess, onError });
+    addProductMutation.mutate(data, { onSuccess, onError });
   };
-
-  if (!form.formState.isDirty) return null;
 
   return (
     <TopBarCTA>
-      <Button isLoading={isLoading} onClick={form.handleSubmit(onSubmit, console.warn)} loadingIconClassName="size-4">
-        {isEditMode ? 'Save' : 'Add'}
-      </Button>
+      {form.formState.isDirty && form.formState.isValid && (
+        <>
+          <Button
+            isLoading={isLoading}
+            onClick={form.handleSubmit(onSubmit, console.warn)}
+            loadingIconClassName="size-4"
+          >
+            {isEditMode ? 'Save' : 'Add'}
+          </Button>
 
       {isEditMode && (
         <Button variant="destructive" isDisabled={isLoading} onClick={() => form.reset()}>
           Discard
         </Button>
       )}
+        </>
+      )}
+
+      {isEditMode && <RemoveProduct isDisabled={isLoading} {...product!} />}
     </TopBarCTA>
+  );
+};
+
+interface RemoveProductProps extends Product {
+  isDisabled?: boolean;
+}
+
+const RemoveProduct = ({ isDisabled, id, name }: RemoveProductProps) => {
+  const router = useRouter();
+
+  const removeProductMutation = useRemoveProductMutation();
+
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Button isDisabled={isDisabled} variant="destructive" icon={<HugeiconsIcon icon={Trash} />} />
+      </AlertDialogTrigger>
+
+      <AlertDialogContent size="sm">
+        <AlertDialogHeader>
+          <AlertDialogTitle>Remove Product</AlertDialogTitle>
+
+          <AlertDialogDescription>
+            Are you sure you want to remove the {name[defaultLocale]} product?
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+
+          <AlertDialogAction
+            onClick={() =>
+              removeProductMutation.mutate(id, {
+                onSuccess: () => {
+                  toast.success(`${name[defaultLocale]} product removed successfully`);
+
+                  router.push('/products');
+                },
+              })
+            }
+          >
+            Remove Product
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 };
