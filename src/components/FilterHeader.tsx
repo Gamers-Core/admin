@@ -6,13 +6,13 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger } from '.
 
 type FilterOption = string | { id: number; name: Localized };
 
-interface FilterHeaderProps<T extends readonly FilterOption[]> {
+interface FilterHeaderProps<T extends readonly FilterOption[] | undefined> {
   label: string;
   options: T;
   filterKey: string;
 }
 
-export const FilterHeader = <T extends readonly FilterOption[]>({
+export const FilterHeader = <T extends readonly FilterOption[] | undefined>({
   label,
   filterKey,
   options,
@@ -41,7 +41,7 @@ export const FilterHeader = <T extends readonly FilterOption[]>({
             All
           </SelectItem>
 
-          {options.map((option) => {
+          {options?.map((option) => {
             const isObject = typeof option === 'object';
             const optionValue = isObject ? option.id : option;
             const optionLabel = isObject ? option.name[defaultLocale] : option;
