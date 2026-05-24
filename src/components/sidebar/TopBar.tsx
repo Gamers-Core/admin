@@ -37,7 +37,7 @@ export const TopBar = (props: TopBarProps) => {
 
   return (
     <header className="right-(--removed-body-scroll-bar-size,0) z-50 transition-all duration-300 border-b-2 border-sidebar">
-      <div className="flex items-center justify-between px-4 py-3 bg-transparent transition-colors duration-300 text-sm font-medium text-muted-foreground">
+      <div className="flex items-center justify-between gap-2 md:gap-4 px-4 py-3 bg-transparent transition-colors duration-300 text-sm font-medium text-muted-foreground">
         <div className="flex items-center">
           <SidebarTrigger size="icon-lg" />
 
@@ -69,9 +69,7 @@ export const TopBar = (props: TopBarProps) => {
           </Breadcrumb>
         </div>
 
-        <div className="flex items-center gap-2">
-          <div ref={setPortalElement} className="flex items-center gap-2" />
-        </div>
+        <div ref={setPortalElement} className="flex items-center justify-end flex-1" />
       </div>
     </header>
   );
