@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 
 import { useOrderQuery } from '@/hooks';
 import { PagePropsWithParams } from '@/app/types';
-import { OrderCTA, TopBarCTA } from '@/components';
+import { OrderCTA } from '@/components';
 
 type PageParams = PagePropsWithParams<{ orderNumber: string }>;
 
@@ -29,9 +29,7 @@ export default async function Order(props: PageParams) {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <TopBarCTA>
-        <OrderCTA orderNumber={orderNumber} />
-      </TopBarCTA>
+      <OrderCTA orderNumber={orderNumber} />
     </HydrationBoundary>
   );
 }

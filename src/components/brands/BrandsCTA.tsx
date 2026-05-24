@@ -7,17 +7,18 @@ import { useDisclosure } from '@/hooks';
 
 import { Button } from '../Button';
 import { BrandFormModal } from './BrandFormModal';
+import { TopBarCTA } from '../sidebar';
 
 export const BrandsCTA = () => {
   const modalDisclosure = useDisclosure();
 
   return (
-    <div>
+    <TopBarCTA>
       <Button icon={<HugeiconsIcon icon={Plus} />} onClick={modalDisclosure.onOpen}>
         Add Brand
       </Button>
 
       <BrandFormModal disclosure={modalDisclosure} />
-    </div>
+    </TopBarCTA>
   );
 };

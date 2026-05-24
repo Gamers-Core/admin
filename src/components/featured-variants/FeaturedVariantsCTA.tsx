@@ -9,6 +9,7 @@ import { FeaturedVariant } from '@/api';
 
 import { Button } from '../Button';
 import { FeaturedVariantFormModal } from './FeaturedVariantFormModal';
+import { TopBarCTA } from '../sidebar';
 
 export const FeaturedVariantsCTA = ({
   items,
@@ -43,7 +44,7 @@ export const FeaturedVariantsCTA = ({
   };
 
   return (
-    <div className="flex gap-2">
+    <TopBarCTA className="flex gap-2">
       {isReordered && (
         <div className="flex gap-2">
           <Button
@@ -71,6 +72,6 @@ export const FeaturedVariantsCTA = ({
 
         <FeaturedVariantFormModal disclosure={modalDisclosure} />
       </div>
-    </div>
+    </TopBarCTA>
   );
 };

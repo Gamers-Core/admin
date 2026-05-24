@@ -1,6 +1,6 @@
 'use client';
 
-import { TopBarCTA, ReorderList } from '@/components';
+import { ReorderList } from '@/components';
 import { useFAQsQuery } from '@/hooks';
 
 import { FAQCard } from './FAQCard';
@@ -24,9 +24,7 @@ export const FAQsList = () => {
     >
       {(children, state) => (
         <>
-          <TopBarCTA>
-            <FAQsCTA {...state} />
-          </TopBarCTA>
+          <FAQsCTA {...state} />
 
           <section className="flex-1 flex flex-col gap-8 min-w-0">{children}</section>
         </>

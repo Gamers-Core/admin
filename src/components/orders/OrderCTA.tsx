@@ -6,6 +6,7 @@ import { OrderStatusBadge } from './OrderStatusBadge';
 import { Separator } from '../ui';
 import { OrderStatusSelector } from './OrderStatusSelector';
 import { OrderPaymentStatusSelector } from './OrderPaymentStatusSelector';
+import { TopBarCTA } from '../sidebar';
 
 interface OrderCTAProps {
   orderNumber: string;
@@ -17,7 +18,7 @@ export const OrderCTA = ({ orderNumber }: OrderCTAProps) => {
   if (!orderQuery.data) return null;
 
   return (
-    <div className="flex-1 flex items-center gap-4 justify-between">
+    <TopBarCTA className="flex-1 gap-4 justify-between">
       <div className="flex items-center gap-4">
         <Separator orientation="vertical" className="h-auto" />
 
@@ -33,6 +34,6 @@ export const OrderCTA = ({ orderNumber }: OrderCTAProps) => {
 
         <OrderStatusSelector orderNumber={orderNumber} />
       </div>
-    </div>
+    </TopBarCTA>
   );
 };

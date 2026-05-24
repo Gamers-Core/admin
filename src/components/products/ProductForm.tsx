@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useMemo } from 'react';
 
-import { Form, ProductFormCTA } from '@/components';
+import { Form } from '@/components';
 import { productSchema, ProductSchema, defaultLocalizedValue, Product } from '@/api';
 
 interface ProductFormProps {
@@ -41,13 +41,7 @@ export const ProductForm = ({ product, ...props }: ProductFormProps) => {
     form.trigger();
   }, [form, product]);
 
-  return (
-    <Form {...form} {...props}>
-      <ProductFormCTA product={product} />
-
-      {props.children}
-    </Form>
-  );
+  return <Form {...form} {...props} />;
 };
 
 const mapProductToSchema = ({ brand, category, variants, ...product }: Product): ProductSchema => ({

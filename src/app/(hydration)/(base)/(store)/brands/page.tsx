@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 
 import { useBrandsQuery } from '@/hooks';
-import { BrandsList } from '@/components';
+import { BrandsCTA, BrandsList } from '@/components';
 
 export const metadata: Metadata = { title: 'Gamers Core | Brands' };
 
@@ -13,6 +13,8 @@ export default async function Brands() {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
+      <BrandsCTA />
+
       <BrandsList />
     </HydrationBoundary>
   );

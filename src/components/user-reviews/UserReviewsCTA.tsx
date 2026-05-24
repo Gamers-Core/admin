@@ -5,10 +5,11 @@ import { HugeiconsIcon } from '@hugeicons/react';
 import { toast } from 'sonner';
 
 import { ReorderProps, useDisclosure, useReorderUserReviewMutation } from '@/hooks';
+import { UserReview } from '@/api';
 
 import { Button } from '../Button';
 import { UserReviewFormModal } from './UserReviewFormModal';
-import { UserReview } from '@/api';
+import { TopBarCTA } from '../sidebar';
 
 export const UserReviewsCTA = ({
   items,
@@ -43,7 +44,7 @@ export const UserReviewsCTA = ({
   };
 
   return (
-    <div className="flex gap-2">
+    <TopBarCTA className="flex gap-2">
       {isReordered && (
         <div className="flex gap-2">
           <Button
@@ -73,6 +74,6 @@ export const UserReviewsCTA = ({
           <UserReviewFormModal disclosure={modalDisclosure} />
         </div>
       )}
-    </div>
+    </TopBarCTA>
   );
 };

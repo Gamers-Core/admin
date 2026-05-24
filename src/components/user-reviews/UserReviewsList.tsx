@@ -1,6 +1,6 @@
 'use client';
 
-import { TopBarCTA, ReorderList } from '@/components';
+import { ReorderList } from '@/components';
 import { useUserReviewsQuery } from '@/hooks';
 
 import { UserReviewCard } from './UserReviewCard';
@@ -24,9 +24,7 @@ export const UserReviewsList = () => {
     >
       {(children, state) => (
         <>
-          <TopBarCTA>
-            <UserReviewsCTA {...state} />
-          </TopBarCTA>
+          <UserReviewsCTA {...state} />
 
           <section className="flex-1 flex flex-col gap-8 min-w-0">{children}</section>
         </>
