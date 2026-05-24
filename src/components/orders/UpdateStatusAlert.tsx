@@ -40,15 +40,17 @@ export const UpdateStatusAlert = <S extends OrderStatus | PaymentStatus>({
       <AlertDialogHeader>
         <AlertDialogTitle>Update Status</AlertDialogTitle>
 
-        <AlertDialogDescription className="flex flex-col gap-4">
-          <p> Are you sure you want to update status?</p>
+        <AlertDialogDescription asChild>
+          <div className="flex flex-col gap-4">
+            <p> Are you sure you want to update status?</p>
 
-          <div className="flex items-center gap-1">
-            <OrderStatusBadge status={current} />
+            <div className="flex items-center gap-1">
+              <OrderStatusBadge status={current} />
 
-            <HugeiconsIcon icon={ArrowRight} />
+              <HugeiconsIcon icon={ArrowRight} />
 
-            <OrderStatusBadge status={next} />
+              <OrderStatusBadge status={next} />
+            </div>
           </div>
         </AlertDialogDescription>
       </AlertDialogHeader>
