@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 
 import { useOrderQuery } from '@/hooks';
 import { PagePropsWithParams } from '@/app/types';
-import { OrderCTA } from '@/components';
+import { OrderCTA, OrderInfo } from '@/components';
 
 type PageParams = PagePropsWithParams<{ orderNumber: string }>;
 
@@ -29,7 +29,13 @@ export default async function Order(props: PageParams) {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <OrderCTA orderNumber={orderNumber} />
+      <div className="flex-1 flex flex-col lg:flex-row gap-6">
+        <OrderCTA orderNumber={orderNumber} />
+
+        <div className="min-w-0 flex-2 flex flex-col gap-6">
+          <OrderInfo orderNumber={orderNumber} />
+        </div>
+      </div>
     </HydrationBoundary>
   );
 }
