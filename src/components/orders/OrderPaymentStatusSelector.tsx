@@ -2,12 +2,14 @@
 
 import { useState } from 'react';
 
-import { useDisclosure, useOrderQuery, useUpdateOrderPaymentStatusMutation } from '@/hooks';
+import { useDisclosure, useIsMobile, useOrderQuery, useUpdateOrderPaymentStatusMutation } from '@/hooks';
 import { PaymentStatus } from '@/api';
 
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../ui';
 import { OrderStatusBadge } from './OrderStatusBadge';
 import { UpdateStatusAlert } from './UpdateStatusAlert';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { Money } from '@hugeicons/core-free-icons';
 
 interface OrderPaymentStatusSelectorProps {
   orderNumber: string;
@@ -20,6 +22,7 @@ export const OrderPaymentStatusSelector = ({ orderNumber }: OrderPaymentStatusSe
   const updateOrderPaymentStatusMutation = useUpdateOrderPaymentStatusMutation();
 
   const disclosure = useDisclosure({ canClose: !updateOrderPaymentStatusMutation.isPending });
+  const isMobile = useIsMobile();
 
   const onSelect = (newStatus: PaymentStatus) => {
     if (newStatus === orderQuery.data?.paymentStatus) return;
@@ -47,9 +50,9 @@ export const OrderPaymentStatusSelector = ({ orderNumber }: OrderPaymentStatusSe
       <Select value={orderQuery.data.paymentStatus} onValueChange={onSelect}>
         <SelectTrigger
           disabled={!orderQuery.data.allowedActions?.paymentStatuses.length}
-          className="min-w-24 h-10! max-h-max text-sm capitalize"
+          className="min-w-auto h-8! max-h-max text-sm capitalize p-0.5 gap-1"
         >
-          <SelectValue />
+          {isMobile ? <HugeiconsIcon icon={Money} className="size-4" /> : <SelectValue />}
         </SelectTrigger>
 
         <SelectContent position="popper">

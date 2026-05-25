@@ -18,8 +18,8 @@ export const OrderCTA = ({ orderNumber }: OrderCTAProps) => {
   if (!orderQuery.data) return null;
 
   return (
-    <TopBarCTA className="flex-1 gap-4 justify-between">
-      <div className="flex items-center gap-4">
+    <TopBarCTA className="flex-1 gap-4 justify-end lg:justify-between">
+      <div className="hidden lg:flex items-center gap-4">
         <Separator orientation="vertical" className="h-auto" />
 
         <div className="flex gap-2">
@@ -29,7 +29,7 @@ export const OrderCTA = ({ orderNumber }: OrderCTAProps) => {
         </div>
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex gap-2 items-center flex-wrap-reverse md:flex-nowrap justify-end">
         <OrderPaymentStatusSelector orderNumber={orderNumber} />
 
         <OrderStatusSelector orderNumber={orderNumber} />

@@ -2,12 +2,14 @@
 
 import { useState } from 'react';
 
-import { useDisclosure, useOrderQuery, useUpdateOrderStatusMutation } from '@/hooks';
+import { useDisclosure, useIsMobile, useOrderQuery, useUpdateOrderStatusMutation } from '@/hooks';
 import { OrderStatus } from '@/api';
 
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../ui';
 import { OrderStatusBadge } from './OrderStatusBadge';
 import { UpdateStatusAlert } from './UpdateStatusAlert';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { DeliveryBox01FreeIcons } from '@hugeicons/core-free-icons';
 
 interface OrderPaymentStatusSelectorProps {
   orderNumber: string;
@@ -20,6 +22,7 @@ export const OrderStatusSelector = ({ orderNumber }: OrderPaymentStatusSelectorP
   const updateOrderStatusMutation = useUpdateOrderStatusMutation();
 
   const disclosure = useDisclosure({ canClose: !updateOrderStatusMutation.isPending });
+  const isMobile = useIsMobile();
 
   const onSelect = (newStatus: OrderStatus) => {
     if (newStatus === orderQuery.data?.status) return;
@@ -47,9 +50,9 @@ export const OrderStatusSelector = ({ orderNumber }: OrderPaymentStatusSelectorP
       <Select value={orderQuery.data.status} onValueChange={onSelect}>
         <SelectTrigger
           disabled={!orderQuery.data.allowedActions?.statuses.length}
-          className="min-w-24 h-10! max-h-max text-sm capitalize"
+          className="min-w-auto h-8! max-h-max text-sm capitalize p-0.5 gap-1"
         >
-          <SelectValue />
+          {isMobile ? <HugeiconsIcon icon={DeliveryBox01FreeIcons} className="size-4" /> : <SelectValue />}
         </SelectTrigger>
 
         <SelectContent position="popper">
