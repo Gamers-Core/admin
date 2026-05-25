@@ -67,6 +67,7 @@ export const orderColumns: ColumnDef<Order>[] = [
     cell: ({ row }) => {
       const formatCurrency = useFormatCurrency();
       const formatted = formatCurrency(row.original.total, row.original.currency);
+
       return (
         <span className="text-sm font-semibold tabular-nums block truncate max-w-32.5" title={formatted}>
           {formatted}

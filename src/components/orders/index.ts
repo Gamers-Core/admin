@@ -5,3 +5,4 @@ export * from './OrderStatusSelector';
 export * from './OrderPaymentStatusSelector';
 export * from './UpdateStatusAlert';
 export * from './OrderInfo';
+export * from './OrderPaymentInfo';
