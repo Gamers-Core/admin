@@ -6,3 +6,4 @@ export * from './OrderPaymentStatusSelector';
 export * from './UpdateStatusAlert';
 export * from './OrderInfo';
 export * from './OrderPaymentInfo';
+export * from './OrderStatusTimeline';
