@@ -95,5 +95,5 @@ export const ModalFooter = (props: ModalFooterProps) => {
 
   const Component = isMobile ? DrawerFooter : DialogFooter;
 
-  return <Component {...props} />;
+  return <Component {...props} className="p-0" />;
 };

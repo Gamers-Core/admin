@@ -219,7 +219,7 @@ const TrackingNumberModal = ({ trackingNumber, orderNumber, ...disclosure }: Tra
 
   return (
     <Modal {...disclosure} title="Tracking Number" description="Add or edit the tracking number for this order.">
-      <Form {...form} onSubmit={onSubmit} className="flex flex-col gap-4">
+      <Form {...form} onSubmit={onSubmit} className="flex-1 flex flex-col gap-4">
         <Controller
           name="trackingNumber"
           control={form.control}
@@ -228,14 +228,11 @@ const TrackingNumberModal = ({ trackingNumber, orderNumber, ...disclosure }: Tra
         />
 
         <ModalFooter>
-          <Button variant="outline" onClick={disclosure.onClose}>
-            Cancel
-          </Button>
-
           <Button
             isDisabled={!form.formState.isValid || !form.formState.isDirty}
             isLoading={updateShippingMutation.isPending}
             onClick={form.handleSubmit(onSubmit)}
+            className="w-full h-auto py-2 text-lg"
           >
             Save
           </Button>
