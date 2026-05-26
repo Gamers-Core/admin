@@ -19,11 +19,11 @@ export const useFormatLabeledDate = () => {
 
   return useCallback(
     (date: Date | number | string) => {
-      let label = formatDate(date, 'MMM d');
+      let label = formatDate(new Date(date), 'MMM d');
 
       if (isToday(date)) label = 'Today';
-      if (isYesterday(date)) label = 'Yesterday';
-      if (isThisWeek(date, { weekStartsOn: 0 })) label = formatDate(date, 'EEEE');
+      else if (isYesterday(date)) label = 'Yesterday';
+      else if (isThisWeek(date, { weekStartsOn: 0 })) label = formatDate(date, 'EEEE');
 
       const time = formatDate(date, 'h:mm a');
 
