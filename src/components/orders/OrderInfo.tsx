@@ -140,7 +140,7 @@ export const OrderInfo = ({ orderNumber }: OrderInfoProps) => {
                     />
                   </div>
 
-                  <div className="min-w-0 flex-1 py-1 flex flex-col gap-1">
+                  <div className="min-w-0 flex-1 py-1 flex flex-col gap-1 capitalize">
                     <Link
                       href={`/products/${item.productId}`}
                       target="_blank"
