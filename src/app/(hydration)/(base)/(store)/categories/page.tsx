@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 
 import { useCategoriesQuery } from '@/hooks';
-import { CategoriesList } from '@/components';
+import { CategoriesCTA, CategoriesList } from '@/components';
 
 export const metadata: Metadata = { title: 'Gamers Core | Categories' };
 
@@ -13,6 +13,8 @@ export default async function Categories() {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
+      <CategoriesCTA />
+
       <CategoriesList />
     </HydrationBoundary>
   );

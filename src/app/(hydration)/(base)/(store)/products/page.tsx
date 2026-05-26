@@ -1,7 +1,7 @@
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { Metadata } from 'next';
 
-import { ProductsList, Searchbar, StatusFilter } from '@/components';
+import { ProductsCTA, ProductsList, Searchbar, StatusFilter } from '@/components';
 import { useProductsQuery } from '@/hooks';
 import { productStatuses, SearchProductSchema } from '@/api';
 import { PagePropsWithSearchParams } from '@/app/types';
@@ -22,6 +22,8 @@ export default async function Products(props: PagePropsWithSearchParams<SearchPr
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
+      <ProductsCTA />
+
       <div className="flex gap-2">
         <StatusFilter value={searchParams.status} options={productStatuses} />
 

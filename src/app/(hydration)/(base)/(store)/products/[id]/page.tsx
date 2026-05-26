@@ -9,6 +9,7 @@ import {
   ProductUploadMedia,
   ProductVariants,
   LocalizedForm,
+  ProductFormCTA,
 } from '@/components';
 import { ProductSchema } from '@/api';
 import { useBrandsQuery, useCategoriesQuery, useProductQuery } from '@/hooks';
@@ -37,6 +38,8 @@ export default async function EditProduct(props: PagePropsWithParams<{ id: strin
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <ProductForm className="flex-1 flex flex-col lg:flex-row gap-6" product={product.value}>
+        <ProductFormCTA product={product.value} />
+
         <div className="min-w-0 flex-4 flex flex-col gap-6">
           <section className="bg-sidebar p-4 rounded-lg flex flex-col gap-6">
             <LocalizedForm<ProductSchema> name="name" className="md:flex-row" />

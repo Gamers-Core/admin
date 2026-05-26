@@ -2,7 +2,7 @@
 
 import { ColumnDef } from '@tanstack/react-table';
 import { Order, orderStatuses, paymentStatuses, paymentMethods, sortOrderOptions } from '@/api';
-import { useFormatCurrency, useFormatDate } from '@/hooks';
+import { useFormatCurrency, useFormatLabeledDate } from '@/hooks';
 
 import { Link } from '../Link';
 import { SortHeader } from '../SortHeader';
@@ -29,23 +29,11 @@ export const orderColumns: ColumnDef<Order>[] = [
     size: 160,
     header: () => <SortHeader label="Date" sortKey="created" sortOptions={sortOrderOptions} />,
     cell: ({ row }) => {
-      const formatDate = useFormatDate();
-      const date = new Date(row.original.createdAt);
-      const now = new Date();
-      const diffInDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
-
-      let dateLabel: string;
-
-      if (diffInDays === 0) dateLabel = 'Today';
-      else if (diffInDays === 1) dateLabel = 'Yesterday';
-      else if (diffInDays < 7) dateLabel = formatDate(date, 'EEEE');
-      else dateLabel = formatDate(date, 'MMM d');
-
-      const time = formatDate(date, 'h:mm a');
+      const formatLabeledDate = useFormatLabeledDate();
 
       return (
         <span className="text-sm text-muted-foreground whitespace-nowrap">
-          {dateLabel} at {time}
+          {formatLabeledDate(row.original.createdAt)}
         </span>
       );
     },
@@ -79,6 +67,7 @@ export const orderColumns: ColumnDef<Order>[] = [
     cell: ({ row }) => {
       const formatCurrency = useFormatCurrency();
       const formatted = formatCurrency(row.original.total, row.original.currency);
+
       return (
         <span className="text-sm font-semibold tabular-nums block truncate max-w-32.5" title={formatted}>
           {formatted}

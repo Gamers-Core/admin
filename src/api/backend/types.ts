@@ -175,9 +175,9 @@ export type PaymentMethod = (typeof paymentMethods)[number];
 export interface OrderItem {
   id: number;
   productId: number;
-  productTitle: string;
+  productTitle: Localized;
   variantExternalId: string;
-  variantName: string | null;
+  variantName: Localized | null;
   imageURL: string | null;
   quantity: number;
   unitPrice: number;

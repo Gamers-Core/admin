@@ -89,7 +89,7 @@ export const productColumns: ColumnDef<Product>[] = [
     header: () => {
       const categoriesQuery = useCategoriesQuery();
 
-      return <FilterHeader label="Category" filterKey="categoryId" options={categoriesQuery.data!} />;
+      return <FilterHeader label="Category" filterKey="categoryId" options={categoriesQuery.data} />;
     },
     cell: ({ row }) => <span className="text-sm truncate">{row.original.category.name[defaultLocale]}</span>,
   },
@@ -98,7 +98,7 @@ export const productColumns: ColumnDef<Product>[] = [
     header: () => {
       const brandsQuery = useBrandsQuery();
 
-      return <FilterHeader label="Brand" filterKey="brandId" options={brandsQuery.data!} />;
+      return <FilterHeader label="Brand" filterKey="brandId" options={brandsQuery.data} />;
     },
     cell: ({ row }) => (
       <div className="flex items-center gap-2 min-w-0">

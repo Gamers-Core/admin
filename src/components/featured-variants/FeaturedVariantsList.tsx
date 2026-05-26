@@ -1,6 +1,6 @@
 'use client';
 
-import { TopBarCTA, ReorderList } from '@/components';
+import { ReorderList } from '@/components';
 import { useFeaturedVariantsQuery } from '@/hooks';
 
 import { FeaturedVariantCard } from './FeaturedVariantCard';
@@ -31,9 +31,7 @@ export const FeaturedVariantsList = () => {
     >
       {(children, state) => (
         <>
-          <TopBarCTA>
-            <FeaturedVariantsCTA {...state} />
-          </TopBarCTA>
+          <FeaturedVariantsCTA {...state} />
 
           <section className="flex-1 flex flex-col gap-8 min-w-0">{children}</section>
         </>

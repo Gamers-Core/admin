@@ -13,6 +13,6 @@ interface TopBarCTAProps {
 
 export const TopBarCTA = ({ children, className }: TopBarCTAProps) => (
   <TopBarPortal>
-    <div className={cn('flex items-center gap-2', className)}>{children}</div>
+    <div className={cn('flex items-center', className)}>{children}</div>
   </TopBarPortal>
 );

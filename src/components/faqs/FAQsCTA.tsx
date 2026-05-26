@@ -9,6 +9,7 @@ import { FAQ } from '@/api';
 
 import { Button } from '../Button';
 import { FAQFormModal } from './FAQFormModal';
+import { TopBarCTA } from '../sidebar';
 
 export const FAQsCTA = ({ items, commit, isLoading, isReordered, reset, setIsLoading }: ReorderProps<FAQ>) => {
   const modalDisclosure = useDisclosure();
@@ -36,7 +37,7 @@ export const FAQsCTA = ({ items, commit, isLoading, isReordered, reset, setIsLoa
   };
 
   return (
-    <div className="flex gap-2">
+    <TopBarCTA className="gap-2">
       {isReordered && (
         <div className="flex gap-2">
           <Button
@@ -64,6 +65,6 @@ export const FAQsCTA = ({ items, commit, isLoading, isReordered, reset, setIsLoa
 
         <FAQFormModal disclosure={modalDisclosure} />
       </div>
-    </div>
+    </TopBarCTA>
   );
 };
