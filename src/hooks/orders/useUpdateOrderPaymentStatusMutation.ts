@@ -7,6 +7,7 @@ import { BackendError, Order, PaymentStatus, gamersCoreAdmin } from '@/api';
 
 import { useErrorHandler } from '../useErrorHandler';
 import { useSetOrderQueryData } from './useOrderQuery';
+import { useInvalidateOrdersQuery } from './useOrdersQuery';
 
 interface UpdateOrderPaymentStatusData {
   paymentStatus: PaymentStatus;
@@ -20,6 +21,7 @@ export const useUpdateOrderPaymentStatusMutation = () => {
   const errorHandler = useErrorHandler();
 
   const setOrderQueryData = useSetOrderQueryData();
+  const invalidateOrdersQuery = useInvalidateOrdersQuery();
 
   return useMutation<Order, BackendError | null, UpdateOrderPaymentStatusMutationOptions>({
     mutationFn: ({ orderNumber, paymentStatus }) =>
@@ -33,6 +35,7 @@ export const useUpdateOrderPaymentStatusMutation = () => {
         }),
     onSuccess: (data) => {
       setOrderQueryData(data.orderNumber, data);
+      invalidateOrdersQuery();
     },
   });
 };

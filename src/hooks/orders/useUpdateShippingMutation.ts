@@ -7,6 +7,7 @@ import { BackendError, Order, OrderShippingSchema, ValidationErrors, gamersCoreA
 
 import { useErrorHandler } from '../useErrorHandler';
 import { useSetOrderQueryData } from './useOrderQuery';
+import { useInvalidateOrdersQuery } from './useOrdersQuery';
 
 interface UpdateOrderShippingMutationOptions extends OrderShippingSchema {
   orderNumber: string;
@@ -16,6 +17,7 @@ export const useUpdateShippingMutation = () => {
   const errorHandler = useErrorHandler();
 
   const setOrderQueryData = useSetOrderQueryData();
+  const invalidateOrdersQuery = useInvalidateOrdersQuery();
 
   return useMutation<
     Order,
@@ -31,6 +33,7 @@ export const useUpdateShippingMutation = () => {
         }),
     onSuccess: (data) => {
       setOrderQueryData(data.orderNumber, data);
+      invalidateOrdersQuery();
     },
   });
 };
