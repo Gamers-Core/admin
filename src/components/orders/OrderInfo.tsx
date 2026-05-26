@@ -13,6 +13,7 @@ import {
   useFormatCurrency,
   useFormatDate,
   useOrderQuery,
+  useRestockInventoryMutation,
   useUpdateShippingMutation,
 } from '@/hooks';
 import { defaultLocale, OrderShippingSchema, orderShippingSchema } from '@/api';
@@ -21,7 +22,18 @@ import { OrderStatusBadge } from './OrderStatusBadge';
 import { Link } from '../Link';
 import { Image } from '../Image';
 import { Modal, ModalFooter } from '../Modal';
-import { Input } from '../ui';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+  Input,
+} from '../ui';
 import { Button } from '../Button';
 import { Form } from '../Form';
 
@@ -31,6 +43,7 @@ interface OrderInfoProps {
 
 export const OrderInfo = ({ orderNumber }: OrderInfoProps) => {
   const orderQuery = useOrderQuery(orderNumber);
+  const restockInventoryMutation = useRestockInventoryMutation();
 
   const formatDate = useFormatDate();
   const formatCurrency = useFormatCurrency();
@@ -51,7 +64,15 @@ export const OrderInfo = ({ orderNumber }: OrderInfoProps) => {
             <h2 className="text-xl font-semibold tracking-tight">Order Details</h2>
           </div>
 
-          <OrderStatusBadge status={orderQuery.data.status} />
+          <div className="flex gap-2 items-center justify-end">
+            {orderQuery.data.restocked && (
+              <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium capitalize whitespace-nowrap w-fit max-w-full bg-green-500/10 text-green-600">
+                Inventory Restocked
+              </span>
+            )}
+
+            <OrderStatusBadge status={orderQuery.data.status} />
+          </div>
         </div>
 
         <div className="flex flex-col gap-3">
@@ -121,7 +142,7 @@ export const OrderInfo = ({ orderNumber }: OrderInfoProps) => {
         </div>
       </div>
 
-      <div className="p-4 md:p-6">
+      <div className="flex flex-col gap-4 p-4 md:p-6">
         <div className="flex flex-col gap-4">
           {orderQuery.data.items.map((item) => (
             <div
@@ -175,6 +196,46 @@ export const OrderInfo = ({ orderNumber }: OrderInfoProps) => {
             </div>
           ))}
         </div>
+
+        {orderQuery.data.status === 'returned' && !orderQuery.data.restocked && (
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button
+                variant="outline"
+                className="rounded-full ms-auto w-fit border-yellow-500/20 bg-yellow-500/10 px-3 py-1 text-sm font-medium text-yellow-600 transition-colors hover:bg-yellow-500/20 dark:text-yellow-400"
+              >
+                Restock Inventory
+              </Button>
+            </AlertDialogTrigger>
+
+            <AlertDialogContent size="default">
+              <AlertDialogHeader>
+                <AlertDialogTitle>Restock Inventory</AlertDialogTitle>
+
+                <AlertDialogDescription>
+                  Are you sure you want to restock the inventory for this order?
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+
+              <AlertDialogFooter>
+                <AlertDialogCancel disabled={restockInventoryMutation.isPending}>Cancel</AlertDialogCancel>
+
+                <AlertDialogAction asChild>
+                  <Button
+                    isLoading={restockInventoryMutation.isPending}
+                    onClick={async () =>
+                      await restockInventoryMutation.mutateAsync(orderNumber, {
+                        onSuccess: () => toast.success('Inventory restocked successfully'),
+                      })
+                    }
+                  >
+                    Restock
+                  </Button>
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        )}
       </div>
     </section>
   );

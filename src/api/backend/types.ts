@@ -220,6 +220,7 @@ export interface Order {
   currency: string;
   createdAt: string;
   updatedAt: string;
+  restocked: boolean;
   history: OrderStatusHistory[];
   allowedActions: OrderAllowedActions;
   user: BasicUser;
