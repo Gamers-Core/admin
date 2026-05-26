@@ -2,13 +2,28 @@
 
 import { HugeiconsIcon } from '@hugeicons/react';
 import { DeliveryTracking01Icon, StoreVerified01Icon } from '@hugeicons/core-free-icons';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useEffect } from 'react';
+import { toast } from 'sonner';
 
-import { useFormatCurrency, useFormatDate, useOrderQuery } from '@/hooks';
-import { defaultLocale } from '@/api';
+import {
+  Disclosure,
+  useDisclosure,
+  useFormatCurrency,
+  useFormatDate,
+  useOrderQuery,
+  useUpdateShippingMutation,
+} from '@/hooks';
+import { defaultLocale, OrderShippingSchema, orderShippingSchema } from '@/api';
 
 import { OrderStatusBadge } from './OrderStatusBadge';
 import { Link } from '../Link';
 import { Image } from '../Image';
+import { Modal, ModalFooter } from '../Modal';
+import { Input } from '../ui';
+import { Button } from '../Button';
+import { Form } from '../Form';
 
 interface OrderInfoProps {
   orderNumber: string;
@@ -19,6 +34,7 @@ export const OrderInfo = ({ orderNumber }: OrderInfoProps) => {
 
   const formatDate = useFormatDate();
   const formatCurrency = useFormatCurrency();
+  const trackingNumberDisclosure = useDisclosure();
 
   if (!orderQuery.data) return null;
 
@@ -42,20 +58,61 @@ export const OrderInfo = ({ orderNumber }: OrderInfoProps) => {
             <span>{formatDate(orderQuery.data.createdAt, "MMM d, yyyy 'at' h:mma")}</span>
           </div>
 
-          {orderQuery.data.trackingNumber && (
-            <div className="flex items-center gap-2 text-sm">
-              <HugeiconsIcon icon={DeliveryTracking01Icon} className="size-4 shrink-0 text-muted-foreground" />
-
-              <span className="text-muted-foreground">Tracking Number:</span>
-
-              <Link
-                href={`https://bosta.co/en-eg/tracking-shipments?shipment-number=${orderQuery.data.trackingNumber}`}
-                className="font-medium text-sidebar-primary hover:underline"
-              >
-                {orderQuery.data.trackingNumber}
-              </Link>
+          <div className="flex gap-3 rounded-2xl border border-border bg-background/70 p-4">
+            <div className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-border bg-sidebar">
+              <HugeiconsIcon icon={DeliveryTracking01Icon} className="size-5 text-muted-foreground" />
             </div>
-          )}
+
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="text-sm text-muted-foreground">Tracking Number</p>
+
+                  {orderQuery.data.trackingNumber ? (
+                    <p className="truncate font-semibold text-foreground">{orderQuery.data.trackingNumber}</p>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">No tracking number yet</p>
+                  )}
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2">
+                  {orderQuery.data.trackingNumber && (
+                    <>
+                      <Link
+                        href={`https://bosta.co/en-eg/tracking-shipments?shipment-number=${orderQuery.data.trackingNumber}`}
+                        target="_blank"
+                        className="rounded-full bg-sidebar px-3 py-1 text-sm font-medium text-sidebar-primary transition-colors hover:bg-sidebar-accent hover:underline"
+                      >
+                        Track
+                      </Link>
+
+                      <Link
+                        href={`https://business.bosta.co/orders/${orderQuery.data.trackingNumber}`}
+                        target="_blank"
+                        className="rounded-full border border-border bg-background px-3 py-1 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hover:underline"
+                      >
+                        Dashboard
+                      </Link>
+                    </>
+                  )}
+
+                  <Button
+                    variant="outline"
+                    onClick={trackingNumberDisclosure.onOpen}
+                    className="rounded-full border border-border bg-background px-3 py-1 text-sm font-medium text-muted-foreground transition-colors hover:bg-sidebar hover:text-foreground"
+                  >
+                    Edit
+                  </Button>
+                </div>
+
+                <TrackingNumberModal
+                  trackingNumber={orderQuery.data.trackingNumber}
+                  orderNumber={orderQuery.data.orderNumber}
+                  {...trackingNumberDisclosure}
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -78,7 +135,7 @@ export const OrderInfo = ({ orderNumber }: OrderInfoProps) => {
                     />
                   </div>
 
-                  <div className="min-w-0 flex-1 py-1">
+                  <div className="min-w-0 flex-1 py-1 flex flex-col gap-1">
                     <Link
                       href={`/products/${item.productId}`}
                       target="_blank"
@@ -89,7 +146,7 @@ export const OrderInfo = ({ orderNumber }: OrderInfoProps) => {
                     </Link>
 
                     {item.variantName && (
-                      <p className="mt-1 text-sm text-muted-foreground">{item.variantName[defaultLocale]}</p>
+                      <p className="text-sm text-muted-foreground">{item.variantName[defaultLocale]}</p>
                     )}
                   </div>
                 </div>
@@ -115,5 +172,70 @@ export const OrderInfo = ({ orderNumber }: OrderInfoProps) => {
         </div>
       </div>
     </section>
+  );
+};
+
+interface TrackingNumberModalProps extends Disclosure {
+  orderNumber: string;
+  trackingNumber: string | null;
+}
+
+const TrackingNumberModal = ({ trackingNumber, orderNumber, ...disclosure }: TrackingNumberModalProps) => {
+  const form = useForm({
+    defaultValues: { trackingNumber: trackingNumber || '' },
+    mode: 'onChange',
+    resolver: zodResolver(orderShippingSchema),
+  });
+
+  const updateShippingMutation = useUpdateShippingMutation();
+
+  useEffect(() => {
+    if (disclosure.open) form.reset({ trackingNumber: trackingNumber || '' });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [disclosure.open]);
+
+  const onSubmit: SubmitHandler<OrderShippingSchema> = (data) => {
+    if (updateShippingMutation.isPending) return;
+
+    updateShippingMutation.mutate(
+      { orderNumber, ...data },
+      {
+        onSuccess: () => {
+          toast.success('Tracking number updated successfully');
+
+          form.reset(data);
+
+          disclosure.onClose();
+        },
+      },
+    );
+  };
+
+  return (
+    <Modal {...disclosure} title="Tracking Number" description="Add or edit the tracking number for this order.">
+      <Form {...form} onSubmit={onSubmit} className="flex flex-col gap-4">
+        <Controller
+          name="trackingNumber"
+          control={form.control}
+          defaultValue={trackingNumber || ''}
+          render={({ field }) => <Input {...field} />}
+        />
+
+        <ModalFooter>
+          <Button variant="outline" onClick={disclosure.onClose}>
+            Cancel
+          </Button>
+
+          <Button
+            isDisabled={!form.formState.isValid || !form.formState.isDirty}
+            isLoading={updateShippingMutation.isPending}
+            onClick={form.handleSubmit(onSubmit)}
+          >
+            Save
+          </Button>
+        </ModalFooter>
+      </Form>
+    </Modal>
   );
 };

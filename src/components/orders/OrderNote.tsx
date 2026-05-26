@@ -51,8 +51,8 @@ export const OrderOptions = ({ orderNumber }: OrderOptionsProps) => {
               <HugeiconsIcon icon={NoteIcon} className="size-5 text-muted-foreground" />
             </div>
 
-            <div className="flex-1">
-              <p className="mb-2 text-sm font-medium text-muted-foreground">Customer Note</p>
+            <div className="flex-1 flex flex-col gap-2">
+              <p className="text-sm font-medium text-muted-foreground">Customer Note</p>
 
               <p dir="rtl" className="whitespace-pre-wrap wrap-break-word font-cairo leading-relaxed text-foreground">
                 {note}
