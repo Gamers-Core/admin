@@ -7,5 +7,5 @@ export * from './UpdateStatusAlert';
 export * from './OrderInfo';
 export * from './OrderPaymentInfo';
 export * from './OrderStatusTimeline';
-export * from './OrderNote';
+export * from './OrderOptions';
 export * from './CustomerInfo';

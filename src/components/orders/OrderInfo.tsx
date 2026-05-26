@@ -38,6 +38,9 @@ export const OrderInfo = ({ orderNumber }: OrderInfoProps) => {
 
   if (!orderQuery.data) return null;
 
+  const trackingNumber = orderQuery.data.trackingNumber;
+  const encodedTrackingNumber = trackingNumber ? encodeURIComponent(trackingNumber) : '';
+
   return (
     <section className="overflow-hidden rounded-3xl border border-border bg-sidebar/80 backdrop-blur-sm shadow-sm">
       <div className="border-b border-border p-6 flex flex-col gap-4">
@@ -76,19 +79,21 @@ export const OrderInfo = ({ orderNumber }: OrderInfoProps) => {
                 </div>
 
                 <div className="flex flex-wrap items-center gap-2">
-                  {orderQuery.data.trackingNumber && (
+                  {trackingNumber && (
                     <>
                       <Link
-                        href={`https://bosta.co/en-eg/tracking-shipments?shipment-number=${orderQuery.data.trackingNumber}`}
+                        href={`https://bosta.co/en-eg/tracking-shipments?shipment-number=${encodedTrackingNumber}`}
                         target="_blank"
+                        rel="noopener noreferrer"
                         className="rounded-full bg-sidebar px-3 py-1 text-sm font-medium text-sidebar-primary transition-colors hover:bg-sidebar-accent hover:underline"
                       >
                         Track
                       </Link>
 
                       <Link
-                        href={`https://business.bosta.co/orders/${orderQuery.data.trackingNumber}`}
+                        href={`https://business.bosta.co/orders/${encodedTrackingNumber}`}
                         target="_blank"
+                        rel="noopener noreferrer"
                         className="rounded-full border border-border bg-background px-3 py-1 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hover:underline"
                       >
                         Dashboard
