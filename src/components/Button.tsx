@@ -31,7 +31,7 @@ export const Button = ({
         {...props}
         disabled
       >
-        <Spinner className={cn('size-7.5', loadingIconClassName)} />
+        <Spinner className={cn('size-6', loadingIconClassName)} />
       </ShadCNButton>
     );
 
