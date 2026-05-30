@@ -2,7 +2,7 @@ import { DeliveryBox01FreeIcons, FileText, House, Store01Icon } from '@hugeicons
 
 import { Route } from './types';
 
-export const routes: Route[] = [
+export const routes = [
   {
     title: 'Home',
     url: '/',
@@ -54,4 +54,4 @@ export const routes: Route[] = [
       },
     ],
   },
-];
+] as const satisfies Route[];

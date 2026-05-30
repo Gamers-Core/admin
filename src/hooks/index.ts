@@ -18,3 +18,4 @@ export * from './products';
 export * from './useDebounce';
 export * from './featured-variants';
 export * from './orders';
+export * from './useSidebarStatsQuery';

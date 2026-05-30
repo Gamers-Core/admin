@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
 import { cn } from '@/lib/utils';
-import { useLogoutMutation, useMeQuery } from '@/hooks';
+import { useLogoutMutation, useMeQuery, useSidebarStatsQuery } from '@/hooks';
 
 import {
   AlertDialog,
@@ -35,7 +35,7 @@ import {
 } from '../ui';
 import { Logo } from '../Logo';
 import { routes } from './const';
-import { RouteWithChildren, RouteChild, Route } from './types';
+import { RouteChild, Route, AppRouteWithChildren } from './types';
 import { Link } from '../Link';
 import { getActiveItem, matchesUrl } from './helpers';
 
@@ -48,6 +48,7 @@ export const AppSidebar = (props: AppSidebarProps) => {
 
   const pathname = usePathname();
 
+  const sidebarStatsQuery = useSidebarStatsQuery();
   const meQuery = useMeQuery();
   const logoutMutation = useLogoutMutation();
 
@@ -80,10 +81,23 @@ export const AppSidebar = (props: AppSidebarProps) => {
                     })}
                   >
                     <SidebarMenuButton tooltip={item.title} asChild>
-                      <Link prefetch href={item.url} onClick={() => isMobile && setOpenMobile(false)}>
-                        {item.icon && <HugeiconsIcon icon={item.icon} />}
+                      <Link
+                        prefetch
+                        href={item.url}
+                        onClick={() => isMobile && setOpenMobile(false)}
+                        className="flex justify-between items-center pe-3.5"
+                      >
+                        <p className="flex gap-2 items-center">
+                          {item.icon && <HugeiconsIcon icon={item.icon} />}
 
-                        <span className="whitespace-nowrap capitalize text-sm">{item.title}</span>
+                          <span className="whitespace-nowrap capitalize text-sm">{item.title}</span>
+                        </p>
+
+                        {!!sidebarStatsQuery.data?.[item.url] && (
+                          <span className="text-xxs font-semibold text-foreground">
+                            {sidebarStatsQuery.data[item.url]}
+                          </span>
+                        )}
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -135,12 +149,14 @@ export const AppSidebar = (props: AppSidebarProps) => {
 
 interface SubMenuProps {
   pathname: string;
-  item: RouteWithChildren;
+  item: AppRouteWithChildren;
   activeItem: Route | RouteChild | null;
 }
 
 const SubMenu = ({ pathname, item, activeItem }: SubMenuProps) => {
   const sidebar = useSidebar();
+
+  const sidebarStatsQuery = useSidebarStatsQuery();
 
   const [isOpen, setIsOpen] = useState(() => item.items.some((sub) => matchesUrl(sub.url, pathname)));
 
@@ -175,12 +191,18 @@ const SubMenu = ({ pathname, item, activeItem }: SubMenuProps) => {
               <Link
                 prefetch
                 href={subItem.url}
-                className={cn('text-xs whitespace-nowrap', {
+                className={cn('flex items-center justify-between text-xs whitespace-nowrap', {
                   'bg-secondary rounded-lg': activeItem && 'url' in activeItem && activeItem.url === subItem.url,
                 })}
                 onClick={() => sidebar.isMobile && sidebar.setOpenMobile(false)}
               >
                 {subItem.title}
+
+                {!!sidebarStatsQuery.data?.[subItem.url] && (
+                  <span className="text-xxs font-semibold text-foreground pe-1">
+                    {sidebarStatsQuery.data[subItem.url]}
+                  </span>
+                )}
               </Link>
             </SidebarMenuSubButton>
           </SidebarMenuSubItem>
