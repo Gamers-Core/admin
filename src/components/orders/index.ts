@@ -11,3 +11,4 @@ export * from './OrderOptions';
 export * from './CustomerInfo';
 export * from './OrdersCTA';
 export * from './OrderCreateModal';
+export * from './OrderItemsPanel';

@@ -5,3 +5,6 @@ export * from './useUpdateOrderPaymentStatusMutation';
 export * from './useUpdateShippingMutation';
 export * from './useRestockInventoryMutation';
 export * from './useCreateOrderMutation';
+export * from './useAddOrderItemMutation';
+export * from './useUpdateOrderItemMutation';
+export * from './useRemoveOrderItemMutation';
