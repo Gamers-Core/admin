@@ -8,3 +8,4 @@ export * from './policySchema';
 export * from './products';
 export * from './featuredVariantSchema';
 export * from './orders';
+export * from './users';

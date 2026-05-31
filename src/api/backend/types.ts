@@ -55,6 +55,24 @@ export interface BasicUser {
   email: string;
 }
 
+export interface FullUser extends BasicUser {
+  ordersCount: number;
+  addresses: Address[];
+}
+
+export interface Address {
+  id: number;
+  phoneNumber: string;
+  detailedAddress: string;
+  districtId: string;
+  districtName: string;
+  cityId: string;
+  cityName: string;
+  cityDropOff: string;
+  nameAr: string;
+  isDefault: boolean;
+}
+
 export type Locale = (typeof locales)[number];
 
 export type MediaType = (typeof mediaTypes)[number];
@@ -159,6 +177,10 @@ export type SortOption = (typeof sortProductOptions)[number];
 
 export interface VariantWithProduct extends Variant {
   product: Product;
+}
+
+export interface CrateOrderVariant extends VariantWithProduct {
+  quantity: number;
 }
 
 export interface FeaturedVariant {
