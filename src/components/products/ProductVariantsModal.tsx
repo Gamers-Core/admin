@@ -90,7 +90,7 @@ export const ProductVariantsModal = <M extends 'single' | 'multiple'>({
           isDisabled={selectedVariants.length === 0 || (isSingleMode && selectedVariants.length > 1)}
           isLoading={productsQuery.isPending}
           onClick={() => {
-            onVariantSelect?.(mode === 'single' ? ([selectedVariants[0]] as [VariantWithProduct]) : selectedVariants);
+            onVariantSelect?.(mode === 'single' ? [selectedVariants[0]] : selectedVariants);
 
             disclosure.onClose();
           }}

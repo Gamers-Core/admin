@@ -30,3 +30,4 @@ export * from './SortHeader';
 export * from './FilterHeader';
 export * from './StatusFilter';
 export * from './orders';
+export * from './users';
