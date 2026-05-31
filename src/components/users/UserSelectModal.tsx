@@ -16,12 +16,16 @@ interface UserSelectModalProps<M extends 'single' | 'multiple'> extends Disclosu
   mode: M;
   onUsersSelect?: (variantId: [FullUser] | FullUser[]) => void;
   userIds?: number[];
+  canHaveNoAddresses?: boolean;
+  canHaveNoOrders?: boolean;
 }
 
 export const UserSelectModal = <M extends 'single' | 'multiple'>({
   mode,
   onUsersSelect,
   userIds,
+  canHaveNoAddresses = false,
+  canHaveNoOrders = false,
   ...disclosure
 }: UserSelectModalProps<M>) => {
   const isSingleMode = mode === 'single';
@@ -70,6 +74,7 @@ export const UserSelectModal = <M extends 'single' | 'multiple'>({
                 key={user.id}
                 variant="outline"
                 className="flex gap-4 border rounded-lg shadow-sm relative p-4 justify-between text-start h-auto hover:opacity-80 transition-opacity duration-300"
+                isDisabled={(!user.addresses.length && !canHaveNoAddresses) || (!user.ordersCount && !canHaveNoOrders)}
                 onClick={() => setSelectedUser(isSingleMode ? [user] : [...selectedUsers, user])}
               >
                 <div className="flex-1 min-w-0 flex flex-col justify-between gap-2">

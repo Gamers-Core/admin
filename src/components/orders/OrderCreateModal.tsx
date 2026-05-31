@@ -172,6 +172,7 @@ export const OrderCreateModal = (disclosure: Disclosure) => {
                     userIds={field.value ? [field.value.id] : []}
                     {...userDisclosure}
                     onUsersSelect={([user]) => field.onChange(user)}
+                    canHaveNoOrders
                   />
                 </Field>
               </FieldGroup>
