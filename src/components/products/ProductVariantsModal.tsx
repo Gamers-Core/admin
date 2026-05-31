@@ -17,12 +17,16 @@ interface ProductVariantsModalProps<M extends 'single' | 'multiple'> extends Dis
   mode: M;
   onVariantSelect?: (variantId: [VariantWithProduct] | VariantWithProduct[]) => void;
   variantIds?: number[];
+  canSelectInactive?: boolean;
+  canSelectOutOfStock?: boolean;
 }
 
 export const ProductVariantsModal = <M extends 'single' | 'multiple'>({
   mode,
   onVariantSelect,
   variantIds,
+  canSelectInactive = false,
+  canSelectOutOfStock = false,
   ...disclosure
 }: ProductVariantsModalProps<M>) => {
   const isSingleMode = mode === 'single';
@@ -75,9 +79,14 @@ export const ProductVariantsModal = <M extends 'single' | 'multiple'>({
                 setSelectedVariants(
                   isSingleMode
                     ? [variant]
-                    : (prev) => (prev.includes(variant) ? prev.filter((v) => v !== variant) : [...prev, variant]),
+                    : (prev) =>
+                        prev.some((v) => v.id === variant.id)
+                          ? prev.filter((v) => v.id !== variant.id)
+                          : [...prev, variant],
                 )
               }
+              canSelectInactive={canSelectInactive}
+              canSelectOutOfStock={canSelectOutOfStock}
             />
           ))
         )}
@@ -106,9 +115,17 @@ interface ProductCardProps {
   product: Product;
   onSelect: (variant: VariantWithProduct) => void;
   selectedVariants?: VariantWithProduct[];
+  canSelectInactive?: boolean;
+  canSelectOutOfStock?: boolean;
 }
 
-const ProductCard = ({ product, onSelect, selectedVariants }: ProductCardProps) => {
+const ProductCard = ({
+  product,
+  onSelect,
+  selectedVariants,
+  canSelectInactive,
+  canSelectOutOfStock,
+}: ProductCardProps) => {
   const formatCurrency = useFormatCurrency();
 
   return (
@@ -128,7 +145,7 @@ const ProductCard = ({ product, onSelect, selectedVariants }: ProductCardProps) 
           return (
             <Button
               key={variant.id}
-              isDisabled={!variant.isActive}
+              isDisabled={(!variant.isActive && !canSelectInactive) || (variant.stock === 0 && !canSelectOutOfStock)}
               variant="outline"
               className="relative p-4 border-b justify-between text-start last:border-0 h-auto hover:opacity-80 transition-opacity duration-300"
               onClick={() => onSelect({ ...variant, product })}

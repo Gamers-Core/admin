@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 
 import { SearchOrderSchema } from '@/api';
 import { useOrdersQuery } from '@/hooks';
-import { OrdersList, Searchbar } from '@/components';
+import { OrdersCTA, OrdersList, Searchbar } from '@/components';
 import { PagePropsWithSearchParams } from '@/app/types';
 
 export const metadata: Metadata = { title: 'Gamers Core | Orders' };
@@ -22,6 +22,8 @@ export default async function Orders(props: PagePropsWithSearchParams<SearchOrde
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
+      <OrdersCTA />
+
       <Searchbar q={searchParams.q} />
 
       <OrdersList searchParams={searchParams} />

@@ -179,6 +179,10 @@ export interface VariantWithProduct extends Variant {
   product: Product;
 }
 
+export interface CrateOrderVariant extends VariantWithProduct {
+  quantity: number;
+}
+
 export interface FeaturedVariant {
   id: number;
   position: number;

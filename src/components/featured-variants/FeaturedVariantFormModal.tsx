@@ -137,6 +137,8 @@ export const FeaturedVariantFormModal = ({ featuredVariant, disclosure }: Featur
                     field.onChange(variant.id);
                     setVariant(variant);
                   }}
+                  canSelectInactive
+                  canSelectOutOfStock
                 />
               </Field>
             )}
