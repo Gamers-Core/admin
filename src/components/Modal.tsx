@@ -48,7 +48,7 @@ const MobileDrawer = ({ title, description, children, className, asChild, fullsc
       })}
     >
       <DrawerHeader className="flex flex-col gap-2 px-6">
-        <DrawerTitle className="text-xl font-bold">{title}</DrawerTitle>
+        <DrawerTitle className="text-xl font-bold font-oxanium">{title}</DrawerTitle>
 
         <DrawerDescription className="text-xs font-semibold text-muted-foreground">{description}</DrawerDescription>
       </DrawerHeader>
@@ -68,7 +68,7 @@ const DesktopDialog = ({ title, description, children, className, asChild, fulls
     >
       <DialogHeader className="flex flex-row justify-between items-center px-4">
         <div className="flex flex-col gap-2">
-          <DialogTitle className="text-xl">{title}</DialogTitle>
+          <DialogTitle className="text-xl font-oxanium">{title}</DialogTitle>
 
           <DialogDescription>{description}</DialogDescription>
         </div>
