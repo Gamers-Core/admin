@@ -1,75 +1,79 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import { LexicalComposer } from '@lexical/react/LexicalComposer';
-import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
-import { ContentEditable } from '@lexical/react/LexicalContentEditable';
-import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
-import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
-import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary';
-import { ListPlugin } from '@lexical/react/LexicalListPlugin';
-import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin';
-import { TabIndentationPlugin } from '@lexical/react/LexicalTabIndentationPlugin';
-import { $generateHtmlFromNodes, $generateNodesFromDOM } from '@lexical/html';
-import { ListNode, ListItemNode } from '@lexical/list';
-import { HeadingNode, QuoteNode } from '@lexical/rich-text';
-import { $createParagraphNode, $getRoot, EditorState, LexicalEditor } from 'lexical';
-import { LinkNode } from '@lexical/link';
+import { useEffect } from 'react';
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import Link from '@tiptap/extension-link';
+import Placeholder from '@tiptap/extension-placeholder';
+import Underline from '@tiptap/extension-underline';
+import TextAlign from '@tiptap/extension-text-align';
+import Youtube from '@tiptap/extension-youtube';
 
 import { cn } from '@/lib/utils';
-import { defaultLocale, localeDir } from '@/api';
+import { defaultLocale, Locale } from '@/api';
 
-import { AutoTransformPlugin, ToolbarPlugin } from './plugins';
-import { cleanHtml, isHtmlEmpty, isEmptyParagraph } from './helpers';
-import { YouTubeNode } from './nodes';
+import { ToolbarPlugin } from './ToolbarPlugin';
 import { HTMLRender } from '../HTMLRender';
 
 export interface RichTextInputProps {
   id?: string;
-  dir?: 'ltr' | 'rtl';
   value?: string;
   onChange?: (html: string) => void;
   placeholder?: string;
   className?: string;
+  locale?: Locale;
 }
 
 export const RichTextInput = ({
   id,
-  dir = localeDir[defaultLocale],
   value = '',
   onChange,
   placeholder,
   className,
+  locale = defaultLocale,
 }: RichTextInputProps) => {
-  const [isMounted, setIsMounted] = useState(false);
-  const isInitializingRef = useRef(true);
+  const editor = useEditor({
+    immediatelyRender: false,
+    extensions: [
+      StarterKit.configure({ underline: false, link: false }),
+      Underline,
+      TextAlign.configure({ types: ['heading', 'paragraph'], defaultAlignment: locale === 'ar' ? 'right' : 'left' }),
+      Link.configure({ openOnClick: false, autolink: true }),
+      Placeholder.configure({ placeholder: placeholder ?? 'Enter text…' }),
+      Youtube.configure({
+        nocookie: true,
+        allowFullscreen: true,
+        addPasteHandler: true,
+        ccLanguage: locale,
+        HTMLAttributes: {
+          style: 'aspect-ratio: 16 / 9; width: 100%; height: auto;',
+          class: 'rounded-md border',
+        },
+      }),
+    ],
+    content: value,
+    editorProps: { attributes: { id: id ?? '', class: 'min-h-40 outline-none text-base leading-relaxed' } },
+    onUpdate: ({ editor }) => {
+      const html = editor.isEmpty ? '' : editor.getHTML();
+
+      onChange?.(html);
+    },
+  });
 
   useEffect(() => {
-    setIsMounted(true);
-  }, []);
+    if (!editor || editor.getHTML() === value) return;
 
-  const handleChange = (editorState: EditorState, editor: LexicalEditor) => {
-    if (isInitializingRef.current) {
-      isInitializingRef.current = false;
-      return;
-    }
+    editor.commands.setContent(value ?? '', { emitUpdate: false });
+  }, [value, editor]);
 
-    editorState.read(() => {
-      const html = cleanHtml($generateHtmlFromNodes(editor));
-      onChange?.(isHtmlEmpty(html) ? '' : html);
-    });
-  };
-
-  const normalizedValue = cleanHtml(value);
-
-  if (!isMounted)
+  if (!editor)
     return (
       <div className={cn('w-full rounded-md border border-input bg-background', className)}>
         <div className="flex flex-wrap items-center gap-0.5 p-1.5 border-b border-border bg-muted/30 rounded-t-md h-10" />
         <div className="relative px-3 py-2">
           <div className="min-h-40 text-base leading-relaxed">
-            {normalizedValue ? (
-              <Placeholder html={normalizedValue} />
+            {value ? (
+              <PlaceholderHTML html={value} />
             ) : (
               <div className="text-muted-foreground">{placeholder ?? 'Enter text...'}</div>
             )}
@@ -79,81 +83,19 @@ export const RichTextInput = ({
     );
 
   return (
-    <LexicalComposer
-      initialConfig={{
-        namespace: 'RichText',
-        nodes: [HeadingNode, QuoteNode, ListNode, ListItemNode, LinkNode, YouTubeNode],
-        onError: console.error,
-        editable: true,
-        editorState: (editor) => {
-          const root = $getRoot();
-          root.clear();
-
-          if (!normalizedValue) return root.append($createParagraphNode());
-
-          const parser = new DOMParser();
-          const dom = parser.parseFromString(normalizedValue, 'text/html');
-          const nodes = $generateNodesFromDOM(editor, dom).filter((node) => !isEmptyParagraph(node));
-
-          if (nodes.length === 0) return root.append($createParagraphNode());
-
-          nodes.forEach((node) => root.append(node));
-        },
-        theme: {
-          paragraph: 'mb-1 text-base leading-relaxed',
-          heading: {
-            h1: 'text-3xl font-bold mb-3 mt-4',
-            h2: 'text-2xl font-bold mb-2 mt-3',
-            h3: 'text-xl font-semibold mb-2 mt-3',
-            h4: 'text-lg font-semibold mb-1 mt-2',
-          },
-          list: {
-            ul: 'list-disc list-inside mb-2 space-y-1',
-            ol: 'list-decimal list-inside mb-2 space-y-1',
-            listitem: 'ml-4',
-          },
-          link: 'text-primary underline cursor-pointer hover:text-primary/80',
-          text: {
-            bold: 'font-bold',
-            italic: 'italic',
-            underline: 'underline',
-            strikethrough: 'line-through',
-          },
-          quote: 'border-l-4 border-primary/40 pl-4 italic text-muted-foreground my-2',
-        },
-      }}
+    <div
+      className={cn(
+        'w-full rounded-md border border-input bg-background ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2',
+        className,
+      )}
     >
-      <div
-        className={cn(
-          'w-full rounded-md border border-input bg-background ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2',
-          className,
-        )}
-      >
-        <ToolbarPlugin dir={dir} />
+      <ToolbarPlugin editor={editor} />
 
-        <div className="relative px-3 py-2">
-          <RichTextPlugin
-            contentEditable={
-              <ContentEditable id={id} className="min-h-40 outline-none text-base leading-relaxed" autoFocus={false} />
-            }
-            placeholder={
-              <div className="pointer-events-none absolute top-2 left-3 text-muted-foreground text-base">
-                {placeholder ?? 'Enter text...'}
-              </div>
-            }
-            ErrorBoundary={LexicalErrorBoundary}
-          />
-        </div>
+      <div className="px-3 py-2 prose prose-sm md:prose-base dark:prose-invert max-w-none prose-li:leading-normal prose-p:mt-0 prose-p:mb-0 prose-ul:mb-0 prose-ul:mt-0">
+        <EditorContent editor={editor} />
       </div>
-
-      <HistoryPlugin />
-      <ListPlugin />
-      <LinkPlugin />
-      <TabIndentationPlugin />
-      <AutoTransformPlugin />
-      <OnChangePlugin onChange={handleChange} ignoreSelectionChange />
-    </LexicalComposer>
+    </div>
   );
 };
 
-const Placeholder = HTMLRender('RichTextInput Placeholder');
+const PlaceholderHTML = HTMLRender('RichTextInput Placeholder');

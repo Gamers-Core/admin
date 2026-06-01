@@ -68,6 +68,7 @@ export const LocalizedForm = <T extends Record<string, unknown>>({
                       'font-cairo': dir === 'rtl',
                       'p-2 px-3 text-sm/relaxed md:text-base/relaxed': type !== 'richtext',
                     })}
+                    locale={locale}
                     {...inputProps}
                   />
 
