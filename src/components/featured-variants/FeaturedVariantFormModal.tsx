@@ -62,6 +62,7 @@ export const FeaturedVariantFormModal = ({ featuredVariant, disclosure }: Featur
       form.reset();
       updateFeaturedVariantMutation.reset();
       addFeaturedVariantMutation.reset();
+      setVariant(null);
     }
 
     disclosure.onOpenChange(open);
