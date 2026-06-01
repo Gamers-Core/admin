@@ -58,7 +58,7 @@ export const UserReviewFormModal = ({ userReview, disclosure }: UserReviewFormMo
     if (!form.formState.isValid || isLoading) return;
 
     const onSuccess = () => {
-      toast.success(`UserReview ${userReview ? 'updated' : 'added'} successfully.`);
+      toast.success(`User Review ${userReview ? 'updated' : 'added'} successfully.`);
 
       onOpenChange(false);
     };
@@ -79,8 +79,8 @@ export const UserReviewFormModal = ({ userReview, disclosure }: UserReviewFormMo
 
   return (
     <Modal
-      title={userReview ? `Update UserReview ${userReview.position}` : 'Add New UserReview'}
-      description={userReview ? `Update the userReview ${userReview.position} information.` : 'Add a new user review.'}
+      title={userReview ? `Update User Review ${userReview.position}` : 'Add New User Review'}
+      description={userReview ? `Update the user review ${userReview.position} information.` : 'Add a new user review.'}
       asChild
       {...disclosure}
       onOpenChange={onOpenChange}
@@ -141,7 +141,7 @@ export const UserReviewFormModal = ({ userReview, disclosure }: UserReviewFormMo
             }
             isLoading={isLoading}
           >
-            {userReview ? 'Update' : 'Add'} UserReview
+            {userReview ? 'Update' : 'Add'} User Review
           </Button>
         </ModalFooter>
       </Form>

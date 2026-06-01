@@ -68,7 +68,7 @@ export const UserReviewsCTA = ({
       {items && items.length < 3 && (
         <div>
           <Button icon={<HugeiconsIcon icon={Plus} />} onClick={modalDisclosure.onOpen}>
-            Add UserReview
+            Add User Review
           </Button>
 
           <UserReviewFormModal disclosure={modalDisclosure} />
