@@ -10,7 +10,7 @@ import TextAlign from '@tiptap/extension-text-align';
 import Youtube from '@tiptap/extension-youtube';
 
 import { cn } from '@/lib/utils';
-import { defaultLocale, Locale } from '@/api';
+import { defaultLocale, Locale, localeDir } from '@/api';
 
 import { ToolbarPlugin } from './ToolbarPlugin';
 import { HTMLRender } from '../HTMLRender';
@@ -34,6 +34,7 @@ export const RichTextInput = ({
 }: RichTextInputProps) => {
   const editor = useEditor({
     immediatelyRender: false,
+    textDirection: localeDir[locale],
     extensions: [
       StarterKit.configure({ underline: false, link: false }),
       Underline,
