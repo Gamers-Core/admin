@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useEditor, EditorContent } from '@tiptap/react';
+import { useEditor, EditorContent, InputRule } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Link from '@tiptap/extension-link';
 import Placeholder from '@tiptap/extension-placeholder';
@@ -39,7 +39,7 @@ export const RichTextInput = ({
       StarterKit.configure({ underline: false, link: false }),
       Underline,
       TextAlign.configure({ types: ['heading', 'paragraph'], defaultAlignment: locale === 'ar' ? 'right' : 'left' }),
-      Link.configure({ openOnClick: false, autolink: true }),
+      MarkdownLink,
       Placeholder.configure({ placeholder: placeholder ?? 'Enter text…' }),
       Youtube.configure({
         nocookie: true,
@@ -100,3 +100,26 @@ export const RichTextInput = ({
 };
 
 const PlaceholderHTML = HTMLRender('RichTextInput Placeholder');
+
+const MarkdownLink = Link.configure({ openOnClick: false, autolink: true }).extend({
+  addInputRules() {
+    return [
+      new InputRule({
+        find: /\[([^\]]+)\]\(([^)]+)\)$/,
+        handler: ({ state, range, match }) => {
+          const { tr } = state;
+          const start = range.from;
+          const end = range.to;
+          const text = match[1];
+          const href = match[2];
+
+          tr.replaceWith(start, end, state.schema.text(text)).addMark(
+            start,
+            start + text.length,
+            this.type.create({ href }),
+          );
+        },
+      }),
+    ];
+  },
+});
