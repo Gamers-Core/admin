@@ -1,10 +1,10 @@
 import z from 'zod';
 
 import { paymentMethods } from '../../const';
-import { CrateOrderVariant, FullUser } from '../../types';
+import { CrateOrderVariant, SearchUser } from '../../types';
 
 export const createOrderSchema = z.object({
-  user: z.custom<FullUser>(),
+  user: z.custom<SearchUser>(),
   paymentMethod: z.enum(paymentMethods),
   note: z.string().optional(),
   canOpenPackage: z.boolean().optional(),

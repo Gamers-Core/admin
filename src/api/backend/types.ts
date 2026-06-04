@@ -49,15 +49,25 @@ export type VerifyOTPResponse = {
   [P in AuthPurpose]: { purpose: P } & OtpVerifyResultMap[P];
 };
 
+export type Locale = (typeof locales)[number];
+
 export interface BasicUser {
   id: number;
   name: string;
   email: string;
+  locale: Locale;
 }
 
 export interface FullUser extends BasicUser {
+  orders: Omit<Order, 'user' | 'history'>[];
+  addresses: Address[];
+  createdAt: string;
+}
+
+export interface SearchUser extends BasicUser {
   ordersCount: number;
   addresses: Address[];
+  createdAt: string;
 }
 
 export interface Address {
@@ -72,8 +82,6 @@ export interface Address {
   nameAr: string;
   isDefault: boolean;
 }
-
-export type Locale = (typeof locales)[number];
 
 export type MediaType = (typeof mediaTypes)[number];
 export type MediaFormat = 'all' | MediaType;
