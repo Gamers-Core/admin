@@ -13,11 +13,12 @@ const queryFn = ({ queryKey: [, ...paramsArr] }: QueryFunctionContext<QueryKey>)
     .get<SearchUser[], AxiosResponse<SearchUser[]>>('/users', { params: Object.fromEntries(paramsArr) })
     .then((res) => res.data);
 
-export const useUsersQuery = (searchOptions: SearchUsersSchema = {}) =>
+export const useUsersQuery = (searchOptions: SearchUsersSchema = {}, enabled = false) =>
   useQuery<SearchUser[], AxiosError<BackendError>, SearchUser[], QueryKey>({
     queryKey: queryKey(searchOptions),
     queryFn,
     staleTime: 1000 * 60 * 5, // 5 minutes
+    enabled,
   });
 
 export const useInvalidateUsersQuery = (searchOptions: SearchUsersSchema = {}) => {

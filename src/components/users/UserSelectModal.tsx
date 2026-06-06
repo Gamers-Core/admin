@@ -38,7 +38,7 @@ export const UserSelectModal = <M extends 'single' | 'multiple'>({
     setSearch(debouncedSearch);
   }, [debouncedSearch]);
 
-  const usersQuery = useUsersQuery({ q: debouncedSearch });
+  const usersQuery = useUsersQuery(!!debouncedSearch ? { q: debouncedSearch } : {}, disclosure.open);
 
   const selectedUsersById = useMemo(
     () => usersQuery.data?.filter((user) => userIds?.includes(user.id)),

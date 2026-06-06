@@ -39,7 +39,7 @@ export const ProductVariantsModal = <M extends 'single' | 'multiple'>({
     setSearch(debouncedSearch);
   }, [debouncedSearch]);
 
-  const productsQuery = useProductsQuery({ q: debouncedSearch });
+  const productsQuery = useProductsQuery(!!debouncedSearch ? { q: debouncedSearch } : {}, disclosure.open);
 
   const selectedVariantsById = useMemo(
     () =>
