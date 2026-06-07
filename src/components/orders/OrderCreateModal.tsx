@@ -47,11 +47,15 @@ const defaultValues: CreateOrderSchema = {
   variants: [],
 };
 
-export const OrderCreateModal = (disclosure: Disclosure) => {
+interface OrderCreateModalProps extends Partial<CreateOrderSchema> {
+  disclosure: Disclosure;
+}
+
+export const OrderCreateModal = ({ disclosure, ...orderValues }: OrderCreateModalProps) => {
   const router = useRouter();
 
   const form = useForm<CreateOrderSchema>({
-    defaultValues,
+    defaultValues: { ...defaultValues, ...orderValues },
     mode: 'onChange',
     resolver: zodResolver(createOrderSchema),
   });

@@ -19,7 +19,7 @@ export const OrdersCTA = () => {
         Create Order
       </Button>
 
-      <OrderCreateModal {...modalDisclosure} />
+      <OrderCreateModal disclosure={modalDisclosure} />
     </TopBarCTA>
   );
 };
