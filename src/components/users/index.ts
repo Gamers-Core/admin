@@ -5,3 +5,5 @@ export * from './UserCreateModal';
 export * from './UserEditModal';
 export * from './UserCTA';
 export * from './UserOrders';
+export * from './UserAddresses';
+export * from './UserInfo';

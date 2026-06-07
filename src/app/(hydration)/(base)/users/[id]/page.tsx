@@ -38,6 +38,12 @@ export default async function UserDetails(props: PagePropsWithParams<{ id: strin
         <div className="min-w-0 flex-2 flex flex-col gap-6">
           <UserOrders userId={userId} />
         </div>
+
+        <div className="min-w-0 flex-1 flex flex-col gap-6 lg:sticky lg:top-4 lg:self-start">
+          <UserInfo userId={userId} />
+
+          <UserAddresses userId={userId} />
+        </div>
       </div>
     </HydrationBoundary>
   );
