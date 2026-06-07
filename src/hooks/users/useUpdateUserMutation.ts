@@ -25,7 +25,7 @@ export const useUpdateUserMutation = () => {
   >({
     mutationFn: ({ id, ...data }) =>
       gamersCoreAdmin
-        .post<FullUser, AxiosResponse<FullUser>, CreateUserSchema>(`/users/${id}`, data)
+        .patch<FullUser, AxiosResponse<FullUser>, CreateUserSchema>(`/users/${id}`, data)
         .then((res) => res.data)
         .catch((err: AxiosError<BackendError>) => {
           throw errorHandler(err);
