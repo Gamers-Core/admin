@@ -30,6 +30,8 @@ export const Button = ({
     return (
       <TooltipWrapper {...tooltip}>
         <ShadCNButton
+          size={size}
+          type="button"
           className={cn('opacity-80 cursor-not-allowed flex justify-center items-center', className)}
           {...props}
           disabled

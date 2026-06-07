@@ -14,7 +14,7 @@ import { Button } from '../Button';
 
 interface UserSelectModalProps<M extends 'single' | 'multiple'> extends Disclosure {
   mode: M;
-  onUsersSelect?: (variantId: [SearchUser] | SearchUser[]) => void;
+  onUsersSelect?: (users: [SearchUser] | SearchUser[]) => void;
   userIds?: number[];
   canHaveNoAddresses?: boolean;
   canHaveNoOrders?: boolean;

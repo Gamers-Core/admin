@@ -13,7 +13,7 @@ const queryFn = ({ queryKey: [, ...paramsArr] }: QueryFunctionContext<QueryKey>)
     .get<Product[], AxiosResponse<Product[]>>('/products', { params: Object.fromEntries(paramsArr) })
     .then((res) => res.data);
 
-export const useProductsQuery = (searchOptions: SearchProductSchema = {}, enabled = false) =>
+export const useProductsQuery = (searchOptions: SearchProductSchema = {}, enabled = true) =>
   useQuery<Product[], AxiosError<BackendError>, Product[], QueryKey>({
     queryKey: queryKey(searchOptions),
     queryFn,
