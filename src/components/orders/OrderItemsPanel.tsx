@@ -199,7 +199,7 @@ export const OrderItemsPanel = ({ order }: OrderItemsPanelProps) => {
             className="group rounded-2xl border border-border bg-background/70 p-4 transition-all duration-300 hover:border-sidebar-primary/30 hover:shadow-md"
           >
             <div className="flex gap-4">
-              <div className="shrink-0 overflow-hidden rounded-xl border border-border bg-sidebar p-1">
+              <div className="shrink-0 overflow-hidden h-fit rounded-xl border border-border bg-sidebar p-1">
                 <Image
                   src={item.imageURL}
                   width={80}

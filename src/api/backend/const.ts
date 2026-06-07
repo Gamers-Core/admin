@@ -50,6 +50,21 @@ export const sortOrderOptions = [
   'total-descending',
 ] as const;
 
+export const sortUserOptions = [
+  'created-ascending',
+  'created-descending',
+  'name-ascending',
+  'name-descending',
+  'email-ascending',
+  'email-descending',
+  'orders-ascending',
+  'orders-descending',
+  'addresses-ascending',
+  'addresses-descending',
+  'locale-ascending',
+  'locale-descending',
+] as const;
+
 export const orderStatuses = [
   'pending',
   'confirmed',

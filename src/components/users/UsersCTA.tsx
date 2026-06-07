@@ -5,21 +5,20 @@ import { HugeiconsIcon } from '@hugeicons/react';
 
 import { useDisclosure } from '@/hooks';
 
-import { OrderCreateModal } from '@/components';
-
 import { Button } from '../Button';
 import { TopBarCTA } from '../sidebar';
+import { UserCreateModal } from './UserCreateModal';
 
-export const OrdersCTA = () => {
+export const UsersCTA = () => {
   const modalDisclosure = useDisclosure();
 
   return (
     <TopBarCTA>
       <Button icon={<HugeiconsIcon icon={Plus} />} onClick={modalDisclosure.onOpen}>
-        Create Order
+        Create User
       </Button>
 
-      <OrderCreateModal disclosure={modalDisclosure} />
+      <UserCreateModal {...modalDisclosure} />
     </TopBarCTA>
   );
 };

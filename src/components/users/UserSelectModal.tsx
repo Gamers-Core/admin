@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { HugeiconsIcon } from '@hugeicons/react';
 import { Check } from '@hugeicons/core-free-icons';
 
-import { FullUser } from '@/api';
+import { SearchUser } from '@/api';
 import { Disclosure, useDebounce, useUsersQuery } from '@/hooks';
 import { cn } from '@/lib/utils';
 
@@ -14,7 +14,7 @@ import { Button } from '../Button';
 
 interface UserSelectModalProps<M extends 'single' | 'multiple'> extends Disclosure {
   mode: M;
-  onUsersSelect?: (variantId: [FullUser] | FullUser[]) => void;
+  onUsersSelect?: (users: [SearchUser] | SearchUser[]) => void;
   userIds?: number[];
   canHaveNoAddresses?: boolean;
   canHaveNoOrders?: boolean;
@@ -38,14 +38,14 @@ export const UserSelectModal = <M extends 'single' | 'multiple'>({
     setSearch(debouncedSearch);
   }, [debouncedSearch]);
 
-  const usersQuery = useUsersQuery({ q: debouncedSearch });
+  const usersQuery = useUsersQuery(!!debouncedSearch ? { q: debouncedSearch } : {}, disclosure.open);
 
   const selectedUsersById = useMemo(
     () => usersQuery.data?.filter((user) => userIds?.includes(user.id)),
     [usersQuery.data, userIds],
   );
 
-  const [selectedUsers, setSelectedUser] = useState<FullUser[]>(selectedUsersById ?? []);
+  const [selectedUsers, setSelectedUser] = useState<SearchUser[]>(selectedUsersById ?? []);
 
   useEffect(() => {
     if (!usersQuery.data || !userIds) return;

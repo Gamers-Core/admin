@@ -10,7 +10,7 @@ import {
   CreateOrderSchema,
   createOrderSchema,
   defaultLocale,
-  FullUser,
+  SearchUser,
   paymentMethods,
   VariantWithProduct,
 } from '@/api';
@@ -40,18 +40,22 @@ import { ProductVariantsModal } from '../products/ProductVariantsModal';
 import { UserSelectModal } from '../users';
 
 const defaultValues: CreateOrderSchema = {
-  user: undefined as unknown as FullUser,
+  user: undefined as unknown as SearchUser,
   paymentMethod: paymentMethods[0],
   note: undefined,
   canOpenPackage: false,
   variants: [],
 };
 
-export const OrderCreateModal = (disclosure: Disclosure) => {
+interface OrderCreateModalProps extends Partial<CreateOrderSchema> {
+  disclosure: Disclosure;
+}
+
+export const OrderCreateModal = ({ disclosure, ...orderValues }: OrderCreateModalProps) => {
   const router = useRouter();
 
   const form = useForm<CreateOrderSchema>({
-    defaultValues,
+    defaultValues: { ...defaultValues, ...orderValues },
     mode: 'onChange',
     resolver: zodResolver(createOrderSchema),
   });
