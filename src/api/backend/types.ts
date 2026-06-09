@@ -255,3 +255,13 @@ export interface Order {
   allowedActions: OrderAllowedActions;
   user: BasicUser;
 }
+
+export interface AppSettings {
+  maintenanceMode: {
+    enabled: boolean;
+    message: Localized;
+    countdown?: string;
+  };
+}
+
+export type AppSettingsKey = keyof AppSettings;
