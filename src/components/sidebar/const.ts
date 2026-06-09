@@ -1,4 +1,4 @@
-import { DeliveryBox01FreeIcons, FileText, House, Store01Icon, UserIcon } from '@hugeicons/core-free-icons';
+import { DeliveryBox01FreeIcons, FileText, House, Settings, Store01Icon, UserIcon } from '@hugeicons/core-free-icons';
 
 import { Route } from './types';
 
@@ -58,5 +58,10 @@ export const routes = [
         url: '/user-reviews',
       },
     ],
+  },
+  {
+    title: 'Settings',
+    icon: Settings,
+    url: '/settings',
   },
 ] as const satisfies Route[];
