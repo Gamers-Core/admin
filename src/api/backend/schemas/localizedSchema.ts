@@ -15,6 +15,7 @@ export const localizedSchema = z.object({
   ...optionalSchema,
   [defaultLocale]: z.string().min(1, { message: `${defaultLocale} value is required` }),
 });
+export const optionalLocalizedSchema = z.object(optionalSchema);
 
 export type Localized = z.infer<typeof localizedSchema>;
 

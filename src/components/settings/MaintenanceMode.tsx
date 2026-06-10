@@ -92,7 +92,7 @@ export const MaintenanceModeModal = ({ maintenanceMode, ...disclosure }: Mainten
     resolver: zodResolver(appSettingsSchemas.maintenanceMode),
     mode: 'onChange',
   });
-  const { isValid, isDirty } = useFormState({ control: form.control });
+  const { isDirty } = useFormState({ control: form.control });
 
   const setMaintenanceModeMutation = useSetAppSettingsMutation('maintenanceMode');
 
@@ -114,24 +114,29 @@ export const MaintenanceModeModal = ({ maintenanceMode, ...disclosure }: Mainten
   }, [disclosure.open, maintenanceMode, form]);
 
   const onSubmit: SubmitHandler<AppSettingsSchemas['maintenanceMode']> = async (data) => {
-    if (!isValid || setMaintenanceModeMutation.isPending) return;
+    if (setMaintenanceModeMutation.isPending) return;
 
-    await setMaintenanceModeMutation.mutateAsync(data, {
-      onSuccess: () => {
-        toast.success('Maintenance mode configuration updated successfully.');
+    const hasMessage = Object.values(data.message ?? {}).some((msg) => msg && msg.trim() !== '');
 
-        onOpenChange(false);
+    await setMaintenanceModeMutation.mutateAsync(
+      { ...data, message: hasMessage ? data.message : undefined },
+      {
+        onSuccess: () => {
+          toast.success('Maintenance mode configuration updated successfully.');
+
+          onOpenChange(false);
+        },
+        onError: (validationErrors) => {
+          if (!validationErrors) return;
+
+          validationErrors.errors.forEach((error) => {
+            form.setError(error.property, { message: error.messages[0] });
+          });
+
+          toast.error('Please review the form and fix the errors before submitting again.');
+        },
       },
-      onError: (validationErrors) => {
-        if (!validationErrors) return;
-
-        validationErrors.errors.forEach((error) => {
-          form.setError(error.property, { message: error.messages[0] });
-        });
-
-        toast.error('Please review the form and fix the errors before submitting again.');
-      },
-    });
+    );
   };
 
   const enabled = form.watch('enabled');
@@ -160,7 +165,11 @@ export const MaintenanceModeModal = ({ maintenanceMode, ...disclosure }: Mainten
 
         {enabled && (
           <>
-            <LocalizedForm<AppSettingsSchemas['maintenanceMode']> name="message" />
+            <div>
+              <LocalizedForm<AppSettingsSchemas['maintenanceMode']> name="message" />
+
+              <FieldError className="text-sm/normal md:text-sm/relaxed" errors={[form.formState.errors.message]} />
+            </div>
 
             <Controller
               name="countdown"
@@ -168,9 +177,11 @@ export const MaintenanceModeModal = ({ maintenanceMode, ...disclosure }: Mainten
               render={({ field, fieldState }) => (
                 <>
                   <DateTimeSelector
-                    value={field.value}
+                    value={field.value ?? undefined}
                     onChange={(date) => {
-                      field.onChange(date?.toISOString());
+                      if (!date) return form.setValue('countdown', null, { shouldValidate: true });
+
+                      field.onChange(date.toISOString());
                     }}
                   />
 
@@ -187,7 +198,7 @@ export const MaintenanceModeModal = ({ maintenanceMode, ...disclosure }: Mainten
             variant="default"
             className="w-full h-auto py-2 text-lg"
             isLoading={setMaintenanceModeMutation.isPending}
-            isDisabled={!isValid || !isDirty}
+            isDisabled={!isDirty}
           >
             Save Configuration
           </Button>

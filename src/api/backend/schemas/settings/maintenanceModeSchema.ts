@@ -1,9 +1,9 @@
 import z from 'zod';
-import { localizedSchema } from '../localizedSchema';
+import { optionalLocalizedSchema } from '../localizedSchema';
 
 export const maintenanceModeSchema = z.object({
   enabled: z.boolean(),
-  message: localizedSchema.optional(),
+  message: optionalLocalizedSchema.optional(),
   countdown: z.string().nullable().optional(),
 });
 
