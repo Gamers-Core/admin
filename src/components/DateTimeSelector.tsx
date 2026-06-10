@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from './Button';
 import { Card, CardContent, Field, FieldLabel, Calendar, Input, Separator } from './ui';
 
 interface DateTimeSelectorProps {
@@ -71,6 +72,10 @@ export const DateTimeSelector = ({ onChange, value }: DateTimeSelectorProps) => 
             <p className="text-sm font-medium">{date.toLocaleString()}</p>
           </div>
         )}
+
+        <Button isDisabled={!date} variant="outline" onClick={() => onChange?.(undefined)}>
+          Clear
+        </Button>
       </CardContent>
     </Card>
   );
