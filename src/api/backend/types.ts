@@ -260,6 +260,7 @@ export interface AppSettings {
   maintenanceMode: {
     enabled: boolean;
     message: Localized;
+    disableOnCountdownEnd?: boolean;
     countdown?: string;
   };
 }

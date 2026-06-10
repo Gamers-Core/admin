@@ -4,6 +4,7 @@ import { optionalLocalizedSchema } from '../localizedSchema';
 export const maintenanceModeSchema = z.object({
   enabled: z.boolean(),
   message: optionalLocalizedSchema.optional(),
+  disableOnCountdownEnd: z.boolean().optional(),
   countdown: z.string().nullable().optional(),
 });
 

@@ -58,9 +58,17 @@ export const MaintenanceMode = (props: AppSettings['maintenanceMode']) => {
 
               {data.countdown && (
                 <div>
-                  <p className="text-sm text-muted-foreground">Countdown</p>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Disable on countdown end</p>
 
-                  <p>{formatDate(data.countdown, "MMM d, yyyy 'at' h:mma")}</p>
+                    <p>{data.disableOnCountdownEnd ? 'Yes' : 'No'}</p>
+                  </div>
+
+                  <div>
+                    <p className="text-sm text-muted-foreground">Countdown</p>
+
+                    <p>{formatDate(data.countdown, "MMM d, yyyy 'at' h:mma")}</p>
+                  </div>
                 </div>
               )}
             </div>
@@ -84,6 +92,7 @@ const defaultValues: AppSettingsSchemas['maintenanceMode'] = {
     ar: '',
   },
   countdown: '',
+  disableOnCountdownEnd: false,
 };
 
 export const MaintenanceModeModal = ({ maintenanceMode, ...disclosure }: MaintenanceModeModalProps) => {
@@ -171,24 +180,40 @@ export const MaintenanceModeModal = ({ maintenanceMode, ...disclosure }: Mainten
               <FieldError className="text-sm/normal md:text-sm/relaxed" errors={[form.formState.errors.message]} />
             </div>
 
-            <Controller
-              name="countdown"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <>
-                  <DateTimeSelector
-                    value={field.value ?? undefined}
-                    onChange={(date) => {
-                      if (!date) return form.setValue('countdown', null, { shouldValidate: true });
+            <div className="flex flex-col gap-5">
+              <Controller
+                name="disableOnCountdownEnd"
+                control={form.control}
+                render={({ field }) => (
+                  <FieldLabel htmlFor="disable-on-countdown-end">
+                    <Field orientation="horizontal">
+                      <FieldTitle className="text-base font-medium">Disable on countdown end</FieldTitle>
 
-                      field.onChange(date.toISOString());
-                    }}
-                  />
+                      <Switch checked={field.value} onCheckedChange={field.onChange} id="disable-on-countdown-end" />
+                    </Field>
+                  </FieldLabel>
+                )}
+              />
 
-                  <FieldError className="text-sm/normal md:text-sm/relaxed" errors={[fieldState.error]} />
-                </>
-              )}
-            />
+              <Controller
+                name="countdown"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <>
+                    <DateTimeSelector
+                      value={field.value ?? undefined}
+                      onChange={(date) => {
+                        if (!date) return form.setValue('countdown', null, { shouldValidate: true });
+
+                        field.onChange(date.toISOString());
+                      }}
+                    />
+
+                    <FieldError className="text-sm/normal md:text-sm/relaxed" errors={[fieldState.error]} />
+                  </>
+                )}
+              />
+            </div>
           </>
         )}
 
