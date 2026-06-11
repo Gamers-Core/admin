@@ -1,9 +1,11 @@
 'use client';
 
 import { HugeiconsIcon } from '@hugeicons/react';
-import { Call02Icon, Mail01Icon, MapsLocation01Icon, UserIcon } from '@hugeicons/core-free-icons';
+import { Call02Icon, Mail01Icon, MapsLocation01Icon, UserIcon, WhatsappFreeIcons } from '@hugeicons/core-free-icons';
 
 import { useOrderQuery } from '@/hooks';
+
+import { Link } from '../Link';
 
 interface CustomerInfoProps {
   orderNumber: string;
@@ -63,6 +65,13 @@ export const CustomerInfo = ({ orderNumber }: CustomerInfoProps) => {
               {shippingAddress.phoneNumber}
             </p>
           </div>
+
+          <Link
+            href={`https://wa.me/${shippingAddress.phoneNumber}`}
+            className="flex justify-center items-center size-12 rounded-lg border border-sidebar-border transition-all duration-500 bg-green-400/20 hover:bg-green-400/30"
+          >
+            <HugeiconsIcon icon={WhatsappFreeIcons} className="text-foreground size-5" />
+          </Link>
         </div>
 
         <div className="flex gap-4 rounded-2xl border border-border bg-background/70 p-5">
