@@ -13,5 +13,12 @@ interface UsersListProps {
 export const UsersList = ({ searchParams }: UsersListProps) => {
   const usersQuery = useUsersQuery(searchParams);
 
-  return <DataTable data={usersQuery.data ?? []} columns={userColumns} placeholder="No users found." />;
+  return (
+    <DataTable
+      data={usersQuery.data ?? []}
+      columns={userColumns}
+      placeholder="No users found."
+      getRowHref={({ id }) => `/users/${id}`}
+    />
+  );
 };

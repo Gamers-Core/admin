@@ -13,5 +13,12 @@ interface OrdersListProps {
 export const OrdersList = ({ searchParams }: OrdersListProps) => {
   const ordersQuery = useOrdersQuery(searchParams);
 
-  return <DataTable data={ordersQuery.data ?? []} columns={orderColumns} placeholder="No orders found." />;
+  return (
+    <DataTable
+      data={ordersQuery.data ?? []}
+      columns={orderColumns}
+      placeholder="No orders found."
+      getRowHref={({ orderNumber }) => `/orders/${orderNumber}`}
+    />
+  );
 };

@@ -13,5 +13,12 @@ interface ProductsListProps {
 export const ProductsList = ({ searchParams }: ProductsListProps) => {
   const productsQuery = useProductsQuery(searchParams);
 
-  return <DataTable data={productsQuery.data ?? []} columns={productColumns} placeholder="No products found." />;
+  return (
+    <DataTable
+      data={productsQuery.data ?? []}
+      columns={productColumns}
+      placeholder="No products found."
+      getRowHref={({ id }) => `/products/${id}`}
+    />
+  );
 };
