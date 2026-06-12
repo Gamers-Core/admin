@@ -68,6 +68,7 @@ export const CustomerInfo = ({ orderNumber }: CustomerInfoProps) => {
 
           <Link
             href={`https://wa.me/${shippingAddress.phoneNumber}`}
+            target="_blank"
             className="flex justify-center items-center size-12 rounded-lg border border-sidebar-border transition-all duration-500 bg-green-400/20 hover:bg-green-400/30"
           >
             <HugeiconsIcon icon={WhatsappFreeIcons} className="text-foreground size-5" />
