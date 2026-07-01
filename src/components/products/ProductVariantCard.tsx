@@ -13,9 +13,9 @@ import {
   FieldError,
   FieldLabel,
   FieldTitle,
-  Input,
   LocalizedForm,
   Media,
+  NumberInput,
   Switch,
   UploadMediaModal,
 } from '@/components';
@@ -152,25 +152,7 @@ const VariantNumberInput = ({ index, name, label }: VariantNumberInputProps) => 
         <div className="flex flex-col gap-1">
           <span className="text-xs font-medium text-muted-foreground">{label}</span>
 
-          <Input
-            type="text"
-            inputMode="decimal"
-            className="min-h-10"
-            {...field}
-            value={field.value == null ? '' : field.value}
-            onChange={(e) => {
-              const raw = e.target.value;
-              if (raw === '' || raw === '-') return field.onChange(null);
-
-              const parsed = Number(raw);
-              if (!isNaN(parsed)) field.onChange(parsed);
-            }}
-            onBlur={() => {
-              field.onBlur();
-
-              if (field.value == null) field.onChange(0);
-            }}
-          />
+          <NumberInput {...field} />
 
           {fieldState.invalid && <FieldError errors={[fieldState.error]} className="text-xs" />}
         </div>

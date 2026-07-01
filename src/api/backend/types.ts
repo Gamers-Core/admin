@@ -1,5 +1,10 @@
 import {
   authPurposes,
+  discountEligibilities,
+  discountMethods,
+  discountSorts,
+  discountTargets,
+  discountValueTypes,
   locales,
   mediaFolders,
   mediaFoldersTypeMap,

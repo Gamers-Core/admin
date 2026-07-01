@@ -45,12 +45,12 @@ export const UserSelectModal = <M extends 'single' | 'multiple'>({
     [usersQuery.data, userIds],
   );
 
-  const [selectedUsers, setSelectedUser] = useState<SearchUser[]>(selectedUsersById ?? []);
+  const [selectedUsers, setSelectedUsers] = useState<SearchUser[]>(selectedUsersById ?? []);
 
   useEffect(() => {
     if (!usersQuery.data || !userIds) return;
 
-    setSelectedUser(selectedUsersById ?? []);
+    setSelectedUsers(selectedUsersById ?? []);
   }, [userIds, usersQuery.data, selectedUsersById]);
 
   return (
@@ -75,7 +75,15 @@ export const UserSelectModal = <M extends 'single' | 'multiple'>({
                 variant="outline"
                 className="flex gap-4 border rounded-lg shadow-sm relative p-4 justify-between text-start h-auto hover:opacity-80 transition-opacity duration-300"
                 isDisabled={(!user.addresses.length && !canHaveNoAddresses) || (!user.ordersCount && !canHaveNoOrders)}
-                onClick={() => setSelectedUser(isSingleMode ? [user] : [...selectedUsers, user])}
+                onClick={() =>
+                  setSelectedUsers(
+                    isSingleMode
+                      ? [user]
+                      : isSelected
+                        ? selectedUsers.filter(({ id }) => id !== user.id)
+                        : [...selectedUsers, user],
+                  )
+                }
               >
                 <div className="flex-1 min-w-0 flex flex-col justify-between gap-2">
                   <h3 className="font-medium text-sm truncate min-w-0">{user.name}</h3>
