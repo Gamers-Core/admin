@@ -314,7 +314,6 @@ export interface Discount {
 export interface DiscountUsage {
   id: number;
   discountAmount: number | null;
-  shippingDiscount: number;
   user: BasicUser;
   order: {
     orderNumber: string;
