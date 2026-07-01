@@ -8,3 +8,4 @@ export * from './DiscountStatus';
 export * from './DiscountRestrictions';
 export * from './DiscountApplicability';
 export * from './DiscountEligibility';
+export * from './DiscountUsagesModal';

@@ -18,6 +18,7 @@ import {
   AlertDialogFooter,
   AlertDialogCancel,
   AlertDialogAction,
+  DiscountUsagesModal,
 } from '@/components';
 import { Discount, DiscountSchema, BackendError, ValidationErrors } from '@/api';
 import { useAddDiscountMutation, useUpdateDiscountMutation, useRemoveDiscountMutation } from '@/hooks';
@@ -82,6 +83,8 @@ export const DiscountFormCTA = ({ discount }: DiscountFormCTAProps) => {
           )}
         </>
       )}
+
+      {isEditMode && <DiscountUsagesModal discountId={discount.id} />}
 
       {isEditMode && <RemoveDiscount isDisabled={isLoading} {...discount} />}
     </TopBarCTA>

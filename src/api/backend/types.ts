@@ -310,3 +310,16 @@ export interface Discount {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface DiscountUsage {
+  id: number;
+  discountAmount: number;
+  shippingDiscount: number;
+  user: BasicUser;
+  order: {
+    orderNumber: string;
+    total: number;
+    createdAt: Date;
+  };
+  createdAt: Date;
+}
