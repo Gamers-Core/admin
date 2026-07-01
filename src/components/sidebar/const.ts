@@ -1,4 +1,12 @@
-import { DeliveryBox01FreeIcons, FileText, House, Settings, Store01Icon, UserIcon } from '@hugeicons/core-free-icons';
+import {
+  DeliveryBox01FreeIcons,
+  Discount01FreeIcons,
+  FileText,
+  House,
+  Settings,
+  Store01Icon,
+  UserIcon,
+} from '@hugeicons/core-free-icons';
 
 import { Route } from './types';
 
@@ -40,6 +48,11 @@ export const routes = [
         url: '/featured-variants',
       },
     ],
+  },
+  {
+    title: 'Discounts',
+    icon: Discount01FreeIcons,
+    url: '/discounts',
   },
   {
     title: 'Content',

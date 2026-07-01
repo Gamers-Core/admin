@@ -80,3 +80,20 @@ export const orderStatuses = [
 export const paymentStatuses = ['unpaid', 'paid', 'refunded'] as const;
 
 export const paymentMethods = ['cod', 'instapay', 'valu', 'card'] as const;
+
+export const discountTargets = ['order', 'product', 'category', 'brand', 'free_shipping'] as const;
+
+export const discountMethods = ['code', 'automatic'] as const;
+
+export const discountValueTypes = ['percentage', 'fixed_amount'] as const;
+
+export const discountEligibilities = ['all_users', 'custom_users'] as const;
+
+export const discountSorts = [
+  'created-ascending',
+  'created-descending',
+  'expires-ascending',
+  'expires-descending',
+  'usage-ascending',
+  'usage-descending',
+] as const;

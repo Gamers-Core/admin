@@ -266,3 +266,37 @@ export interface AppSettings {
 }
 
 export type AppSettingsKey = keyof AppSettings;
+
+export type DiscountTarget = (typeof discountTargets)[number];
+
+export type DiscountMethod = (typeof discountMethods)[number];
+
+export type DiscountValueType = (typeof discountValueTypes)[number];
+
+export type DiscountEligibility = (typeof discountEligibilities)[number];
+
+export type DiscountSort = (typeof discountSorts)[number];
+
+export interface Discount {
+  id: number;
+  code: string | null;
+  method: DiscountMethod;
+  target: DiscountTarget;
+  valueType: DiscountValueType | null;
+  value: number | null;
+  eligibility: DiscountEligibility;
+  minOrderAmount: number | null;
+  maxDiscountAmount: number | null;
+  usageLimit: number | null;
+  usageCount: number;
+  usageLimitPerUser: number | null;
+  isActive: boolean;
+  startsAt: string | null;
+  expiresAt: string | null;
+  variants: VariantWithProduct[];
+  categories: Category[];
+  brands: Brand[];
+  eligibleUsers: SearchUser[];
+  createdAt: string;
+  updatedAt: string;
+}

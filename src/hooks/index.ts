@@ -20,3 +20,4 @@ export * from './featured-variants';
 export * from './orders';
 export * from './useSidebarStatsQuery';
 export * from './settings';
+export * from './discounts';

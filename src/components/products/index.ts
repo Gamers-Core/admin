@@ -1,6 +1,5 @@
 export * from './ProductsList';
 export * from './ProductsCTA';
-export * from './StatusBadge';
 export * from './productColumns';
 export * from './ProductForm';
 export * from './ProductUploadMedia';
