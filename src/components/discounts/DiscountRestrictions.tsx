@@ -31,7 +31,6 @@ export const DiscountRestrictions = () => {
                 <Field>
                   <InputGroup className="gap-2 h-10">
                     <NumberInput
-                      id="min_price"
                       autoComplete="off"
                       aria-invalid={fieldState.invalid}
                       {...field}
@@ -67,7 +66,6 @@ export const DiscountRestrictions = () => {
                 <Field>
                   <InputGroup className="gap-2 h-10">
                     <NumberInput
-                      id="min_price"
                       autoComplete="off"
                       aria-invalid={fieldState.invalid}
                       {...field}

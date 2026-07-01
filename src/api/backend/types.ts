@@ -313,13 +313,13 @@ export interface Discount {
 
 export interface DiscountUsage {
   id: number;
-  discountAmount: number;
+  discountAmount: number | null;
   shippingDiscount: number;
   user: BasicUser;
   order: {
     orderNumber: string;
     total: number;
-    createdAt: Date;
+    createdAt: string;
   };
-  createdAt: Date;
+  createdAt: string;
 }

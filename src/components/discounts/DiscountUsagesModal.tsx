@@ -25,7 +25,12 @@ export const DiscountUsagesModal = ({ discountId }: DiscountUsagesModalProps) =>
         isDisabled={discountUsagesQuery.data?.length === 0}
         isLoading={discountUsagesQuery.isPending}
         loadingIconClassName="size-4"
-        tooltip={{ tooltip: !discountUsagesQuery.data?.length ? 'No usages found for this discount.' : undefined }}
+        tooltip={{
+          tooltip:
+            discountUsagesQuery.isSuccess && discountUsagesQuery.data.length === 0
+              ? 'No usages found for this discount.'
+              : undefined,
+        }}
         onClick={disclosure.onOpen}
         icon={<HugeiconsIcon icon={View} />}
       />

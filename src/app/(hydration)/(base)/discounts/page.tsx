@@ -8,7 +8,7 @@ import { PagePropsWithSearchParams } from '@/app/types';
 
 export const metadata: Metadata = { title: 'Gamers Core | Discounts' };
 
-export default async function Orders(props: PagePropsWithSearchParams<SearchDiscountSchema>) {
+export default async function Discounts(props: PagePropsWithSearchParams<SearchDiscountSchema>) {
   const searchParams = await props.searchParams;
 
   const queryClient = new QueryClient();

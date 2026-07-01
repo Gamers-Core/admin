@@ -14,9 +14,9 @@ import {
 import { useDiscountQuery } from '@/hooks';
 import { PagePropsWithParams } from '@/app/types';
 
-export const metadata: Metadata = { title: 'Gamers Core | Products | Edit Discount' };
+export const metadata: Metadata = { title: 'Gamers Core | Discounts | Edit Discount' };
 
-export default async function EditProduct(props: PagePropsWithParams<{ id: string }>) {
+export default async function EditDiscount(props: PagePropsWithParams<{ id: string }>) {
   const { id } = await props.params;
   const discountId = Number(id);
   if (!Number.isFinite(discountId)) return notFound();
