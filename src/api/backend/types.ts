@@ -255,6 +255,11 @@ export interface Order {
   currency: string;
   createdAt: string;
   updatedAt: string;
+  discountCode: string | null;
+  discountAmount: number | null;
+  isFreeShipping: boolean;
+  codFee: number | null;
+  openPackageFee: number | null;
   restocked: boolean;
   history: OrderStatusHistory[];
   allowedActions: OrderAllowedActions;
