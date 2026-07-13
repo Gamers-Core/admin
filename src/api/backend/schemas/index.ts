@@ -10,3 +10,4 @@ export * from './featuredVariantSchema';
 export * from './orders';
 export * from './users';
 export * from './settings';
+export * from './discounts';

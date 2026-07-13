@@ -23,3 +23,4 @@ export * from './switch';
 export * from './popover';
 export * from './calendar';
 export * from './card';
+export * from './input-group';

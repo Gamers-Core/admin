@@ -7,10 +7,10 @@ import { useBrandsQuery, useCategoriesQuery, useFormatCurrency, useFormatDate } 
 import { cn } from '@/lib/utils';
 
 import { Media } from '../Media';
-import { StatusBadge } from './StatusBadge';
 import { Link } from '../Link';
 import { SortHeader } from '../SortHeader';
 import { FilterHeader } from '../FilterHeader';
+import { StatusBadge } from '../StatusBadge';
 
 export const productColumns: ColumnDef<Product>[] = [
   {

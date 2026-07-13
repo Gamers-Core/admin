@@ -10,12 +10,14 @@ interface FilterHeaderProps<T extends readonly FilterOption[] | undefined> {
   label: string;
   options: T;
   filterKey: string;
+  formatter?: (value: string) => string;
 }
 
 export const FilterHeader = <T extends readonly FilterOption[] | undefined>({
   label,
   filterKey,
   options,
+  formatter,
 }: FilterHeaderProps<T>) => {
   const { get, set } = useSearchParams();
   const currentValue = get(filterKey) ?? undefined;
@@ -48,7 +50,7 @@ export const FilterHeader = <T extends readonly FilterOption[] | undefined>({
 
             return (
               <SelectItem key={optionValue} value={String(optionValue)} className="capitalize text-sm">
-                {optionLabel}
+                {formatter ? formatter(optionLabel) : optionLabel}
               </SelectItem>
             );
           })}

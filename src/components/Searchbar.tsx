@@ -8,8 +8,9 @@ import { Input } from './ui';
 
 interface SearchOptionsProps {
   q?: string;
+  placeholder?: string;
 }
-export const Searchbar = ({ q }: SearchOptionsProps) => {
+export const Searchbar = ({ q, placeholder }: SearchOptionsProps) => {
   const [search, setSearch] = useState(q || '');
 
   const { set } = useSearchParams();
@@ -24,7 +25,7 @@ export const Searchbar = ({ q }: SearchOptionsProps) => {
     <Input
       value={search ?? ''}
       onChange={(e) => setSearch(e.target.value)}
-      placeholder="Search for titles, names, descriptions, etc."
+      placeholder={placeholder || 'Search for titles, names, descriptions, etc.'}
       className="w-full min-h-10 p-2 px-3 text-sm/relaxed md:text-base/relaxed bg-accent"
     />
   );

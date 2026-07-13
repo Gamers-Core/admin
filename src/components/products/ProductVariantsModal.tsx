@@ -197,7 +197,7 @@ const ProductCard = ({
                 </div>
               </div>
 
-              {!variant.isActive && (
+              {!variant.isActive && !canSelectInactive && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black/60 text-white text-sm font-medium rounded-lg">
                   Inactive
                 </div>

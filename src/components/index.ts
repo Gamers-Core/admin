@@ -33,3 +33,6 @@ export * from './orders';
 export * from './users';
 export * from './settings';
 export * from './DateTimeSelector';
+export * from './discounts';
+export * from './StatusBadge';
+export * from './NumberInput';
