@@ -11,6 +11,9 @@ import { NumberInput } from '../NumberInput';
 export const DiscountRestrictions = () => {
   const form = useFormContext<DiscountSchema>();
 
+  const valueType = form.watch('valueType');
+  const isPercentage = valueType === 'percentage';
+
   return (
     <section className="bg-sidebar p-4 rounded-lg flex flex-col gap-6">
       <h3 className="text-lg font-semibold">Restrictions</h3>
@@ -52,40 +55,42 @@ export const DiscountRestrictions = () => {
             />
           </ToggleField>
 
-          <ToggleField
-            label="Maximum Discount Amount"
-            onToggleChange={(isEnabled) => {
-              form.setValue('maxDiscountAmount', isEnabled ? 1 : undefined, { shouldValidate: true });
-            }}
-            initialValue={!!form.getValues('maxDiscountAmount')}
-          >
-            <Controller
-              name="maxDiscountAmount"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field>
-                  <InputGroup className="gap-2 h-10">
-                    <NumberInput
-                      autoComplete="off"
-                      aria-invalid={fieldState.invalid}
-                      {...field}
-                      value={field.value ?? ''}
-                      onChange={(value) => field.onChange(Math.max(Number(value), 0))}
-                      className="sm:text-base md:text-base bg-transparent! border-0 focus-visible:[box-shadow:0_0_0_0px_transparent]!"
-                    />
+          {isPercentage && (
+            <ToggleField
+              label="Maximum Discount Amount"
+              onToggleChange={(isEnabled) => {
+                form.setValue('maxDiscountAmount', isEnabled ? 1 : undefined, { shouldValidate: true });
+              }}
+              initialValue={!!form.getValues('maxDiscountAmount')}
+            >
+              <Controller
+                name="maxDiscountAmount"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field>
+                    <InputGroup className="gap-2 h-10">
+                      <NumberInput
+                        autoComplete="off"
+                        aria-invalid={fieldState.invalid}
+                        {...field}
+                        value={field.value ?? ''}
+                        onChange={(value) => field.onChange(Math.max(Number(value), 0))}
+                        className="sm:text-base md:text-base bg-transparent! border-0 focus-visible:[box-shadow:0_0_0_0px_transparent]!"
+                      />
 
-                    <InputGroupAddon align="inline-end">
-                      <InputGroupText className="text-base">EGP</InputGroupText>
-                    </InputGroupAddon>
-                  </InputGroup>
+                      <InputGroupAddon align="inline-end">
+                        <InputGroupText className="text-base">EGP</InputGroupText>
+                      </InputGroupAddon>
+                    </InputGroup>
 
-                  {fieldState.invalid && (
-                    <FieldError className="text-xs/normal md:text-xs/relaxed" errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
-          </ToggleField>
+                    {fieldState.invalid && (
+                      <FieldError className="text-xs/normal md:text-xs/relaxed" errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+            </ToggleField>
+          )}
         </FieldGroup>
 
         <FieldGroup className="w-full flex lg:flex-row gap-4">
