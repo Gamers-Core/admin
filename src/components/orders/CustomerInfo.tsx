@@ -1,7 +1,14 @@
 'use client';
 
 import { HugeiconsIcon } from '@hugeicons/react';
-import { Call02Icon, Mail01Icon, MapsLocation01Icon, UserIcon, WhatsappFreeIcons } from '@hugeicons/core-free-icons';
+import {
+  Call02Icon,
+  Mail01Icon,
+  MapsLocation01Icon,
+  UserIcon,
+  WhatsappFreeIcons,
+  WorkIcon,
+} from '@hugeicons/core-free-icons';
 
 import { useOrderQuery } from '@/hooks';
 
@@ -75,13 +82,41 @@ export const CustomerInfo = ({ orderNumber }: CustomerInfoProps) => {
           </Link>
         </div>
 
+        {shippingAddress.secondaryPhoneNumber && (
+          <div className="flex gap-4 rounded-2xl border border-border bg-background/70 p-5">
+            <div className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-border bg-sidebar">
+              <HugeiconsIcon icon={Call02Icon} className="size-5 text-muted-foreground" />
+            </div>
+
+            <div className="min-w-0 flex-1">
+              <p className="text-sm text-muted-foreground">Secondary Phone Number</p>
+
+              <p dir="ltr" className="font-semibold text-foreground">
+                {shippingAddress.secondaryPhoneNumber}
+              </p>
+            </div>
+
+            <Link
+              href={`https://wa.me/${shippingAddress.secondaryPhoneNumber}`}
+              target="_blank"
+              className="flex justify-center items-center size-12 rounded-lg border border-sidebar-border transition-all duration-500 bg-green-400/20 hover:bg-green-400/30"
+            >
+              <HugeiconsIcon icon={WhatsappFreeIcons} className="text-foreground size-5" />
+            </Link>
+          </div>
+        )}
+
         <div className="flex gap-4 rounded-2xl border border-border bg-background/70 p-5">
           <div className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-border bg-sidebar">
             <HugeiconsIcon icon={MapsLocation01Icon} className="size-5 text-muted-foreground" />
           </div>
 
           <div className="min-w-0 flex-1 flex flex-col gap-1">
-            <p className="text-sm text-muted-foreground">Shipping Address</p>
+            <div className="flex justify-between">
+              <p className="text-sm text-muted-foreground">Shipping Address</p>
+
+              {shippingAddress.isWorkAddress && <HugeiconsIcon icon={WorkIcon} className="size-5" />}
+            </div>
 
             <div dir="rtl" className="flex flex-col gap-1 font-cairo">
               <p className="font-semibold text-foreground">{shippingAddress.nameAr}</p>

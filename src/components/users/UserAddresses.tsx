@@ -1,5 +1,8 @@
 'use client';
 
+import { WorkIcon } from '@hugeicons/core-free-icons';
+import { HugeiconsIcon } from '@hugeicons/react';
+
 import { useUserQuery } from '@/hooks';
 
 interface UserAddressesProps {
@@ -31,8 +34,10 @@ export const UserAddresses = ({ userId }: UserAddressesProps) => {
                 <div className="flex items-center gap-2">
                   <p className="font-semibold text-foreground font-cairo text-sm">{address.nameAr}</p>
 
+                  {address.isWorkAddress && <HugeiconsIcon icon={WorkIcon} className="size-4" />}
+
                   {address.isDefault && (
-                    <span className="rounded-full bg-sidebar px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+                    <span className="rounded-full bg-sidebar px-2 py-0.5 text-[10px] font-medium text-muted-foreground ms-auto">
                       Default
                     </span>
                   )}
@@ -48,6 +53,10 @@ export const UserAddresses = ({ userId }: UserAddressesProps) => {
 
                 <p className="text-[10px] text-muted-foreground" dir="ltr">
                   {address.phoneNumber}
+                </p>
+
+                <p className="text-[10px] text-muted-foreground" dir="ltr">
+                  {address.secondaryPhoneNumber}
                 </p>
               </div>
             </div>

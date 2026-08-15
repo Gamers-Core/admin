@@ -78,6 +78,7 @@ export interface SearchUser extends BasicUser {
 export interface Address {
   id: number;
   phoneNumber: string;
+  secondaryPhoneNumber: string | null;
   detailedAddress: string;
   districtId: string;
   districtName: string;
@@ -86,6 +87,7 @@ export interface Address {
   cityDropOff: string;
   nameAr: string;
   isDefault: boolean;
+  isWorkAddress: boolean;
 }
 
 export type MediaType = (typeof mediaTypes)[number];
@@ -223,9 +225,11 @@ export interface OrderAddress {
   id: number;
   nameAr: string;
   phoneNumber: string;
+  secondaryPhoneNumber: string | null;
   detailedAddress: string;
   districtName: string;
   cityName: string;
+  isWorkAddress: boolean;
 }
 
 export interface OrderStatusHistory {
