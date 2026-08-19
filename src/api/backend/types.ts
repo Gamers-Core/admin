@@ -281,6 +281,7 @@ export interface AppSettings {
     enabled: boolean;
     message: Localized;
     mediaIds: number[];
+    intervalHours: number;
     media?: Media<'image' | 'video'>[];
     disableAt?: string;
   };

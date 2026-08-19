@@ -12,7 +12,7 @@ import { cn } from '@/lib/utils';
 import { Button } from '../Button';
 import { Modal, ModalFooter } from '../Modal';
 import { Form } from '../Form';
-import { Field, FieldError, FieldLabel, FieldTitle, Switch } from '../ui';
+import { Field, FieldError, FieldLabel, FieldTitle, Input, Switch } from '../ui';
 import { LocalizedForm } from '../LocalizedForm';
 import { DateTimeSelector } from '../DateTimeSelector';
 import { ReorderedMediaUpload } from '../ReorderedMediaUpload';
@@ -72,6 +72,16 @@ export const Announcement = (props: AppSettings['announcement']) => {
                   </div>
                 </div>
               )}
+
+              {!!data.intervalHours && (
+                <div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Show every</p>
+
+                    <p>{data.intervalHours} hours</p>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -95,6 +105,7 @@ const defaultValues: AppSettingsSchemas['announcement'] = {
     ar: '',
   },
   disableAt: null,
+  intervalHours: undefined,
 };
 
 export const AnnouncementModal = ({ announcement, ...disclosure }: AnnouncementModalProps) => {
@@ -198,6 +209,36 @@ export const AnnouncementModal = ({ announcement, ...disclosure }: AnnouncementM
 
                   <FieldError className="text-sm/normal md:text-sm/relaxed" errors={[fieldState.error]} />
                 </>
+              )}
+            />
+
+            <Controller
+              name="intervalHours"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <FieldLabel htmlFor="announcement-intervalHours">
+                  <Field orientation="vertical">
+                    <FieldTitle className="text-base font-medium">Show every (hours)</FieldTitle>
+
+                    <Input
+                      id="announcement-intervalHours"
+                      type="number"
+                      min={0}
+                      step={1}
+                      value={field.value ?? ''}
+                      onChange={(e) => {
+                        const value = e.target.value;
+
+                        if (!value) return form.setValue('intervalHours', undefined, { shouldValidate: true });
+
+                        field.onChange(Number(value));
+                      }}
+                      placeholder="Enter interval in hours"
+                    />
+
+                    <FieldError className="text-sm/normal md:text-sm/relaxed" errors={[fieldState.error]} />
+                  </Field>
+                </FieldLabel>
               )}
             />
           </>

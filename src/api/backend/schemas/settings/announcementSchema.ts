@@ -8,6 +8,7 @@ export const announcementSchema = z.object({
   message: optionalLocalizedSchema.optional(),
   media: z.array(z.custom<MediaByFolder<'announcement'>>()).optional(),
   disableAt: z.string().nullable().optional(),
+  intervalHours: z.number().int().min(0).optional(),
 });
 
 export type AnnouncementSchema = z.infer<typeof announcementSchema>;
