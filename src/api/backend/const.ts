@@ -11,13 +11,14 @@ export const localeDir: Record<Locale, 'ltr' | 'rtl'> = {
 
 export const mediaTypes = ['image', 'video', 'audio', 'raw'] as const;
 
-export const mediaFolders = ['product', 'variant', 'brand', 'userReview'] as const;
+export const mediaFolders = ['product', 'variant', 'brand', 'userReview', 'announcement'] as const;
 
 export const mediaFoldersTypeMap = {
   product: 'all',
   variant: 'image',
   brand: 'image',
   userReview: 'image',
+  announcement: 'all',
 } as const satisfies Record<MediaFolder, MediaFormat | MediaFormat[]>;
 
 export const mediaRawFormats = ['.pdf', '.csv', '.txt', '.zip', '.doc', '.docx', '.xls', '.xlsx'] as const;
