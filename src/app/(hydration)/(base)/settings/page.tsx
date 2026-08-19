@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 
 import { useAppSettingsQuery } from '@/hooks';
-import { MaintenanceMode } from '@/components';
+import { Announcement, MaintenanceMode } from '@/components';
 
 export const metadata: Metadata = { title: 'Gamers Core | Settings' };
 
@@ -14,6 +14,8 @@ export default async function Settings() {
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <MaintenanceMode {...settings.maintenanceMode} />
+
+      <Announcement {...settings.announcement} />
     </HydrationBoundary>
   );
 }

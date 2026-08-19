@@ -16,6 +16,10 @@ import { useErrorHandler } from '../useErrorHandler';
 import { useInvalidateAppSettingsQuery } from './useAppSettingsQuery';
 import { useSetAppSettingData } from './useAppSettingQuery';
 
+interface AppSettingsSchemaWithMediaIds extends Omit<AppSettingsSchemas[AppSettingsKey], 'media'> {
+  mediaIds: number[] | undefined;
+}
+
 export const useSetAppSettingsMutation = <S extends AppSettingsKey>(setting: S) => {
   const errorHandler = useErrorHandler();
 
@@ -29,7 +33,10 @@ export const useSetAppSettingsMutation = <S extends AppSettingsKey>(setting: S) 
   >({
     mutationFn: (data) =>
       gamersCoreAdmin
-        .put<AppSettings[S], AxiosResponse<AppSettings[S]>>(`/settings/${setting}`, data)
+        .put<AppSettings[S], AxiosResponse<AppSettings[S]>, AppSettingsSchemaWithMediaIds>(`/settings/${setting}`, {
+          ...data,
+          mediaIds: 'media' in data && data.media?.length ? data.media.map(({ id }) => id) : undefined,
+        })
         .then((res) => res.data)
         .catch((err: AxiosError<BackendError>) => {
           throw errorHandler(err);

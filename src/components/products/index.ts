@@ -2,7 +2,6 @@ export * from './ProductsList';
 export * from './ProductsCTA';
 export * from './productColumns';
 export * from './ProductForm';
-export * from './ProductUploadMedia';
 export * from './ProductVariants';
 export * from './ProductStatusSelectMenu';
 export * from './SelectProductRelations';

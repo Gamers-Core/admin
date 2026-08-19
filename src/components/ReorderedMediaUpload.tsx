@@ -5,7 +5,7 @@ import { HugeiconsIcon } from '@hugeicons/react';
 import { DragDropVerticalIcon, Plus, X } from '@hugeicons/core-free-icons';
 import { rectSortingStrategy } from '@dnd-kit/sortable';
 
-import { ProductSchema, MediaByFolder } from '@/api';
+import { MediaByFolder, MediaFolder } from '@/api';
 import {
   Button,
   Field,
@@ -16,13 +16,19 @@ import {
   type ReorderableItemProps,
 } from '@/components';
 import { useDisclosure } from '@/hooks';
+import { cn } from '@/lib/utils';
 
-export const ProductUploadMedia = () => {
-  const form = useFormContext<ProductSchema>();
+interface ReorderedMediaUploadProps<F extends MediaFolder> {
+  folder: F;
+  className?: string;
+}
+
+export const ReorderedMediaUpload = <T extends MediaFolder>({ folder, className }: ReorderedMediaUploadProps<T>) => {
+  const form = useFormContext<{ media: MediaByFolder<T>[] }>();
   const uploadMediaDisclosure = useDisclosure();
 
   return (
-    <section className="bg-sidebar p-4 rounded-lg flex flex-col gap-4 min-h-44">
+    <section className={cn('bg-sidebar rounded-lg flex flex-col gap-4 min-h-44', className)}>
       <div className="flex justify-between gap-2">
         <h3 className="text-lg font-semibold">Media</h3>
 
@@ -64,7 +70,7 @@ export const ProductUploadMedia = () => {
                 </Field>
 
                 <UploadMediaModal
-                  folder="product"
+                  folder={folder}
                   onSuccess={(newMedia) => state.setItems([...state.items, ...newMedia])}
                   {...uploadMediaDisclosure}
                 />
@@ -77,20 +83,20 @@ export const ProductUploadMedia = () => {
   );
 };
 
-interface MediaCardProps extends MediaByFolder<'product'>, ReorderableItemProps {
+interface MediaCardProps<T extends MediaFolder> extends MediaByFolder<T>, ReorderableItemProps {
   onRemove: () => void;
 }
 
-const MediaCard = ({
+const MediaCard = <T extends MediaFolder>({
   sortable: { containerProps, buttonProps: sortButtonProps },
   onRemove,
   ...media
-}: MediaCardProps) => {
+}: MediaCardProps<T>) => {
   return (
     <li {...containerProps} className="relative">
       <Media
         media={media}
-        alt={`Product Media ${media.id}`}
+        alt={`Media ${media.id}`}
         className="w-full aspect-square object-cover overflow-hidden rounded-lg"
       />
 

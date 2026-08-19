@@ -277,6 +277,14 @@ export interface AppSettings {
     disableOnCountdownEnd?: boolean;
     countdown?: string;
   };
+  announcement: {
+    enabled: boolean;
+    message: Localized;
+    mediaIds: number[];
+    intervalHours: number;
+    media?: Media<'image' | 'video'>[];
+    disableAt?: string | null;
+  };
 }
 
 export type AppSettingsKey = keyof AppSettings;
