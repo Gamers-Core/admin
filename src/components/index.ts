@@ -36,3 +36,4 @@ export * from './DateTimeSelector';
 export * from './discounts';
 export * from './StatusBadge';
 export * from './NumberInput';
+export * from './ReorderedMediaUpload';

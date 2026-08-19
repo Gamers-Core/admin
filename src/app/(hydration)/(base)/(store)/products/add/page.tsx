@@ -5,7 +5,7 @@ import {
   ProductForm,
   SelectProductRelations,
   ProductStatusSelectMenu,
-  ProductUploadMedia,
+  ReorderedMediaUpload,
   ProductVariants,
   LocalizedForm,
   ProductFormCTA,
@@ -34,7 +34,7 @@ export default async function AddProduct() {
             <LocalizedForm<ProductSchema> name="description" type="richtext" />
           </section>
 
-          <ProductUploadMedia />
+          <ReorderedMediaUpload folder="product" className="p-4" />
 
           <ProductVariants />
         </div>

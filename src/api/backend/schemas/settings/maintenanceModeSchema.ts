@@ -1,4 +1,5 @@
 import z from 'zod';
+
 import { optionalLocalizedSchema } from '../localizedSchema';
 
 export const maintenanceModeSchema = z.object({
