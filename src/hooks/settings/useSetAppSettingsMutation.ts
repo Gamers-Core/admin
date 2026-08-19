@@ -17,7 +17,7 @@ import { useInvalidateAppSettingsQuery } from './useAppSettingsQuery';
 import { useSetAppSettingData } from './useAppSettingQuery';
 
 interface AppSettingsSchemaWithMediaIds extends Omit<AppSettingsSchemas[AppSettingsKey], 'media'> {
-  mediaIds: number[];
+  mediaIds: number[] | undefined;
 }
 
 export const useSetAppSettingsMutation = <S extends AppSettingsKey>(setting: S) => {
@@ -33,7 +33,7 @@ export const useSetAppSettingsMutation = <S extends AppSettingsKey>(setting: S) 
   >({
     mutationFn: (data) =>
       gamersCoreAdmin
-        .put<AppSettings[S], AxiosResponse<AppSettings[S], AppSettingsSchemaWithMediaIds>>(`/settings/${setting}`, {
+        .put<AppSettings[S], AxiosResponse<AppSettings[S]>, AppSettingsSchemaWithMediaIds>(`/settings/${setting}`, {
           ...data,
           mediaIds: 'media' in data && data.media?.length ? data.media.map(({ id }) => id) : undefined,
         })
