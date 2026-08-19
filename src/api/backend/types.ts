@@ -283,7 +283,7 @@ export interface AppSettings {
     mediaIds: number[];
     intervalHours: number;
     media?: Media<'image' | 'video'>[];
-    disableAt?: string;
+    disableAt?: string | null;
   };
 }
 
