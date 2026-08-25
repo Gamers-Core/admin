@@ -78,7 +78,7 @@ export const UserReviewCard = ({
         <Image
           image={userReview.image}
           alt={`Position ${userReview.position}`}
-          className="h-full w-fit overflow-hidden object-contain bg-contain!"
+          className="h-full max-h-50 md:max-h-60 w-full md:w-2/3 overflow-hidden object-contain bg-contain!"
         />
       </Link>
     </div>
