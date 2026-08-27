@@ -52,4 +52,5 @@ const mapDiscountToSchema = (discount: Discount): DiscountSchema => ({
   usageLimitPerUser: discount.usageLimitPerUser ?? undefined,
   startsAt: discount.startsAt ?? undefined,
   expiresAt: discount.expiresAt ?? undefined,
+  paymentMethods: discount.paymentMethods ?? undefined,
 });

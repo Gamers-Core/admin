@@ -8,6 +8,7 @@ import {
   DiscountRestrictions,
   DiscountApplicability,
   DiscountEligibility,
+  DiscountPaymentMethods,
 } from '@/components';
 
 export const metadata: Metadata = { title: 'Gamers Core | Discounts | Add Discount' };
@@ -23,6 +24,8 @@ export default async function AddDiscount() {
         <DiscountRestrictions />
 
         <DiscountApplicability />
+
+        <DiscountPaymentMethods />
 
         <DiscountEligibility />
       </div>
