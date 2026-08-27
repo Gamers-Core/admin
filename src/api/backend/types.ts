@@ -319,6 +319,7 @@ export interface Discount {
   categories: Category[];
   brands: Brand[];
   eligibleUsers: SearchUser[];
+  paymentMethods: PaymentMethod[] | null;
   createdAt: string;
   updatedAt: string;
 }

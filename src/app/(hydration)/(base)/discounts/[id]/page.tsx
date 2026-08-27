@@ -10,6 +10,7 @@ import {
   DiscountApplicability,
   DiscountEligibility,
   DiscountStatus,
+  DiscountPaymentMethods,
 } from '@/components';
 import { useDiscountQuery } from '@/hooks';
 import { PagePropsWithParams } from '@/app/types';
@@ -43,6 +44,8 @@ export default async function EditDiscount(props: PagePropsWithParams<{ id: stri
           <DiscountRestrictions />
 
           <DiscountApplicability />
+
+          <DiscountPaymentMethods />
 
           <DiscountEligibility />
         </div>

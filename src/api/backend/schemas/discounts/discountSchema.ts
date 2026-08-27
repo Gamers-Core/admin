@@ -1,6 +1,12 @@
 import z from 'zod';
 
-import { discountEligibilities, discountMethods, discountTargets, discountValueTypes } from '../../const';
+import {
+  discountEligibilities,
+  discountMethods,
+  discountTargets,
+  discountValueTypes,
+  paymentMethods,
+} from '../../const';
 import { Brand, Category, SearchUser, VariantWithProduct } from '../../types';
 
 export const discountSchema = z.object({
@@ -21,6 +27,7 @@ export const discountSchema = z.object({
   brands: z.array(z.custom<Brand>()).optional(),
   eligibility: z.enum(discountEligibilities),
   eligibleUsers: z.array(z.custom<SearchUser>()).optional(),
+  paymentMethods: z.array(z.enum(paymentMethods)).optional(),
 });
 
 export type DiscountSchema = z.infer<typeof discountSchema>;
