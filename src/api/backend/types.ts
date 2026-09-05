@@ -56,6 +56,16 @@ export type VerifyOTPResponse = {
 
 export type Locale = (typeof locales)[number];
 
+export interface Pagination<T> {
+  data: T[];
+  meta: { itemsPerPage: number; totalItems: number; currentPage: number; totalPages: number };
+}
+
+export interface PaginationParams {
+  page?: number;
+  limit?: number;
+}
+
 export interface BasicUser {
   id: number;
   name: string;

@@ -37,3 +37,4 @@ export * from './discounts';
 export * from './StatusBadge';
 export * from './NumberInput';
 export * from './ReorderedMediaUpload';
+export * from './InfiniteScrollTrigger';

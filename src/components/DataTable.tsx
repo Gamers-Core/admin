@@ -1,8 +1,9 @@
 'use client';
 import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
+
+import { InfiniteScrollTrigger, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components';
+import { cn } from '@/lib/utils';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -10,6 +11,9 @@ interface DataTableProps<TData, TValue> {
   placeholder?: React.ReactNode;
   className?: string;
   getRowHref?: (row: TData) => string;
+  onLoadMore?: () => void;
+  hasMore?: boolean;
+  isLoadingMore?: boolean;
 }
 
 export function DataTable<TData, TValue>({
@@ -18,6 +22,9 @@ export function DataTable<TData, TValue>({
   placeholder,
   className,
   getRowHref,
+  onLoadMore,
+  hasMore = false,
+  isLoadingMore = false,
 }: DataTableProps<TData, TValue>) {
   const router = useRouter();
   const table = useReactTable({ data, columns, getCoreRowModel: getCoreRowModel() });
@@ -73,6 +80,11 @@ export function DataTable<TData, TValue>({
           </TableBody>
         )}
       </Table>
+
+      {hasRows && hasMore && onLoadMore && (
+        <InfiniteScrollTrigger onLoadMore={onLoadMore} hasMore={hasMore} isLoading={isLoadingMore} />
+      )}
+
       {!hasRows && (
         <div className="flex-1 flex items-center justify-center text-muted-foreground text-base">
           {placeholder || 'No Results Found.'}
