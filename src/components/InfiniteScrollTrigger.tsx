@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useIsInView } from '@/hooks/useIsInView';
+import { useEffect, useRef } from 'react';
+
+import { useIsInView } from '@/hooks';
 
 interface InfiniteScrollTriggerProps {
   onLoadMore: () => void;
@@ -20,13 +21,21 @@ export function InfiniteScrollTrigger({
 }: InfiniteScrollTriggerProps) {
   const [ref, isInView] = useIsInView<HTMLDivElement>({ root, rootMargin });
 
+  const hasTriggeredRef = useRef(false);
+
   useEffect(() => {
-    if (isInView && hasMore && !isLoading) {
+    if (!isInView) {
+      hasTriggeredRef.current = false;
+      return;
+    }
+
+    if (hasMore && !isLoading && !hasTriggeredRef.current) {
+      hasTriggeredRef.current = true;
       onLoadMore();
     }
   }, [isInView, hasMore, isLoading, onLoadMore]);
 
   if (!hasMore) return null;
 
-  return <div ref={ref} aria-hidden className="h-px w-full shrink-0" />;
+  return <div ref={ref} aria-hidden className="size-px shrink-0" />;
 }
