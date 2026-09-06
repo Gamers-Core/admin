@@ -2,7 +2,7 @@ import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query
 import { Metadata } from 'next';
 
 import { SearchOrderSchema } from '@/api';
-import { useOrdersQuery } from '@/hooks';
+import { useOrdersInfiniteQuery } from '@/hooks';
 import { OrdersCTA, OrdersList, Searchbar } from '@/components';
 import { PagePropsWithSearchParams } from '@/app/types';
 
@@ -14,9 +14,10 @@ export default async function Orders(props: PagePropsWithSearchParams<SearchOrde
   const queryClient = new QueryClient();
 
   await Promise.all([
-    queryClient.prefetchQuery({
-      queryKey: useOrdersQuery.queryKey(searchParams),
-      queryFn: useOrdersQuery.queryFn,
+    queryClient.prefetchInfiniteQuery({
+      queryKey: useOrdersInfiniteQuery.queryKey(searchParams),
+      queryFn: useOrdersInfiniteQuery.queryFn,
+      initialPageParam: 1,
     }),
   ]);
 

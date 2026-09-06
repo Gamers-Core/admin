@@ -7,7 +7,7 @@ import { AddOrderItemSchema, BackendError, Order, ValidationErrors, gamersCoreAd
 
 import { useErrorHandler } from '../useErrorHandler';
 import { useSetOrderQueryData } from './useOrderQuery';
-import { useInvalidateOrdersQuery } from './useOrdersQuery';
+import { useInvalidateOrdersQuery } from './useOrdersInfiniteQuery';
 import { useInvalidateProductsQuery } from '../products';
 
 interface AddOrderItemMutationOptions extends AddOrderItemSchema {

@@ -7,7 +7,7 @@ import { BackendError, Order, OrderStatus, gamersCoreAdmin } from '@/api';
 
 import { useErrorHandler } from '../useErrorHandler';
 import { useSetOrderQueryData } from './useOrderQuery';
-import { useInvalidateOrdersQuery } from './useOrdersQuery';
+import { useInvalidateOrdersQuery } from './useOrdersInfiniteQuery';
 
 interface UpdateOrderStatusData {
   status: OrderStatus;

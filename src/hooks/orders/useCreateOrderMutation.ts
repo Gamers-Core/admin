@@ -7,7 +7,7 @@ import { AddOrderItemSchema, BackendError, CreateOrderSchema, Order, ValidationE
 
 import { useErrorHandler } from '../useErrorHandler';
 import { useSetOrderQueryData } from './useOrderQuery';
-import { useInvalidateOrdersQuery } from './useOrdersQuery';
+import { useInvalidateOrdersQuery } from './useOrdersInfiniteQuery';
 import { useInvalidateProductsQuery } from '../products';
 
 interface CreateOrderMutationData extends Omit<CreateOrderSchema, 'variants' | 'user'> {
