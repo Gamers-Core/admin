@@ -1,4 +1,4 @@
-export * from './useDiscountsQuery';
+export * from './useDiscountsInfiniteQuery';
 export * from './useDiscountQuery';
 export * from './useAddDiscountMutation';
 export * from './useUpdateDiscountMutation';

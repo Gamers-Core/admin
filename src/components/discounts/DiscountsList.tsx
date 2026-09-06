@@ -1,7 +1,7 @@
 'use client';
 
 import { SearchDiscountSchema } from '@/api';
-import { useDiscountsQuery } from '@/hooks';
+import { useDiscountsInfiniteQuery } from '@/hooks';
 
 import { DataTable } from '../DataTable';
 import { discountColumns } from './discountColumns';
@@ -11,14 +11,19 @@ interface DiscountsListProps {
 }
 
 export const DiscountsList = ({ searchParams }: DiscountsListProps) => {
-  const discountsQuery = useDiscountsQuery(searchParams);
+  const discountsQuery = useDiscountsInfiniteQuery(searchParams);
+
+  const discounts = discountsQuery.data?.pages.flatMap((page) => page.data) ?? [];
 
   return (
     <DataTable
-      data={discountsQuery.data ?? []}
+      data={discounts}
       columns={discountColumns}
       placeholder="No discounts found."
       getRowHref={({ id }) => `/discounts/${id}`}
+      onLoadMore={discountsQuery.fetchNextPage}
+      hasMore={discountsQuery.hasNextPage}
+      isLoadingMore={discountsQuery.isFetchingNextPage}
     />
   );
 };

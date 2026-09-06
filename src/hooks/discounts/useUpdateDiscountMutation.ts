@@ -6,7 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 import { DiscountSchema, BackendError, Discount, ValidationErrors, gamersCoreAdmin } from '@/api';
 
 import { useErrorHandler } from '../useErrorHandler';
-import { useInvalidateDiscountsQuery } from './useDiscountsQuery';
+import { useInvalidateDiscountsQuery } from './useDiscountsInfiniteQuery';
 import { useSetDiscountData } from './useDiscountQuery';
 
 interface UpdateDiscountMutationParams extends DiscountSchema {

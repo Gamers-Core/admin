@@ -6,7 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 import { BackendError, gamersCoreAdmin } from '@/api';
 
 import { useErrorHandler } from '../useErrorHandler';
-import { useInvalidateDiscountsQuery } from './useDiscountsQuery';
+import { useInvalidateDiscountsQuery } from './useDiscountsInfiniteQuery';
 
 export const useRemoveDiscountMutation = () => {
   const errorHandler = useErrorHandler();
