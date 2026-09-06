@@ -1,7 +1,7 @@
 'use client';
 
 import { SearchProductSchema } from '@/api';
-import { useProductsQuery } from '@/hooks';
+import { useProductsInfiniteQuery } from '@/hooks';
 
 import { DataTable } from '../DataTable';
 import { productColumns } from './productColumns';
@@ -11,14 +11,19 @@ interface ProductsListProps {
 }
 
 export const ProductsList = ({ searchParams }: ProductsListProps) => {
-  const productsQuery = useProductsQuery(searchParams);
+  const productsQuery = useProductsInfiniteQuery(searchParams);
+
+  const products = productsQuery.data?.pages.flatMap((page) => page.data) ?? [];
 
   return (
     <DataTable
-      data={productsQuery.data ?? []}
+      data={products}
       columns={productColumns}
       placeholder="No products found."
       getRowHref={({ id }) => `/products/${id}`}
+      onLoadMore={productsQuery.fetchNextPage}
+      hasMore={productsQuery.hasNextPage}
+      isLoadingMore={productsQuery.isFetchingNextPage}
     />
   );
 };

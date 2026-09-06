@@ -2,7 +2,7 @@ import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query
 import { Metadata } from 'next';
 
 import { ProductsCTA, ProductsList, Searchbar, StatusFilter } from '@/components';
-import { useProductsQuery } from '@/hooks';
+import { useProductsInfiniteQuery } from '@/hooks';
 import { productStatuses, SearchProductSchema } from '@/api';
 import { PagePropsWithSearchParams } from '@/app/types';
 
@@ -14,9 +14,10 @@ export default async function Products(props: PagePropsWithSearchParams<SearchPr
   const queryClient = new QueryClient();
 
   await Promise.all([
-    queryClient.prefetchQuery({
-      queryKey: useProductsQuery.queryKey(searchParams),
-      queryFn: useProductsQuery.queryFn,
+    queryClient.prefetchInfiniteQuery({
+      queryKey: useProductsInfiniteQuery.queryKey(searchParams),
+      queryFn: useProductsInfiniteQuery.queryFn,
+      initialPageParam: 1,
     }),
   ]);
 
