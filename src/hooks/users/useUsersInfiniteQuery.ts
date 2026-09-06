@@ -13,7 +13,7 @@ const queryFn = ({ queryKey: [, ...paramsArr], pageParam }: QueryFunctionContext
     .get<
       Pagination<SearchUser>,
       AxiosResponse<Pagination<SearchUser>>
-    >('/users', { params: { page: pageParam, limit: 26, ...Object.fromEntries(paramsArr) } })
+    >('/users', { params: { limit: 26, ...Object.fromEntries(paramsArr), page: pageParam } })
     .then((res) => res.data);
 
 type UsersInfiniteQueryParams = SearchUsersSchema & PaginationParams;

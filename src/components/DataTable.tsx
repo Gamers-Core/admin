@@ -2,8 +2,10 @@
 import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useRouter } from 'next/navigation';
 
-import { InfiniteScrollTrigger, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui';
 import { cn } from '@/lib/utils';
+
+import { InfiniteScrollTrigger } from './InfiniteScrollTrigger';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
