@@ -2,7 +2,7 @@ import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query
 import { Metadata } from 'next';
 
 import { SearchDiscountSchema } from '@/api';
-import { useDiscountsQuery } from '@/hooks';
+import { useDiscountsInfiniteQuery } from '@/hooks';
 import { DiscountsCTA, DiscountsList, Searchbar } from '@/components';
 import { PagePropsWithSearchParams } from '@/app/types';
 
@@ -14,9 +14,10 @@ export default async function Discounts(props: PagePropsWithSearchParams<SearchD
   const queryClient = new QueryClient();
 
   await Promise.all([
-    queryClient.prefetchQuery({
-      queryKey: useDiscountsQuery.queryKey(searchParams),
-      queryFn: useDiscountsQuery.queryFn,
+    queryClient.prefetchInfiniteQuery({
+      queryKey: useDiscountsInfiniteQuery.queryKey(searchParams),
+      queryFn: useDiscountsInfiniteQuery.queryFn,
+      initialPageParam: 1,
     }),
   ]);
 

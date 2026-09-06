@@ -7,7 +7,7 @@ import { BackendError, Order, OrderShippingSchema, ValidationErrors, gamersCoreA
 
 import { useErrorHandler } from '../useErrorHandler';
 import { useSetOrderQueryData } from './useOrderQuery';
-import { useInvalidateOrdersQuery } from './useOrdersQuery';
+import { useInvalidateOrdersQuery } from './useOrdersInfiniteQuery';
 
 interface UpdateOrderShippingMutationOptions extends OrderShippingSchema {
   orderNumber: string;

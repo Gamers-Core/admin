@@ -5,13 +5,14 @@ import { HugeiconsIcon } from '@hugeicons/react';
 import { Check } from '@hugeicons/core-free-icons';
 
 import { defaultLocale, Product, VariantWithProduct } from '@/api';
-import { Disclosure, useDebounce, useFormatCurrency, useProductsQuery } from '@/hooks';
+import { Disclosure, useDebounce, useFormatCurrency, useProductsInfiniteQuery } from '@/hooks';
 import { cn } from '@/lib/utils';
 
 import { Modal, ModalFooter } from '../Modal';
 import { Input, Spinner } from '../ui';
 import { Button } from '../Button';
 import { Media } from '../Media';
+import { InfiniteScrollTrigger } from '../InfiniteScrollTrigger';
 
 interface ProductVariantsModalProps<M extends 'single' | 'multiple'> extends Disclosure {
   mode: M;
@@ -32,6 +33,7 @@ export const ProductVariantsModal = <M extends 'single' | 'multiple'>({
   const isSingleMode = mode === 'single';
 
   const [search, setSearch] = useState<string>();
+  const [listContainer, setListContainer] = useState<HTMLDivElement | null>(null);
 
   const debouncedSearch = useDebounce(search, 700);
 
@@ -39,14 +41,19 @@ export const ProductVariantsModal = <M extends 'single' | 'multiple'>({
     setSearch(debouncedSearch);
   }, [debouncedSearch]);
 
-  const productsQuery = useProductsQuery(!!debouncedSearch ? { q: debouncedSearch } : {}, disclosure.open);
+  const productsQuery = useProductsInfiniteQuery(
+    { limit: 5, ...(!!debouncedSearch ? { q: debouncedSearch } : {}) },
+    disclosure.open,
+  );
+
+  const products = useMemo(() => productsQuery.data?.pages.flatMap((page) => page.data) ?? [], [productsQuery.data]);
 
   const selectedVariantsById = useMemo(
     () =>
-      productsQuery.data
-        ?.flatMap((product) => product.variants.map((variant) => ({ ...variant, product })))
+      products
+        .flatMap((product) => product.variants.map((variant) => ({ ...variant, product })))
         .filter((variant) => variantIds?.includes(variant.id)),
-    [productsQuery.data, variantIds],
+    [products, variantIds],
   );
 
   const [selectedVariants, setSelectedVariants] = useState<VariantWithProduct[]>(selectedVariantsById ?? []);
@@ -66,29 +73,40 @@ export const ProductVariantsModal = <M extends 'single' | 'multiple'>({
         className="w-full min-h-10 p-2 px-3 text-sm/relaxed md:text-base/relaxed bg-accent"
       />
 
-      <div className="flex flex-col gap-4 overflow-y-auto">
+      <div ref={setListContainer} className="flex flex-col gap-4 overflow-y-auto">
         {productsQuery.isPending ? (
           <Spinner className="size-8 m-auto" />
         ) : (
-          productsQuery.data?.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              selectedVariants={selectedVariants}
-              onSelect={(variant) =>
-                setSelectedVariants(
-                  isSingleMode
-                    ? [variant]
-                    : (prev) =>
-                        prev.some((v) => v.id === variant.id)
-                          ? prev.filter((v) => v.id !== variant.id)
-                          : [...prev, variant],
-                )
-              }
-              canSelectInactive={canSelectInactive}
-              canSelectOutOfStock={canSelectOutOfStock}
+          <>
+            {products.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                selectedVariants={selectedVariants}
+                onSelect={(variant) =>
+                  setSelectedVariants(
+                    isSingleMode
+                      ? [variant]
+                      : (prev) =>
+                          prev.some((v) => v.id === variant.id)
+                            ? prev.filter((v) => v.id !== variant.id)
+                            : [...prev, variant],
+                  )
+                }
+                canSelectInactive={canSelectInactive}
+                canSelectOutOfStock={canSelectOutOfStock}
+              />
+            ))}
+
+            <InfiniteScrollTrigger
+              onLoadMore={productsQuery.fetchNextPage}
+              hasMore={!!productsQuery.hasNextPage}
+              isLoading={productsQuery.isFetchingNextPage}
+              root={listContainer}
             />
-          ))
+
+            {productsQuery.isFetchingNextPage && <Spinner className="size-6 mx-auto my-2" />}
+          </>
         )}
       </div>
 

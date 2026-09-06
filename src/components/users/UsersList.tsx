@@ -1,7 +1,7 @@
 'use client';
 
 import { SearchUsersSchema } from '@/api';
-import { useUsersQuery } from '@/hooks';
+import { useUsersInfiniteQuery } from '@/hooks';
 
 import { DataTable } from '../DataTable';
 import { userColumns } from './userColumns';
@@ -11,14 +11,19 @@ interface UsersListProps {
 }
 
 export const UsersList = ({ searchParams }: UsersListProps) => {
-  const usersQuery = useUsersQuery(searchParams);
+  const usersQuery = useUsersInfiniteQuery(searchParams);
+
+  const users = usersQuery.data?.pages.flatMap(({ data }) => data) ?? [];
 
   return (
     <DataTable
-      data={usersQuery.data ?? []}
+      data={users}
       columns={userColumns}
       placeholder="No users found."
       getRowHref={({ id }) => `/users/${id}`}
+      onLoadMore={usersQuery.fetchNextPage}
+      hasMore={usersQuery.hasNextPage}
+      isLoadingMore={usersQuery.isFetchingNextPage}
     />
   );
 };

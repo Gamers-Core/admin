@@ -1,4 +1,4 @@
-export * from './useOrdersQuery';
+export * from './useOrdersInfiniteQuery';
 export * from './useOrderQuery';
 export * from './useUpdateOrderStatusMutation';
 export * from './useUpdateOrderPaymentStatusMutation';

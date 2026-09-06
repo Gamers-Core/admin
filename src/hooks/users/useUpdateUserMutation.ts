@@ -6,7 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 import { BackendError, CreateUserSchema, FullUser, ValidationErrors, gamersCoreAdmin } from '@/api';
 
 import { useErrorHandler } from '../useErrorHandler';
-import { useInvalidateUsersQuery } from './useUsersQuery';
+import { useInvalidateUsersQuery } from './useUsersInfiniteQuery';
 import { useSetUserQueryData } from './useUserQuery';
 
 interface UpdateUserMutationOptions extends CreateUserSchema {

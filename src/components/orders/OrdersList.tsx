@@ -1,7 +1,7 @@
 'use client';
 
 import { SearchOrderSchema } from '@/api';
-import { useOrdersQuery } from '@/hooks';
+import { useOrdersInfiniteQuery } from '@/hooks';
 
 import { DataTable } from '../DataTable';
 import { orderColumns } from './orderColumns';
@@ -11,14 +11,19 @@ interface OrdersListProps {
 }
 
 export const OrdersList = ({ searchParams }: OrdersListProps) => {
-  const ordersQuery = useOrdersQuery(searchParams);
+  const ordersQuery = useOrdersInfiniteQuery(searchParams);
+
+  const orders = ordersQuery.data?.pages.flatMap(({ data }) => data) ?? [];
 
   return (
     <DataTable
-      data={ordersQuery.data ?? []}
+      data={orders}
       columns={orderColumns}
       placeholder="No orders found."
       getRowHref={({ orderNumber }) => `/orders/${orderNumber}`}
+      onLoadMore={ordersQuery.fetchNextPage}
+      hasMore={ordersQuery.hasNextPage}
+      isLoadingMore={ordersQuery.isFetchingNextPage}
     />
   );
 };

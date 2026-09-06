@@ -21,3 +21,4 @@ export * from './orders';
 export * from './useSidebarStatsQuery';
 export * from './settings';
 export * from './discounts';
+export * from './useIsInView';

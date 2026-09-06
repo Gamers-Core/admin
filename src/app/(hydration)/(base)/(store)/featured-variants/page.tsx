@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 
-import { useFeaturedVariantsQuery, useProductsQuery } from '@/hooks';
+import { useFeaturedVariantsQuery, useProductsInfiniteQuery } from '@/hooks';
 import { FeaturedVariantsList } from '@/components';
 
 export const metadata: Metadata = { title: 'Gamers Core | Featured Variants' };
@@ -11,7 +11,11 @@ export default async function FeaturedVariants() {
 
   await Promise.all([
     queryClient.prefetchQuery(useFeaturedVariantsQuery),
-    queryClient.prefetchQuery({ queryKey: useProductsQuery.queryKey(), queryFn: useProductsQuery.queryFn }),
+    queryClient.prefetchInfiniteQuery({
+      queryKey: useProductsInfiniteQuery.queryKey(),
+      queryFn: useProductsInfiniteQuery.queryFn,
+      initialPageParam: 1,
+    }),
   ]);
 
   return (

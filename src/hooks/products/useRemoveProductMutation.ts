@@ -6,7 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 import { BackendError, gamersCoreAdmin } from '@/api';
 
 import { useErrorHandler } from '../useErrorHandler';
-import { useInvalidateProductsQuery } from './useProductsQuery';
+import { useInvalidateProductsQuery } from './useProductsInfiniteQuery';
 
 export const useRemoveProductMutation = () => {
   const errorHandler = useErrorHandler();

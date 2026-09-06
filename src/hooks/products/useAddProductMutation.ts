@@ -6,7 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 import { ProductSchema, BackendError, Product, ValidationErrors, gamersCoreAdmin } from '@/api';
 
 import { useErrorHandler } from '../useErrorHandler';
-import { useInvalidateProductsQuery } from './useProductsQuery';
+import { useInvalidateProductsQuery } from './useProductsInfiniteQuery';
 
 interface AddProductMutationData extends Omit<ProductSchema, 'media'> {
   mediaIds: number[];

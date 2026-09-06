@@ -7,7 +7,7 @@ import { BackendError, Order, UpdateOrderItemSchema, ValidationErrors, gamersCor
 
 import { useErrorHandler } from '../useErrorHandler';
 import { useSetOrderQueryData } from './useOrderQuery';
-import { useInvalidateOrdersQuery } from './useOrdersQuery';
+import { useInvalidateOrdersQuery } from './useOrdersInfiniteQuery';
 import { useInvalidateProductsQuery } from '../products';
 
 interface UpdateOrderItemMutationOptions extends UpdateOrderItemSchema {
