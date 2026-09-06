@@ -2,7 +2,7 @@ import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query
 import { Metadata } from 'next';
 
 import { SearchUsersSchema } from '@/api';
-import { useUsersQuery } from '@/hooks';
+import { useUsersInfiniteQuery } from '@/hooks';
 import { Searchbar, UsersCTA, UsersList } from '@/components';
 import { PagePropsWithSearchParams } from '@/app/types';
 
@@ -14,9 +14,10 @@ export default async function Users(props: PagePropsWithSearchParams<SearchUsers
   const queryClient = new QueryClient();
 
   await Promise.all([
-    queryClient.prefetchQuery({
-      queryKey: useUsersQuery.queryKey(searchParams),
-      queryFn: useUsersQuery.queryFn,
+    queryClient.prefetchInfiniteQuery({
+      queryKey: useUsersInfiniteQuery.queryKey(searchParams),
+      queryFn: useUsersInfiniteQuery.queryFn,
+      initialPageParam: 1,
     }),
   ]);
 
